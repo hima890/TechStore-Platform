@@ -1,0 +1,11 @@
+To get the IP address of a host like the one described, you can use the dig or nslookup command to resolve the hostname to an IP address. These commands are commonly used to query DNS servers for information about domain names.
+
+Using dig
+The dig command provides detailed information about DNS queries and responses. Here's how you can use it:
+
+sh
+Copy code
+dig +short c00aad369ea8.e1b0837b.alx-cod.online
+
+The ip: 44.192.92.232
+The +short option provides a concise output, showing only the IP address.

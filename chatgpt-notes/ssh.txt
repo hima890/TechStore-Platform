@@ -1,0 +1,50 @@
+Generate an SSH Key Pair (if you don't have one):
+On your local machine, open a terminal and run:
+
+sh
+Copy code
+ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
+This will create a public/private key pair. By default, the keys will be stored in ~/.ssh/id_rsa (private key) and ~/.ssh/id_rsa.pub (public key).
+
+Copy the Public Key to the Server:
+Use the ssh-copy-id command to copy your public key to the server:
+
+sh
+Copy code
+ssh-copy-id username@your_server_ip
+Replace username with your actual username on the server and your_server_ip with the server's IP address. You'll be prompted to enter your password.
+
+Manually Add the Public Key (if ssh-copy-id is not available):
+Alternatively, you can manually add the public key:
+
+Display the Public Key:
+
+sh
+Copy code
+cat ~/.ssh/id_rsa.pub
+Copy the output.
+
+Connect to the Server:
+
+sh
+Copy code
+ssh username@your_server_ip
+Create the .ssh Directory (if it doesn't exist):
+
+sh
+Copy code
+mkdir -p ~/.ssh
+chmod 700 ~/.ssh
+Add the Public Key to the authorized_keys File:
+
+sh
+Copy code
+echo "your_copied_public_key" >> ~/.ssh/authorized_keys
+chmod 600 ~/.ssh/authorized_keys
+Test the SSH Connection:
+Disconnect from the server and then try to connect again using SSH:
+
+sh
+Copy code
+ssh username@your_server_ip
+If everything is set up correctly, you should be able to connect without entering your password.

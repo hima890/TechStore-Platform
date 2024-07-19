@@ -1,0 +1,47 @@
+The `curl` option to save the body of the resulting response to a file is `-o`.
+
+Here's how you can use it:
+
+```sh
+curl -o outputfile.txt https://example.com
+```
+
+This command will save the response body from `https://example.com` into a file named `outputfile.txt`.
+
+The `curl` option that defines the HTTP method used is `-X`.
+
+For example, to make a `POST` request, you can use:
+
+```sh
+curl -X POST https://example.com
+```
+
+curl -H "Content-Type: application/json" https://example.com
+
+
+The `curl` option to set a cookie with a key-value pair is `-b`.
+
+For example, to set a cookie named `sessionid` with a value of `12345`, you can use:
+
+```sh
+curl -b "sessionid=12345" https://example.com
+```
+
+The `curl` option to disable the progress display is `-s` (which stands for "silent").
+
+For example:
+
+```sh
+curl -s https://example.com
+```
+
+The `curl` option to set a body key-value parameter is `-d`.
+
+For example, to send a POST request with a key-value pair in the body:
+
+```sh
+curl -d "key1=value1" https://example.com
+```
+
+This option is used to send data in the request body, typically for methods like POST or PUT where data needs to be included.
+
