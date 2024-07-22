@@ -16,7 +16,8 @@
     <link href="{{ url_for('landingPage.static', filename='css/all.min.css') }}" rel="stylesheet">
     <link href="{{ url_for('landingPage.static', filename='css/main.css') }}" rel="stylesheet">
   </head>
-  <body id="top"><div class="site-wrapper">
+  <body id="top">
+    <div class="site-wrapper">
   <div class="site-wrapper-inner">
     <div class="cover-container">
       <div class="masthead clearfix">
@@ -31,6 +32,19 @@
         </div>
       </div>      
       <div class="inner cover">
+        <!-- Display flash messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
         <h1 class="cover-heading">The adventure Begins</h1>
         <p class="lead cover-copy"> TechConnect bridges the gap between displaced tech business owners and their potential customers by providing a platform to showcase their products and reach their audience.</p>
         <p class="lead"><button type="button" class="btn btn-lg btn-default btn-notify" data-toggle="modal" data-target="#subscribeModal">Notify Me</button></p>
