@@ -1,4 +1,0 @@
-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
-
-git tokens:
-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

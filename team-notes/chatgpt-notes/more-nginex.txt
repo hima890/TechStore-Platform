@@ -1,0 +1,23 @@
+# Create the directories if they don't already exist
+sudo mkdir -p </path-to-the-directorie>
+
+Test the configuration:
+Before restarting Nginx, test the configuration to ensure there are no syntax errors:
+
+sh
+Copy code
+sudo nginx -t
+Restart Nginx:
+If the configuration test is successful, restart Nginx to apply the changes:
+
+sh
+Copy code
+sudo systemctl restart nginx
+Verify the Configuration
+Check Nginx status:
+Ensure Nginx is running without issues:
+
+sh
+Copy code
+sudo systemctl status nginx
+

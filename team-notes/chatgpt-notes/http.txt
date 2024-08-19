@@ -1,0 +1,63 @@
+The term "URL" stands for Uniform Resource Locator. It is a reference or address to a resource on the internet. URLs are used to specify the location of web pages, files, resources, or services. They typically consist of several components:
+
+1. **Scheme**: Specifies the protocol used to access the resource (e.g., `http`, `https`, `ftp`).
+2. **Hostname**: Indicates the domain name or IP address where the resource is located (e.g., `www.example.com`).
+3. **Port**: Optional; specifies a port number if different from the default for the scheme (e.g., `:8080`).
+4. **Path**: Specifies the location of the resource on the server (e.g., `/path/to/resource`).
+5. **Query**: Optional; provides parameters for the resource (e.g., `?key1=value1&key2=value2`).
+6. **Fragment**: Optional; identifies a specific section within the resource (e.g., `#section`).
+
+
+
+S.N.	Method and Description
+1	GET
+The GET method is used to retrieve information from the given server using a given URI. Requests using GET should only retrieve data and should have no other effect on the data.
+
+2	HEAD
+Same as GET, but transfers the status line and header section only.
+
+3	POST
+A POST request is used to send data to the server, for example, customer information, file upload, etc. using HTML forms.
+
+4	PUT
+Replaces all current representations of the target resource with the uploaded content.
+
+5	DELETE
+Removes all current representations of the target resource given by a URI.
+
+6	CONNECT
+Establishes a tunnel to the server identified by a given URI.
+
+7	OPTIONS
+Describes the communication options for the target resource.
+
+8	TRACE
+Performs a message loop-back test along the path to the target resource.
+
+
+In the URL `http://www.google.com`, the hostname is `www.google.com`.
+
+Here's how it breaks down:
+
+- Protocol: `http://`
+- Hostname: `www.google.com`
+
+The hostname includes the entire domain name along with any subdomains (`www`).
+
+The name of the HTTP response header used to define the status code of the response is `Status`.
+
+When an HTTP response indicates a redirection, the header that defines the URL the client should be redirected to is `Location`. This header provides the new URL that the client should request to follow the redirection.
+
+The name of the HTTP response header that defines a list of available HTTP methods for a URL is `Allow`. This header specifies the HTTP methods (such as GET, POST, PUT, DELETE, etc.) that are supported by the resource identified by the URL.
+
+The name of the HTTP response header used to send cookies to the client from the server is `Set-Cookie`. 
+
+This header is used by the server to instruct the client (usually a web browser) to store a cookie. Multiple `Set-Cookie` headers can be sent in a single HTTP response to set multiple cookies.
+
+
+The `curl` option to follow all redirects is `-L`.
+
+When you use `-L` with `curl`, it instructs `curl` to follow HTTP redirects automatically, which means if the server responds with a redirect (status codes 3xx), `curl` will make additional requests to the new locations specified in the `Location` response headers.
+
+
+

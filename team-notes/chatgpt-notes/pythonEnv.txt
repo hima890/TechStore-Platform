@@ -1,0 +1,50 @@
+To create a virtual environment in Python, you can use the `venv` module, which is available in Python 3 by default. Here's how you can create a virtual environment:
+
+### Using Command Line (Windows)
+
+1. **Open Command Prompt:**
+   - Press `Win + R`, type `cmd`, and press Enter.
+
+2. **Navigate to your project directory:**
+   ```bash
+   cd path\to\your\project
+   ```
+
+3. **Create a virtual environment:**
+   ```bash
+   python -m venv venv_name
+   ```
+   Replace `venv_name` with your desired name for the virtual environment.
+
+4. **Activate the virtual environment:**
+   ```bash
+   venv_name\Scripts\activate
+   ```
+   You should see `(venv_name)` in your command prompt, indicating the virtual environment is active.
+
+### Using Command Line (Mac/Linux)
+
+1. **Open Terminal.**
+
+2. **Navigate to your project directory:**
+   ```bash
+   cd path/to/your/project
+   ```
+
+3. **Create a virtual environment:**
+   ```bash
+   python3 -m venv venv_name
+   ```
+   Replace `venv_name` with your desired name for the virtual environment.
+
+4. **Activate the virtual environment:**
+   ```bash
+   source venv_name/bin/activate
+   ```
+   You should see `(venv_name)` in your terminal prompt, indicating the virtual environment is active.
+
+### Notes:
+- To deactivate the virtual environment, simply type `deactivate` in the command prompt or terminal.
+- The `venv_name` is the name you give to your virtual environment, choose something meaningful to your project.
+
+Let me know if you need further assistance with this or any related topic!

@@ -1,0 +1,67 @@
+Project file structure:
+
+TechStore-Platform/
+├── app/
+│   ├── __init__.py
+│   ├── config.py
+│   ├── models.py
+│   ├── views/
+│   │   ├── __init__.py
+│   │   ├── user_views.py
+│   │   ├── business_views.py
+│   ├── templates/
+│   │   ├── base.html
+│   │   ├── user/
+│   │   │   ├── login.html
+│   │   │   ├── register.html
+│   │   ├── business/
+│   │   │   ├── dashboard.html
+│   │   │   ├── add_product.html
+│   ├── static/
+│   │   ├── css/
+│   │   │   ├── styles.css
+│   │   ├── js/
+│   │   │   ├── scripts.js
+│   │   ├── images/
+│   │       ├── logo.png
+├── api/
+│   ├── __init__.py
+│   ├── config.py
+│   ├── models.py
+│   ├── routes/
+│   │   ├── __init__.py
+│   │   ├── user_routes.py
+│   │   ├── business_routes.py
+│   ├── tests/
+│       ├── __init__.py
+│       ├── test_user.py
+│       ├── test_business.py
+├── frontend/
+│   ├── src/
+│   │   ├── index.html
+│   │   ├── css/
+│   │   │   ├── styles.css
+│   │   ├── js/
+│   │       ├── scripts.js
+│   ├── public/
+│   │   ├── images/
+│   │       ├── logo.png
+├── server_configuration/
+│   ├── scripts/
+│   │   ├── deploy.sh
+│   │   ├── setup_puppet.sh
+│   │   ├── backup.sh
+│   ├── puppet/
+│   │   ├── manifests/
+│   │   │   ├── site.pp
+│   │   ├── modules/
+│   │       ├── techstore/
+│   │           ├── manifests/
+│   │               ├── init.pp
+├── docker/
+│   ├── Dockerfile
+│   ├── docker-compose.yml
+├── .gitignore
+├── README.md
+├── requirements.txt
+
