@@ -2,14 +2,13 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from dotenv import load_dotenv
 import os
-from config import Config, TestConfig
+from config import ProConfig, TestConfig
 
 # Load environment variables from .env file
-load_dotenv()
+load_dotenv("../.env")
 
 # Determine which config class to use
-config_name = os.getenv('FLASK_CONFIG', 'config.Config')  # Default to Config if not set
-print(config_name)
+config_name = os.getenv('FLASK_CONFIG', 'config.TestConfig')  # Default to Config if not set
 
 # Create the SQLAlchemy object
 db = SQLAlchemy()

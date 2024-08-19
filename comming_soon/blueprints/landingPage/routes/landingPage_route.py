@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from blueprints import db
 from models import Email
-from .utility import checkForExcringEmail
+from .utility import checkForExcringEmail, userRegistration
 
 landingPage = Blueprint('landingPage', __name__,
                         static_folder='../static',
@@ -32,6 +32,8 @@ def register():
                 addnewEmail = Email(email=formEmail)
                 db.session.add(addnewEmail)
                 db.session.commit()
+                # Send the welcome email
+                userRegistration(formEmail)
                 flash('Your email has been registered successfully!', 'success')
                 return (redirect(url_for('landingPage.home')))
             

@@ -1,4 +1,4 @@
-#!/home/ahmed/Documents/ALX-SE/TechStore-Platform/app/TechStore/bin/python3
+#!/home/ahmed/Documents/ALX-SE/TechStore-Platform/microservices/emails/bin/python3
 # -*- coding: utf-8 -*-
 import re
 import sys
