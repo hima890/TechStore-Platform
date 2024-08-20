@@ -1,16 +1,23 @@
 #!/usr/bin/python3
 """ Flask Application """
+import os
 from flask import Flask
+from app.apis import endPoints
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-from ..instance import config
+from .config import config
 
 # Initialize extensions
 db = SQLAlchemy()
 migrate = Migrate()
 
-def create_app(config_name):
+def create_app():
+    # Get the configuration name from the environment variable, default is testing
+    config_name = os.environ.get('FLASK_CONFIG', 'testing')
     """Application factory function."""
+
+    """Create the Flask app and tells Flask to look for a
+    configuration file in the instance/ directory"""
     app = Flask(__name__, instance_relative_config=True)
     
     # Load the configuration from the config.py file
@@ -24,5 +31,5 @@ def create_app(config_name):
     migrate.init_app(app, db)
     
     # Register blueprints and other app-specific logic here
-    
+    app.register_blueprint(endPoints)
     return app
