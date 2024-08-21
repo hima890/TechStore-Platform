@@ -7,7 +7,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from .config import config
 
-# Initialize extensions
+# Initialize database extensions
 db = SQLAlchemy()
 migrate = Migrate()
 
@@ -29,7 +29,11 @@ def create_app():
     # Initialize extensions with the app
     db.init_app(app)
     migrate.init_app(app, db)
-    
+    # Import models to register them with SQLAlchemy
+    with app.app_context():
+        from . import models
+        db.create_all() # Create tables for our models
+
     # Register blueprints and other app-specific logic here
     app.register_blueprint(endPoints)
     return app
