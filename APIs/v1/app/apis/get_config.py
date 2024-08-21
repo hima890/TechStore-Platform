@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """ get the configuration for the current environment """
-from app.apis import endPoints
+from . import endPoints
 from ..config import Config
 
 

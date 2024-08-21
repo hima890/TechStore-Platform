@@ -6,4 +6,4 @@ from flask import Blueprint
 endPoints = Blueprint('endPoints', __name__, url_prefix='/api/v1')
 
 # Import the API endpoints
-from app.apis.get_config import *
+from .get_config import *

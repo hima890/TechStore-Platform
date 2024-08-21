@@ -1,4 +1,4 @@
 #!/usr/bin/python3
-""" All models for the application """
+""" All Models """
 
 from .user import User
