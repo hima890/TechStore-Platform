@@ -20,9 +20,23 @@ class User(db.Model):
     location = db.Column(db.String(150), nullable=True)
     password_hash = db.Column(db.String(128), nullable=False)
     is_active = db.Column(db.Boolean, default=False)
-    activation_token = db.Column(db.String(128), nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    def __repr__(self):
+        """ Return a string representation of the User object. """
+        return "User email: {}, User name {}".format(self.email, self.name)
+
+    def to_dict(self):
+        """Convert the User object to a dictionary."""
+        return {
+            'id': self.id,
+            'username': self.username,
+            'email': self.email,
+            'is_active': self.is_active,
+            'created_at': self.created_at.isoformat(),
+            'updated_at': self.updated_at.isoformat()
+        }
 
     def set_password(self, password):
         """ Create hashed password. """
@@ -32,24 +46,3 @@ class User(db.Model):
         """ Check hashed password. """
         return check_password_hash(self.password_hash, password)
 
-    def generate_activation_token(self):
-        """Generate a unique activation token."""
-        tokenURL = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
-        # Return a signed string serialized with the internal serializer
-        return tokenURL.dumps(self.email, salt=current_app.config['SECURITY_PASSWORD_SALT'])
-
-    def confirm_activation_token(self, token, expiration=3600):
-        """Check if the activation token is valid and not expired."""
-        tokenURL = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
-        # Try to deserialize the token and check if it is valid
-        try:
-            userEmail = tokenURL.loads(
-                token,# The token to be checked
-                salt=current_app.config['SECURITY_PASSWORD_SALT'],# The salt used to sign the token
-                max_age=expiration # The maximum age of the token
-            )
-        except:
-            # Return false if the token is invalid or expired
-            return False
-        # Return the user email from the token
-        return userEmail == self.email
