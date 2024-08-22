@@ -4,14 +4,17 @@ import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 from .config import config
 
 
-# Initialize database extensions
-db = SQLAlchemy()
-migrate = Migrate()
 # Get the configuration name from the environment variable, default is testing
 config_name = os.environ.get('FLASK_CONFIG', 'testing')
+
+# Initialize database extensions and migration engine
+db = SQLAlchemy()
+migrate = Migrate()
 
 
 def create_app():
@@ -24,10 +27,18 @@ def create_app():
     
     # Load the configuration from the instance/config.py file (if it exists)
     app.config.from_pyfile('../instance/config.py', silent=True)
-    
+
+    # Config Flask-Limiter to limit the number of requests per user
+    limiter = Limiter(
+        get_remote_address,  # Function to get client IP address
+        app=app,              # Pass the Flask app instance
+        default_limits=["200 per day", "50 per hour"]  # Default limits
+    )
+
     # Initialize extensions with the app
-    db.init_app(app)
-    migrate.init_app(app, db)
+    db.init_app(app) # Initialize the database
+    migrate.init_app(app, db) # Initialize the migration engine
+    limiter.init_app(app)  # Initialize the rate limiter
 
     with app.app_context():
         from .models import User  # Import models after db is initialized
