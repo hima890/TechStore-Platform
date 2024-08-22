@@ -8,10 +8,11 @@ from flask_migrate import Migrate
 from flask_jwt_extended import JWTManager
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
+from redis import Redis
 from .config import config
 
 # Load environment variables from .env file
-load_dotenv("../.env")
+load_dotenv("./.env")
 
 # Get the configuration name from the environment variable, default is testing
 config_name = os.environ.get('FLASK_CONFIG', 'testing')
@@ -27,10 +28,12 @@ jwt = JWTManager()
 app = Flask(__name__, instance_relative_config=True)
 
 # Config Flask-Limiter to limit the number of requests per user
+# redis = Redis(host='localhost', port=5007) # Config redis database
 limiter = Limiter(
     get_remote_address,  # Function to get client IP address
     app=app,              # Pass the Flask app instance
-    default_limits=["200 per day", "50 per hour"]  # Default limits
+    default_limits=["200 per day", "50 per hour"],  # Default limits
+    # storage_uri="redis://localhost:6379" # Set the uri
 )
 
 def create_app():

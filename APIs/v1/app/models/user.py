@@ -37,12 +37,3 @@ class User(db.Model):
             'created_at': self.created_at.isoformat(),
             'updated_at': self.updated_at.isoformat()
         }
-
-    def set_password(self, password):
-        """ Create hashed password. """
-        return generate_password_hash(password)
-
-    def check_password(self, password):
-        """ Check hashed password. """
-        return check_password_hash(self.password_hash, password)
-

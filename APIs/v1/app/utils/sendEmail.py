@@ -17,7 +17,6 @@ def send_email(recipient, htmlContent, subject):
     sender_email = os.getenv("SENDER_EMAIL")
     sender_password = os.getenv("SENDER_PASSWORD")
     subject = "Welcome to TechStore!"
-
     # Create the email
     msg = MIMEMultipart("alternative")
     msg['Subject'] = subject
