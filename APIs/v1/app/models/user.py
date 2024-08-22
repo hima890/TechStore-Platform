@@ -40,7 +40,7 @@ class User(db.Model):
 
     def set_password(self, password):
         """ Create hashed password. """
-        self.password_hash = generate_password_hash(password)
+        return generate_password_hash(password)
 
     def check_password(self, password):
         """ Check hashed password. """

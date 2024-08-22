@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """ Flask Application """
 import os
+from dotenv import load_dotenv
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -9,6 +10,8 @@ from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from .config import config
 
+# Load environment variables from .env file
+load_dotenv("../.env")
 
 # Get the configuration name from the environment variable, default is testing
 config_name = os.environ.get('FLASK_CONFIG', 'testing')
