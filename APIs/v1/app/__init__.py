@@ -4,6 +4,7 @@ import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from flask_jwt_extended import JWTManager
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from .config import config
@@ -15,6 +16,9 @@ config_name = os.environ.get('FLASK_CONFIG', 'testing')
 # Initialize database extensions and migration engine
 db = SQLAlchemy()
 migrate = Migrate()
+
+# intialize JWTManager
+jwt = JWTManager()
 
 
 def create_app():
@@ -38,6 +42,7 @@ def create_app():
     # Initialize extensions with the app
     db.init_app(app) # Initialize the database
     migrate.init_app(app, db) # Initialize the migration engine
+    jwt.init_app(app)   # Initialize JWT manager
     limiter.init_app(app)  # Initialize the rate limiter
 
     with app.app_context():
