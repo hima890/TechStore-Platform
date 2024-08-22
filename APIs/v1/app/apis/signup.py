@@ -2,6 +2,8 @@
 """ Signup API Endpoints """
 from flask import request, jsonify, url_for
 from flask_jwt_extended import create_access_token
+from .. import limiter
+from . import endPoints
 from ..utils.sendEmail import send_email
 from .. import db
 from ..models.user import User
