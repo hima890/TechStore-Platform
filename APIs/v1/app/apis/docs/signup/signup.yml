@@ -1,0 +1,36 @@
+User signup:
+  post:
+    parameters:
+      - name: name
+        in: formData
+        type: string
+        required: true
+        description: The user's name
+      - name: email
+        in: formData
+        type: string
+        required: true
+        description: The user's email
+      - name: password
+        in: formData
+        type: string
+        required: true
+        description: The user's password
+      - name: profilePicture
+        in: formData
+        type: file
+        required: false
+        description: Profile picture upload
+    responses:
+      201:
+        description: User created successfully
+      400:
+        description: Invalid input
+      415:
+        description: Unsupported Media Type
+      400:
+        description: Missing fields
+      409:
+        description: User already exists
+      500:
+        description: Internal Server Error

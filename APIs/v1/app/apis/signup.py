@@ -3,6 +3,7 @@
 from flask import request, jsonify, url_for
 from werkzeug.security import generate_password_hash,check_password_hash
 from flask_jwt_extended import create_access_token
+from flasgger import swag_from
 from datetime import timedelta
 from .. import limiter
 from . import endPoints
@@ -14,6 +15,7 @@ from ..models.user import User
 
 @endPoints.route('/signup', methods=['POST'])
 @limiter.limit("5 per minute")
+@swag_from('docs/signup/signup.yml')
 def signup():
     if request.content_type == 'application/json':
         data = request.get_json()
@@ -37,7 +39,7 @@ def signup():
     # Filter the User table by email and check if the user exists
     if User.query.filter_by(email=email).first():
         # Return an error message if the user already exists with a 400 status code
-        return jsonify({"error": "User already exists"}), 400
+        return jsonify({"error": "User already exists"}), 409
 
     # Validate and process the profile picture
     if profilePicture:

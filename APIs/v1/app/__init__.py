@@ -9,6 +9,7 @@ from flask_jwt_extended import JWTManager
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from redis import Redis
+from flasgger import Swagger
 from .config import config
 
 # Load environment variables from .env file
@@ -35,6 +36,17 @@ limiter = Limiter(
     default_limits=["200 per day", "50 per hour"],  # Default limits
     # storage_uri="redis://localhost:6379" # Set the uri
 )
+
+# Initialize Swagger for API documentation
+swagger = Swagger(app, template={
+    "swagger": "2.0",
+    "info": {
+        "title": "TechStore API",
+        "description": "API documentation for the TechStore platform",
+        "version": "1.0.0"
+    }
+})
+
 
 def create_app():
     """Create the Flask app and tells Flask to look for a
