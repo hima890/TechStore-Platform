@@ -37,16 +37,8 @@ limiter = Limiter(
     # storage_uri="redis://localhost:6379" # Set the uri
 )
 
-# Initialize Swagger for API documentation
-swagger = Swagger(app, template={
-    "swagger": "2.0",
-    "info": {
-        "title": "TechStore API",
-        "description": "API documentation for the TechStore platform",
-        "version": "1.0.0"
-    }
-})
-
+# Initialize Swagger
+swagger = Swagger()
 
 def create_app():
     """Create the Flask app and tells Flask to look for a
@@ -64,13 +56,19 @@ def create_app():
     migrate.init_app(app, db) # Initialize the migration engine
     jwt.init_app(app)   # Initialize JWT manager
     limiter.init_app(app)  # Initialize the rate limiter
+    swagger.init_app(app)     # Initialize Swagger
 
     # Register blueprints and other app-specific logic here
     with app.app_context():
-        from .models import User  # Import models after db is initialized
+        # Import tabels after db is initialized
+        from .models import User
+        # Import the end-point
         from .apis import endPoints
         from .apis import signUp
+        # Register the end-pointe
         app.register_blueprint(endPoints)
         app.register_blueprint(signUp)
+        # Create the database tabels
+        db.create_all()
 
     return app

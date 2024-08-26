@@ -4,6 +4,7 @@ from flask import request, jsonify, url_for
 from werkzeug.security import generate_password_hash,check_password_hash
 from flask_jwt_extended import create_access_token
 from flasgger import swag_from
+from .swagger_docs import signup_doc
 from datetime import timedelta
 from .. import limiter
 from . import endPoints
@@ -15,24 +16,25 @@ from ..models.user import User
 
 @endPoints.route('/signup', methods=['POST'])
 @limiter.limit("5 per minute")
-@swag_from('docs/signup/signup.yml')
+@swag_from(signup_doc)
 def signup():
     if request.content_type == 'application/json':
         data = request.get_json()
         username = data.get('username')
         email = data.get('email')
         password = data.get('password')
-        profilePicture = None  # No file upload in JSON
+        profilePicture = data.get('profile_image')  # No file upload in JSON
     elif 'multipart/form-data' in request.content_type:
-        username = request.form.get('name')
+        username = request.form.get('username')
         email = request.form.get('email')
         password = request.form.get('password')
-        profilePicture = request.files.get('profilePicture')
+        profilePicture = request.files.get('profile_image')
     else:
         return jsonify({'error': 'Unsupported Media Type'}), 415
 
     # Validate required fields
     if not username or not email or not password:
+        print(str(username) + str(email) + str(password))
         return jsonify({'error': 'Missing fields'}), 400
 
     # Check if user already exists
@@ -44,14 +46,16 @@ def signup():
     # Validate and process the profile picture
     if profilePicture:
         filename, picture_path = saveProfilePicture(profilePicture)
+        print(str(filename) + ' ' + str(picture_path))
     else:
         filename = None  # Handle cases where no picture is uploaded
+        print("nothinf")
 
     # Create a new user with is_active=False
     newUser = User(
         name=username,
         email=email,
-        password_hash=password,
+        password_hash=generate_password_hash(password),
         is_active=False,
         profile_image=filename
         )
