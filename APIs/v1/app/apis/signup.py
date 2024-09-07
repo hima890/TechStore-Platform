@@ -4,7 +4,7 @@ from flask import request, jsonify, url_for
 from werkzeug.security import generate_password_hash,check_password_hash
 from flask_jwt_extended import create_access_token
 from flasgger import swag_from
-from .swagger_docs import signup_doc
+from .swaggerFile.swagger_docs import signup_doc
 from datetime import timedelta
 from .. import limiter
 from . import endPoints
@@ -85,7 +85,7 @@ def signup():
         activationToken = create_access_token(identity=email, expires_delta=timedelta(hours=1))
 
         # Send email with activation link
-        activationURL = url_for('endPoints.activateAccount', token=activationToken, _external=True)
+        activationURL = "http://localhost:5001/api/v1/activate?token={token}".format(activationToken)
         send_email(
             email,
             "Please click the link to activate your account: {}".format(activationURL),
@@ -103,8 +103,3 @@ def signup():
         print(e)
         db.session.rollback()
         return jsonify({"error": "An error occurred while creating the user."}), 500
-
-@endPoints.route('/activate/<token>', methods=['GET'])
-def activateAccount(token):
-    # Your activation logic here
-    return "Account activated!"
