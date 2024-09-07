@@ -21,17 +21,25 @@ def signup():
     """Create a new user"""
     if request.content_type == 'application/json':
         data = request.get_json()
+        firstName = data.get('first_name')
+        lastName = data.get('last_name')
         username = data.get('username')
         email = data.get('email')
         type = data.get('type')
-        gender = data.get('gender')
+        phoneNumber = data.get('phone_number')
+        ganderType = data.get('gender')
+        userLocation = data.get('location')
         password = data.get('password')
         profilePicture = request.files.get('profile_image')  # No file upload in JSON
     elif 'multipart/form-data' in request.content_type:
+        firstName = request.form.get('first_name')
+        lastName = request.form.get('last_name')
         username = request.form.get('username')
         email = request.form.get('email')
         type = request.form.get('type')
-        gender = request.form.get('gender')
+        phoneNumber = request.form.get('phone_number')
+        ganderType = request.form.get('gender')
+        userLocation = request.form.get('location')
         password = request.form.get('password')
         profilePicture = request.files.get('profile_image')
     else:
@@ -56,10 +64,14 @@ def signup():
 
     # Create a new user with is_active=False
     newUser = User(
-        name=username,
+        first_name=firstName,
+        last_name=lastName,
+        username=username,
         email=email,
+        phone_number=phoneNumber,
         type=type,
-        gender=gender,
+        gander=ganderType,
+        location=userLocation,
         password_hash=generate_password_hash(password),
         is_active=False,
         profile_image=filename
@@ -88,6 +100,7 @@ def signup():
             ), 201
     except Exception as e:
         # Return to the last change
+        print(e)
         db.session.rollback()
         return jsonify({"error": "An error occurred while creating the user."}), 500
 

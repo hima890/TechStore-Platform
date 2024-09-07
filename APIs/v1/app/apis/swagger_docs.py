@@ -6,19 +6,35 @@ signup_doc = {
     'tags': ['User Registration'],
     'parameters': [
         {
+            'name': 'first_name',
+            'in': 'formData',
+            'type': 'string',
+            'required': True
+        }
+        ,
+        {
+            'name': 'last_name',
+            'in': 'formData',
+            'type': 'string',
+            'required': True
+        }
+        ,
+        {
             'name': 'username',
             'in': 'formData',
             'type': 'string',
             'required': True
-        },
+        }
+        ,
         {
             'name': 'email',
             'in': 'formData',
             'type': 'string',
             'required': True
-        },
+        }
+        ,
         {
-            'name': 'password',
+            'name': 'phone_number',
             'in': 'formData',
             'type': 'string',
             'required': True
@@ -39,11 +55,25 @@ signup_doc = {
         }
         ,
         {
+            'name': 'location',
+            'in': 'formData',
+            'type': 'string',
+            'required': True
+        }
+        ,
+        {
             'name': 'profile_image',
             'in': 'formData',
             'type': 'file',
             'required': False,
             'description': 'Optional profile image for the user'
+        }
+        ,
+        {
+            'name': 'password',
+            'in': 'formData',
+            'type': 'string',
+            'required': True
         }
     ],
     'consumes': [
