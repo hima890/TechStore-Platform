@@ -85,7 +85,7 @@ def signup():
         activationToken = create_access_token(identity=email, expires_delta=timedelta(hours=1))
 
         # Send email with activation link
-        activationURL = "http://localhost:5001/api/v1/activate?token={token}".format(activationToken)
+        activationURL = "http://localhost:5001/api/v1/activate?token={}".format(activationToken)
         send_email(
             email,
             "Please click the link to activate your account: {}".format(activationURL),
@@ -102,4 +102,5 @@ def signup():
         # Return to the last change
         print(e)
         db.session.rollback()
+        db.session.commit()
         return jsonify({"error": "An error occurred while creating the user."}), 500
