@@ -2,13 +2,13 @@
 """ Activation API Endpoints """
 from flask import request, jsonify, url_for
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from . import endPoints
+from . import activation
 from .. import db
 from ..models.user import User
 
 
 
-@endPoints.route('/activate', methods=['GET'])
+@activation.route('/activate', methods=['GET'])
 @jwt_required(optional=True)
 def activate_account():
     """Get the token from the URL and activate the user account"""
