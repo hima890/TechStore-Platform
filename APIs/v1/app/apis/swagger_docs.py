@@ -1,5 +1,7 @@
+"""Sawqer documentation for the user API endpoints"""
 # swagger_docs.py
 
+# Documentation for the signup endpoint
 signup_doc = {
     'tags': ['User Registration'],
     'parameters': [
@@ -31,18 +33,18 @@ signup_doc = {
         }
     ],
     'consumes': [
-        # 'application/json',  # Set the content type to JSON
+        'application/json',  # Set the content type to JSON
         'multipart/form-data',  # Uncomment this line to use multipart form data
     ],
     'responses': {
-        200: {
-            'description': 'User registered successfully',
+        201: {
+            'description': 'User created',
             'schema': {
                 'type': 'object',
                 'properties': {
                     'message': {
                         'type': 'string',
-                        'example': 'User registered successfully'
+                        'example': 'User created! Un email was sent to activate the account.'
                     }
                 }
             }
@@ -58,6 +60,41 @@ signup_doc = {
                     }
                 }
             }
-        }
+        },
+        409: {
+            'description': 'User already exists in the database',
+            'schema': {
+                'type': 'object',
+                'properties': {
+                    'error': {
+                        'type': 'string',
+                        'example': 'User already exists'
+                    }
+                }
+            }
+        },
+        415: {
+            'description': 'Request Type must be application/json or multipart/form-data',
+            'schema': {
+                'type': 'object',
+                'properties': {
+                    'error': {
+                        'type': 'string',
+                        'example': 'Unsupported Request Type'
+                    }
+                }
+            }
+        },
+        500: {
+            'description': 'An error occurred while creating the user.',
+            'schema': {
+                'type': 'object',
+                'properties': {
+                    'error': {
+                        'type': 'string',
+                        'example': 'Internal Server Error'
+                    }
+                }
+        }   }
     }
 }

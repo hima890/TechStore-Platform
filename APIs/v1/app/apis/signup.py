@@ -18,19 +18,20 @@ from ..models.user import User
 @limiter.limit("5 per minute")
 @swag_from(signup_doc)
 def signup():
+    """Create a new user"""
     if request.content_type == 'application/json':
         data = request.get_json()
         username = data.get('username')
         email = data.get('email')
         password = data.get('password')
-        profilePicture = data.get('profile_image')  # No file upload in JSON
+        profilePicture = request.files.get('profile_image')  # No file upload in JSON
     elif 'multipart/form-data' in request.content_type:
         username = request.form.get('username')
         email = request.form.get('email')
         password = request.form.get('password')
         profilePicture = request.files.get('profile_image')
     else:
-        return jsonify({'error': 'Unsupported Media Type'}), 415
+        return jsonify({'error': 'Unsupported Request Type'}), 415
 
     # Validate required fields
     if not username or not email or not password:
