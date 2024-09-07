@@ -1,12 +1,8 @@
 #!/usr/bin/python3
 """ User Table Schema """
+from flask import url_for
 from .. import db
 from datetime import datetime
-from flask import current_app
-# Helper functions for password hashing and verification
-from werkzeug.security import generate_password_hash, check_password_hash
-from itsdangerous import URLSafeTimedSerializer
-
 
 
 class User(db.Model):
@@ -33,13 +29,25 @@ class User(db.Model):
 
     def to_dict(self):
         """Convert the User object to a dictionary."""
+        # Check if the user has a profile image
+        if self.profile_image:
+            profile_image_url = url_for('static', filename='profile_pics' + self.profile_image)
+        else:
+            # Set a default profile image
+            profile_image_url = 'defult_profile_image.png' 
+        # Return the user data as a dictionary
         return {
             'id': self.id,
+            'first_name': self.first_name,
+            'last_name': self.last_name,
             'username': self.username,
             'email': self.email,
+            'phone_number': self.phone_number,
             'type': self.type,
             'gander': self.gander,
+            'location': self.location,
             'is_active': self.is_active,
+            'profile_image_path': profile_image_url,
             'created_at': self.created_at.isoformat(),
             'updated_at': self.updated_at.isoformat()
         }
