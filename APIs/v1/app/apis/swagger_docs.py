@@ -25,6 +25,20 @@ signup_doc = {
         }
         ,
         {
+            'name': 'type',
+            'in': 'formData',
+            'type': 'string',
+            'required': True
+        }
+        ,
+        {
+            'name': 'gender',
+            'in': 'formData',
+            'type': 'string',
+            'required': True
+        }
+        ,
+        {
             'name': 'profile_image',
             'in': 'formData',
             'type': 'file',

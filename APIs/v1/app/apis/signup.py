@@ -23,11 +23,15 @@ def signup():
         data = request.get_json()
         username = data.get('username')
         email = data.get('email')
+        type = data.get('type')
+        gender = data.get('gender')
         password = data.get('password')
         profilePicture = request.files.get('profile_image')  # No file upload in JSON
     elif 'multipart/form-data' in request.content_type:
         username = request.form.get('username')
         email = request.form.get('email')
+        type = request.form.get('type')
+        gender = request.form.get('gender')
         password = request.form.get('password')
         profilePicture = request.files.get('profile_image')
     else:
@@ -54,10 +58,13 @@ def signup():
     newUser = User(
         name=username,
         email=email,
+        type=type,
+        gender=gender,
         password_hash=generate_password_hash(password),
         is_active=False,
         profile_image=filename
         )
+
     # Save the user in the database
     try:
         db.session.add(newUser)
@@ -72,7 +79,13 @@ def signup():
             "Please click the link to activate your account: {}".format(activationURL),
             "Account Activation"
             )
-        return jsonify({"message": "User created! Un email was sent to activate the account."}), 201
+
+        # Return a success message with the user data
+        return jsonify(
+            {"status": "success",},
+            {"message": "User created! Un email was sent to activate the account."},
+            {'data': newUser.to_dict()}
+            ), 201
     except Exception as e:
         # Return to the last change
         db.session.rollback()
