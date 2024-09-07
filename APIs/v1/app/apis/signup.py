@@ -47,10 +47,8 @@ def signup():
     # Validate and process the profile picture
     if profilePicture:
         filename, picture_path = saveProfilePicture(profilePicture)
-        print(str(filename) + ' ' + str(picture_path))
     else:
         filename = None  # Handle cases where no picture is uploaded
-        print("nothinf")
 
     # Create a new user with is_active=False
     newUser = User(
@@ -77,7 +75,6 @@ def signup():
         return jsonify({"message": "User created! Un email was sent to activate the account."}), 201
     except Exception as e:
         # Return to the last change
-        print("The server error: " + str(e))
         db.session.rollback()
         return jsonify({"error": "An error occurred while creating the user."}), 500
 
