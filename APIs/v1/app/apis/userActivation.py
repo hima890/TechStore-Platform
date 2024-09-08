@@ -34,8 +34,15 @@ def activate_account(token):
         if not user:
             # Return an error message if the user does not exist
             return jsonify(
-                {"msg": "User not found"}
-                ), 404
+                {"status": "error",},
+                {"message": "User dose not exist"}
+                ), 407
+    # Check if the account already activated
+    if user.is_active == True:
+        return jsonify(
+        {"status": "error",},
+        {"message": "Account already activated"}
+        ), 200
     # If the user exists, activate the account
     user.is_active = True
     # Save the changes to the database
