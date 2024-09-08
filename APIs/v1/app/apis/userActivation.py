@@ -12,6 +12,7 @@ from ..models.provider import Provider
 
 
 @activation.route('/activate', methods=['GET'])
+@limiter.limit("5 per minute")
 @jwt_required(optional=True)
 @swag_from(activation)
 def activate_account():
