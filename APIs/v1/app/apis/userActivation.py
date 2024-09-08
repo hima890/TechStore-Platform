@@ -4,6 +4,7 @@ from .swaggerFile.activation import activation
 from flask import request, jsonify, url_for
 from flasgger import swag_from
 from flask_jwt_extended import jwt_required, get_jwt_identity
+from .. import limiter
 from . import activation
 from .. import db
 from ..models.user import User

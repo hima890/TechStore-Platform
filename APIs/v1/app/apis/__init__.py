@@ -6,7 +6,7 @@ from flask import Blueprint
 endPoints = Blueprint('endPoints', __name__, url_prefix='/api/v1')
 signUp = Blueprint('signUp', __name__, url_prefix='/api/v1')
 activation = Blueprint('activation', __name__, url_prefix='/api/v1')
-signin = Blueprint('signin', __name__, url_prefix='/api/v1')
+signIn = Blueprint('signin', __name__, url_prefix='/api/v1')
 
 # Import the API endpoints
 from .get_config import *

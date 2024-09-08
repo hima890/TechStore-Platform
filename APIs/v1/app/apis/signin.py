@@ -1,23 +1,28 @@
 #!/usr/bin/python3
 """ Signin API Endpoints """
-from . import signin
+from flasgger import swag_from
+from .. import limiter
 from flask import request, jsonify
 from werkzeug.security import check_password_hash
 from flask_jwt_extended import create_access_token
 from ..models.user import User
 from ..models.provider import Provider
+from .swaggerFile.loginSwagger import login
+from . import signIn
 
 
 
-@signin.route('/signin', methods=['POST'])
+@signIn.route('/signin', methods=['POST'])
+@limiter.limit("5 per minute")
+@swag_from(login)
 def signin():
     """Sign in a user"""
-    # Get the user cerdentials from the request
-    data = request.get_json()
-    email = data.get('email')
-    password = data.get('password')
+    # Get the request data based on the content_type
+    if request.content_type == 'application/json':
+        data = request.get_json()
+        email = data.get('email')
+        password = data.get('password')
 
-    # Check if the user exists
     user = User.query.filter_by(email=email).first()
     if not user:
         user = Provider.query.filter_by(email=email).first()
