@@ -12,6 +12,7 @@ from ..utils.sendEmail import send_email
 from ..utils.saveProfilePicture import saveProfilePicture
 from .. import db
 from ..models.user import User
+from ..models.provider import Provider
 
 
 @endPoints.route('/signup', methods=['POST'])
@@ -25,7 +26,7 @@ def signup():
         lastName = data.get('last_name')
         username = data.get('username')
         email = data.get('email')
-        type = data.get('type')
+        accountType = data.get('type')
         phoneNumber = data.get('phone_number')
         ganderType = data.get('gender')
         userLocation = data.get('location')
@@ -36,7 +37,7 @@ def signup():
         lastName = request.form.get('last_name')
         username = request.form.get('username')
         email = request.form.get('email')
-        type = request.form.get('type')
+        accountType = request.form.get('type')
         phoneNumber = request.form.get('phone_number')
         ganderType = request.form.get('gender')
         userLocation = request.form.get('location')
@@ -52,7 +53,7 @@ def signup():
 
     # Check if user already exists
     # Filter the User table by email and check if the user exists
-    if User.query.filter_by(email=email).first():
+    if User.query.filter_by(email=email).first() or Provider.query.filter_by(email=email).first():
         # Return an error message if the user already exists with a 400 status code
         return jsonify({"error": "User already exists"}), 409
 
@@ -62,20 +63,33 @@ def signup():
     else:
         filename = None  # Handle cases where no picture is uploaded
 
-    # Create a new user with is_active=False
-    newUser = User(
-        first_name=firstName,
-        last_name=lastName,
-        username=username,
-        email=email,
-        phone_number=phoneNumber,
-        type=type,
-        gander=ganderType,
-        location=userLocation,
-        password_hash=generate_password_hash(password),
-        is_active=False,
-        profile_image=filename
-        )
+    if accountType == 'user':
+        # Create a new user with is_active=False
+        newUser = User(
+            first_name=firstName,
+            last_name=lastName,
+            username=username,
+            email=email,
+            phone_number=phoneNumber,
+            gander=ganderType,
+            location=userLocation,
+            password_hash=generate_password_hash(password),
+            is_active=False,
+            profile_image=filename
+            )
+    elif accountType == 'provider':
+        # Create a new provider with is_active=False
+        newUser = Provider(
+            first_name=firstName,
+            last_name=lastName,
+            username=username,
+            email=email,
+            phone_number=phoneNumber,
+            gander=ganderType,
+            password_hash=generate_password_hash(password),
+            is_active=False,
+            profile_image=filename
+            )
 
     # Save the user in the database
     try:

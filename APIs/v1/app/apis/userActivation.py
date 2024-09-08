@@ -7,6 +7,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from . import activation
 from .. import db
 from ..models.user import User
+from ..models.provider import Provider
 
 
 
@@ -27,10 +28,12 @@ def activate_account():
     user = User.query.filter_by(email=current_user).first()
     # Check if the user exists
     if not user:
-        # Return an error message if the user does not exist
-        return jsonify(
-            {"msg": "User not found"}
-            ), 404
+        user = Provider.query.filter_by(email=current_user).first()
+        if not user:
+            # Return an error message if the user does not exist
+            return jsonify(
+                {"msg": "User not found"}
+                ), 404
     # If the user exists, activate the account
     user.is_active = True
     # Save the changes to the database
