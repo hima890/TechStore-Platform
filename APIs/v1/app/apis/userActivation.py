@@ -1,9 +1,9 @@
 #!/usr/bin/python3
 """ Activation API Endpoints """
-from .swaggerFile.activation import activation
+from .swaggerFile.activation import activate_account_doc
 from flask import request, jsonify, url_for
 from flasgger import swag_from
-from flask_jwt_extended import jwt_required, get_jwt_identity
+from flask_jwt_extended import decode_token
 from .. import limiter
 from . import activation
 from .. import db
@@ -12,14 +12,14 @@ from ..models.provider import Provider
 
 
 
-@activation.route('/activate', methods=['GET'])
+@activation.route('/activate/<token>', methods=['GET'])
 @limiter.limit("5 per minute")
-@jwt_required(optional=True)
-@swag_from(activation)
-def activate_account():
+@swag_from(activate_account_doc)
+def activate_account(token):
     """Get the token from the URL and activate the user account"""
     # Get the token from the URL
-    current_user = get_jwt_identity()
+    decoded_token = decode_token(token)  # Decode the JWT token
+    current_user =  decoded_token.get('sub')  # 'sub' is typically the identity
     # Check it the token blong to a user
     if not current_user:
         # Return an error message if the token is invalid or expired

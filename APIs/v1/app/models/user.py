@@ -42,7 +42,6 @@ class User(db.Model):
             'username': self.username,
             'email': self.email,
             'phone_number': self.phone_number,
-            'type': self.type,
             'gander': self.gander,
             'location': self.location,
             'is_active': self.is_active,

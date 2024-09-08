@@ -20,31 +20,17 @@ from ..models.provider import Provider
 @swag_from(signup_doc)
 def signup():
     """Create a new user"""
-    if request.content_type == 'application/json':
-        data = request.get_json()
-        firstName = data.get('first_name')
-        lastName = data.get('last_name')
-        username = data.get('username')
-        email = data.get('email')
-        accountType = data.get('type')
-        phoneNumber = data.get('phone_number')
-        ganderType = data.get('gender')
-        userLocation = data.get('location')
-        password = data.get('password')
-        profilePicture = request.files.get('profile_image')  # No file upload in JSON
-    elif 'multipart/form-data' in request.content_type:
-        firstName = request.form.get('first_name')
-        lastName = request.form.get('last_name')
-        username = request.form.get('username')
-        email = request.form.get('email')
-        accountType = request.form.get('type')
-        phoneNumber = request.form.get('phone_number')
-        ganderType = request.form.get('gender')
-        userLocation = request.form.get('location')
-        password = request.form.get('password')
-        profilePicture = request.files.get('profile_image')
-    else:
-        return jsonify({'error': 'Unsupported Request Type'}), 415
+    # Get the data
+    firstName = request.form.get('first_name')
+    lastName = request.form.get('last_name')
+    username = request.form.get('username')
+    email = request.form.get('email')
+    accountType = request.form.get('type')
+    phoneNumber = request.form.get('phone_number')
+    ganderType = request.form.get('gender')
+    userLocation = request.form.get('location')
+    password = request.form.get('password')
+    profilePicture = request.files.get('profile_image')
 
     # Validate required fields
     if not username or not email or not password:

@@ -110,3 +110,5 @@ server_configuration/backups/
 .DS_Store
 Thumbs.db
 
+# static/imagefolder
+static/

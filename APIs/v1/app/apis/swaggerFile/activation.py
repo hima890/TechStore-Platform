@@ -2,65 +2,78 @@
 # swagger_docs.py
 
 # Documentation for the activiation endpoint
-activation = {
-    'tags': ['User activiation'],
+activate_account_doc = {
+    'tags': ['User Activation'],
+    'description': 'Activate user account by submitting the token received via email in JSON format.',
     'parameters': [
         {
-            'name': 'token',
-            'in': 'query',
-            'type': 'string',
-            'required': False,
-            'description': 'Activates a user account using a JWT token provided either as a query parameter.'
-        }
-        ,
-        {
-            'name': 'Authorization',
-            'in': 'header',
-            'type': 'string',
-            'required': False,
-            'description': 'WT token provided in the Authorization header. Expected format: Bearer <token>'
+            'name': 'body',
+            'in': 'path',
+            'required': True,
+            'schema': {
+                'type': 'object',
+                'properties': {
+                    'token': {
+                        'type': 'string',
+                        'description': 'The token sent to the user via email for account activation.',
+                        'example': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
+                        'required': True
+                    }
+                }
+            }
         }
     ],
     'consumes': [
-        'application/json',  # Set the content type to JSON
-        'multipart/form-data',  # Uncomment this line to use multipart form data
+        'application/json'
     ],
     'responses': {
         200: {
-            'description': 'Account activated successfully.',
+            'description': 'Account activated successfully',
             'schema': {
                 'type': 'object',
                 'properties': {
                     'message': {
                         'type': 'string',
-                        'example': 'Account activated successfully.'
+                        'example': 'Account successfully activated.'
                     }
                 }
             }
         },
         400: {
-            'description': 'Invalid or expired token.',
+            'description': 'Invalid or expired token',
             'schema': {
                 'type': 'object',
                 'properties': {
                     'error': {
                         'type': 'string',
-                        'example': 'Invalid or expired token.'
+                        'example': 'Invalid token'
                     }
                 }
             }
         },
-        401: {
-            'description': 'Authorization information is missing or invalid.',
+        404: {
+            'description': 'User not found',
             'schema': {
                 'type': 'object',
                 'properties': {
                     'error': {
                         'type': 'string',
-                        'example': 'Authorization information is missing or invalid.'
+                        'example': 'User not found'
                     }
                 }
             }
         },
+        500: {
+            'description': 'Internal Server Error',
+            'schema': {
+                'type': 'object',
+                'properties': {
+                    'error': {
+                        'type': 'string',
+                        'example': 'Internal Server Error'
+                    }
+                }
+            }
+        }
     }
 }
