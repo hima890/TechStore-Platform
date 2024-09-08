@@ -1,6 +1,8 @@
 #!/usr/bin/python3
 """ Activation API Endpoints """
+from .swaggerFile.activation import activation
 from flask import request, jsonify, url_for
+from flasgger import swag_from
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from . import activation
 from .. import db
@@ -10,6 +12,7 @@ from ..models.user import User
 
 @activation.route('/activate', methods=['GET'])
 @jwt_required(optional=True)
+@swag_from(activation)
 def activate_account():
     """Get the token from the URL and activate the user account"""
     # Get the token from the URL
