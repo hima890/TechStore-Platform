@@ -1,7 +1,7 @@
 """Sawqer documentation for the OPT code API endpoints"""
 
 # Documentation for the OPT code endpoint
-login = {
+opt_Code = {
     'tags': ['Password reset by OPT code'],
     'parameters': [
         {
