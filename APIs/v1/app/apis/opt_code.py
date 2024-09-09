@@ -9,7 +9,7 @@ from ..models.provider import Provider
 from . import optCode
 from .utils import generateOtpCode
 from ..utils.sendEmail import send_email
-from from .swaggerFile.swagger_docs import signup_d
+from from .swaggerFile.swagger_docs import opt_Code
 
 
 
@@ -35,7 +35,7 @@ def sendNewOptCode():
     if user.is_active != True:
         return jsonify({
                 "status": "error",
-                "message": "User acoount need to be activated"
+                "message": "User acount need to be activated"
                 }), 401
 
     # generate OTP and creation time
@@ -69,3 +69,12 @@ def sendNewOptCode():
                 optCode
             )
             )
+
+    # Return seccuses respound
+    return return jsonify({
+            "status": "success",
+            "message": "OPT code has been sent successful",
+            "data": {
+                "email": user.email
+            }
+        }), 200
