@@ -8,7 +8,7 @@ from ..models.provider import Provider
 from . import optCode
 
 
-@optCode.route('/opt', methods=['POST'])
+@optCode.route('/opt', methods=['GET'])
 @limiter.limit("5 per minute")
 def sendNewOptCode():
     return jsonify(
