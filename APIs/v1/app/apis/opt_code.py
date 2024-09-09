@@ -6,6 +6,7 @@ from flask import request, jsonify
 from ..models.user import User
 from ..models.provider import Provider
 from . import optCode
+from .utils import generateOtpCode
 
 
 @optCode.route('/opt', methods=['GET'])
