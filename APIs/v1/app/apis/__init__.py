@@ -7,9 +7,11 @@ endPoints = Blueprint('endPoints', __name__, url_prefix='/api/v1')
 signUp = Blueprint('signUp', __name__, url_prefix='/api/v1')
 activation = Blueprint('activation', __name__, url_prefix='/api/v1')
 signIn = Blueprint('signin', __name__, url_prefix='/api/v1')
+optCode = Blueprint('code', __name__,  url_prefix='/api/v1')
 
 # Import the API endpoints
 from .get_config import *
 from .signup import *
 from .userActivation import *
 from .signin import *
+from .opt_code import *
