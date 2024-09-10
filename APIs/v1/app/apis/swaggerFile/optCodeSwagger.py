@@ -30,7 +30,11 @@ optCodeDoc = {
             'schema': {
                 'type': 'object',
                 'properties': {
-                    'error': {
+                    'status': {
+                        'type': 'string',
+                        'example': 'error'
+                    },
+                    'message': {
                         'type': 'string',
                         'example': 'User not found.'
                     }
@@ -42,7 +46,11 @@ optCodeDoc = {
             'schema': {
                 'type': 'object',
                 'properties': {
-                    'error': {
+                    'status': {
+                        'type': 'string',
+                        'example': 'error'
+                    },
+                    'message': {
                         'type': 'string',
                         'example': 'Invalid account.'
                     }

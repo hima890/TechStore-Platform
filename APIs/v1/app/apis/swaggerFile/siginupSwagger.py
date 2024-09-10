@@ -86,6 +86,10 @@ signuDoc = {
             'schema': {
                 'type': 'object',
                 'properties': {
+                    'status': {
+                        'type': 'string',
+                        'example': 'success'
+                    },
                     'message': {
                         'type': 'string',
                         'example': 'User created! Un email was sent to activate the account.'
@@ -98,7 +102,11 @@ signuDoc = {
             'schema': {
                 'type': 'object',
                 'properties': {
-                    'error': {
+                    'status': {
+                        'type': 'string',
+                        'example': 'error'
+                    },
+                    'message': {
                         'type': 'string',
                         'example': 'Missing fields'
                     }
@@ -110,7 +118,11 @@ signuDoc = {
             'schema': {
                 'type': 'object',
                 'properties': {
-                    'error': {
+                    'status': {
+                        'type': 'string',
+                        'example': 'error'
+                    },
+                    'message': {
                         'type': 'string',
                         'example': 'User already exists'
                     }
@@ -122,7 +134,11 @@ signuDoc = {
             'schema': {
                 'type': 'object',
                 'properties': {
-                    'error': {
+                    'status': {
+                        'type': 'string',
+                        'example': 'error'
+                    },
+                    'message': {
                         'type': 'string',
                         'example': 'Unsupported Request Type'
                     }
@@ -134,7 +150,11 @@ signuDoc = {
             'schema': {
                 'type': 'object',
                 'properties': {
-                    'error': {
+                    'status': {
+                        'type': 'string',
+                        'example': 'error'
+                    },
+                    'message': {
                         'type': 'string',
                         'example': 'Internal Server Error'
                     }

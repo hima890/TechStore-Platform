@@ -44,7 +44,11 @@ activiationDoc = {
             'schema': {
                 'type': 'object',
                 'properties': {
-                    'error': {
+                    'status': {
+                        'type': 'string',
+                        'example': 'error'
+                    },
+                    'message': {
                         'type': 'string',
                         'example': 'Invalid token'
                     }
@@ -56,7 +60,11 @@ activiationDoc = {
             'schema': {
                 'type': 'object',
                 'properties': {
-                    'error': {
+                    'status': {
+                        'type': 'string',
+                        'example': 'error'
+                    },
+                    'message': {
                         'type': 'string',
                         'example': 'User not found'
                     }
@@ -68,7 +76,11 @@ activiationDoc = {
             'schema': {
                 'type': 'object',
                 'properties': {
-                    'error': {
+                    'status': {
+                        'type': 'string',
+                        'example': 'error'
+                    },
+                    'message': {
                         'type': 'string',
                         'example': 'Internal Server Error'
                     }
