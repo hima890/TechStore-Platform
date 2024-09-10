@@ -5,6 +5,7 @@ from werkzeug.security import generate_password_hash,check_password_hash
 from flask_jwt_extended import create_access_token
 from flasgger import swag_from
 from .swaggerFile.swagger_docs import signup_doc
+from .swaggerFile.resendSwagger import resend
 from datetime import timedelta
 from .. import limiter
 from . import endPoints
@@ -109,7 +110,7 @@ def signup():
 
 @endPoints.route('/resend-confirmation', methods=['POST'])
 @limiter.limit("5 per minute")
-@swag_from(signup_doc)
+@swag_from(resend)
 def resendConfirmation():
     # Get user email from the request
     email = request.json.get('email')
@@ -125,10 +126,10 @@ def resendConfirmation():
                 }), 404
 
     # Check if the account is active
-    if user.is_active != True:
+    if user.is_active == True:
         return jsonify({
                 "status": "error",
-                "message": "User acount need to be activated"
+                "message": "User acount already activated"
                 }), 401
 
     try:
