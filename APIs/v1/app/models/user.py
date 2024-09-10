@@ -19,6 +19,8 @@ class User(db.Model):
     location = db.Column(db.String(150), nullable=True)
     password_hash = db.Column(db.String(128), nullable=False)
     is_active = db.Column(db.Boolean, default=False)
+    opt_code = db.Column(db.Integer, nullable=True)
+    opt_code_time = db.Column(db.DateTime, nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 

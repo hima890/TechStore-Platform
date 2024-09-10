@@ -5,6 +5,7 @@ from werkzeug.security import generate_password_hash,check_password_hash
 from flask_jwt_extended import create_access_token
 from flasgger import swag_from
 from .swaggerFile.swagger_docs import signup_doc
+from .swaggerFile.resendSwagger import resend
 from datetime import timedelta
 from .. import limiter
 from . import endPoints
@@ -77,15 +78,16 @@ def signup():
             profile_image=filename
             )
 
-    # Save the user in the database
     try:
+        # Save the user in the database
         db.session.add(newUser)
         db.session.commit()
+
         # Create an access token with a short expiration time
         activationToken = create_access_token(identity=email, expires_delta=timedelta(hours=1))
 
         # Send email with activation link
-        activationURL = "http://localhost:5001/api/v1/activate?token={}".format(activationToken)
+        activationURL = "http://localhost:5001/api/v1/activate/{}".format(activationToken)
         send_email(
             email,
             "Please click the link to activate your account: {}".format(activationURL),
@@ -104,3 +106,53 @@ def signup():
         db.session.rollback()
         db.session.commit()
         return jsonify({"error": "An error occurred while creating the user."}), 500
+
+
+@endPoints.route('/resend-confirmation', methods=['POST'])
+@limiter.limit("5 per minute")
+@swag_from(resend)
+def resendConfirmation():
+    # Get user email from the request
+    email = request.json.get('email')
+
+    # Find the user by email
+    user = User.query.filter_by(email=email).first()
+    if not user:
+        user = Provider.query.filter_by(email=email).first()
+        if not user:
+            return jsonify({
+                "status": "error",
+                "message": "User not found"
+                }), 404
+
+    # Check if the account is active
+    if user.is_active == True:
+        return jsonify({
+                "status": "error",
+                "message": "User acount already activated"
+                }), 401
+
+    try:
+        # Create a new access token with a short expiration time
+        activationToken = create_access_token(identity=email, expires_delta=timedelta(hours=1))
+
+        # Send email with activation link
+        activationURL = "http://localhost:5001/api/v1/activate/{}".format(activationToken)
+        send_email(
+            email,
+            "Please click the link to activate your account: {}".format(activationURL),
+            "Account Activation"
+            )
+
+        # Return a success message with the user data
+        return jsonify(
+            {"status": "success",},
+            {"message": "Confirmation email resent. Please check your inbox."},
+            ), 200
+    except Exception as e:
+        # Return to the last change
+        print(e)
+        return jsonify({
+            "status": "error",
+            "message": "An error occurred while resending confirmation email."
+            }), 500

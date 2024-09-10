@@ -28,7 +28,17 @@ def signin():
     if not user:
         user = Provider.query.filter_by(email=email).first()
         if not user:
-            return jsonify({"error": "User not found"}), 404
+            return jsonify({
+                "status": "error",
+                "message": "User not found"
+                }), 404
+
+    # Check if the account is active
+    if user.is_active != True:
+        return jsonify({
+                "status": "error",
+                "message": "User acount need to be activated"
+                }), 401
 
     # Check if the password is correct
     if not check_password_hash(user.password_hash, password):
@@ -55,4 +65,7 @@ def signin():
     except Exception as e:
         # Return to the last change
         print("{}".format(e))
-        return jsonify({"error": "An error occurred while authenicate the user."}), 500
+        return jsonify({
+            "status": "error",
+            "message": "An error occurred while authenicate the user."
+            }), 500
