@@ -33,6 +33,13 @@ def signin():
                 "message": "User not found"
                 }), 404
 
+    # Check if the account is active
+    if user.is_active != True:
+        return jsonify({
+                "status": "error",
+                "message": "User acount need to be activated"
+                }), 401
+
     # Check if the password is correct
     if not check_password_hash(user.password_hash, password):
         return jsonify({"error": "Invalid password"}), 401

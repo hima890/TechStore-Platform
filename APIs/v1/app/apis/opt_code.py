@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-""" OPT API Endpoints """
+""" OPT API send and resend Endpoints """
 from flasgger import swag_from
 from .. import db
 from .. import limiter
