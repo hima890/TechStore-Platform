@@ -1,21 +1,20 @@
 #!/usr/bin/python3
 """ Signin API Endpoints """
 from flasgger import swag_from
-from .. import limiter
 from flask import request, jsonify
-from datetime import timedelta
 from werkzeug.security import check_password_hash
 from flask_jwt_extended import create_access_token
-from ..models.user import User
-from ..models.provider import Provider
-from .swaggerFile.loginSwagger import login
+from datetime import timedelta
 from . import signIn
+from .swaggerFile import siginDoc
+from .. import limiter
+from ..models import User, Provider
 
 
 
 @signIn.route('/signin', methods=['POST'])
 @limiter.limit("5 per minute")
-@swag_from(login)
+@swag_from(siginDoc)
 def signin():
     """Sign in a user"""
     # Get the request data based on the content_type

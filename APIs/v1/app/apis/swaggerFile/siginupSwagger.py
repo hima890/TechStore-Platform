@@ -2,7 +2,7 @@
 # swagger_docs.py
 
 # Documentation for the signup endpoint
-signup_doc = {
+signuDoc = {
     'tags': ['User Registration'],
     'parameters': [
         {
@@ -86,6 +86,10 @@ signup_doc = {
             'schema': {
                 'type': 'object',
                 'properties': {
+                    'status': {
+                        'type': 'string',
+                        'example': 'success'
+                    },
                     'message': {
                         'type': 'string',
                         'example': 'User created! Un email was sent to activate the account.'
@@ -98,7 +102,11 @@ signup_doc = {
             'schema': {
                 'type': 'object',
                 'properties': {
-                    'error': {
+                    'status': {
+                        'type': 'string',
+                        'example': 'error'
+                    },
+                    'message': {
                         'type': 'string',
                         'example': 'Missing fields'
                     }
@@ -110,7 +118,11 @@ signup_doc = {
             'schema': {
                 'type': 'object',
                 'properties': {
-                    'error': {
+                    'status': {
+                        'type': 'string',
+                        'example': 'error'
+                    },
+                    'message': {
                         'type': 'string',
                         'example': 'User already exists'
                     }
@@ -122,7 +134,11 @@ signup_doc = {
             'schema': {
                 'type': 'object',
                 'properties': {
-                    'error': {
+                    'status': {
+                        'type': 'string',
+                        'example': 'error'
+                    },
+                    'message': {
                         'type': 'string',
                         'example': 'Unsupported Request Type'
                     }
@@ -134,7 +150,11 @@ signup_doc = {
             'schema': {
                 'type': 'object',
                 'properties': {
-                    'error': {
+                    'status': {
+                        'type': 'string',
+                        'example': 'error'
+                    },
+                    'message': {
                         'type': 'string',
                         'example': 'Internal Server Error'
                     }

@@ -1,20 +1,20 @@
 #!/usr/bin/python3
 """ Activation API Endpoints """
-from .swaggerFile.activation import activate_account_doc
 from flask import request, jsonify, url_for
 from flasgger import swag_from
 from flask_jwt_extended import decode_token
-from .. import limiter
+from .swaggerFile import activiationDoc
 from . import activation
+from .. import limiter
 from .. import db
-from ..models.user import User
-from ..models.provider import Provider
+from ..models import User, Provider
+
 
 
 
 @activation.route('/activate/<token>', methods=['GET'])
 @limiter.limit("5 per minute")
-@swag_from(activate_account_doc)
+@swag_from(activiationDoc)
 def activate_account(token):
     """Get the token from the URL and activate the user account"""
     # Get the token from the URL

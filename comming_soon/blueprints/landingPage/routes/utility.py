@@ -14,7 +14,7 @@ def userRegistration(email):
     # Now, trigger the email microservice
     try:
         response = requests.post(
-            'http://localhost:5004/send_welcome_email',
+            'http://localhost:5005/send_welcome_email',
             json={'email': email}
         )
         if response.status_code == 200:

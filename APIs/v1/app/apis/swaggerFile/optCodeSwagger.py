@@ -1,9 +1,8 @@
-"""Sawqer documentation for the login API endpoints"""
-# login.py
+"""Sawqer documentation for the OPT code API endpoints"""
 
-# Documentation for the login endpoint
-login = {
-    'tags': ['User login'],
+# Documentation for the OPT code endpoint
+optCodeDoc = {
+    'tags': ['Password reset by OPT code'],
     'parameters': [
         {
             'name': 'body',
@@ -16,14 +15,9 @@ login = {
                         'type': 'string',
                         'example': 'hfibrahim90@gmail.com',
                         'description': 'The email of the user'
-                    },
-                    'password': {
-                        'type': 'string',
-                        'example': 'hima890',
-                        'description': 'The password of the user'
                     }
                 },
-                'required': ['email', 'password']
+                'required': ['email']
             }
         }
     ],
@@ -36,7 +30,11 @@ login = {
             'schema': {
                 'type': 'object',
                 'properties': {
-                    'error': {
+                    'status': {
+                        'type': 'string',
+                        'example': 'error'
+                    },
+                    'message': {
                         'type': 'string',
                         'example': 'User not found.'
                     }
@@ -44,19 +42,23 @@ login = {
             }
         },
         401: {
-            'description': 'Invalid password.',
+            'description': 'User acount need to be activated.',
             'schema': {
                 'type': 'object',
                 'properties': {
-                    'error': {
+                    'status': {
                         'type': 'string',
-                        'example': 'Invalid password.'
+                        'example': 'error'
+                    },
+                    'message': {
+                        'type': 'string',
+                        'example': 'Invalid account.'
                     }
                 }
             }
         },
         200: {
-            'description': 'Authentication successful',
+            'description': 'OPT code successful',
             'schema': {
                 'type': 'object',
                 'properties': {
@@ -66,7 +68,7 @@ login = {
                     },
                     'message': {
                         'type': 'string',
-                        'example': 'Authentication successful'
+                        'example': 'OPT code successful'
                     },
                     'data': {
                         'type': 'object',
@@ -74,18 +76,6 @@ login = {
                             'email': {
                                 'type': 'string',
                                 'example': '  [email protected]'
-                            },
-                            'username': {
-                                'type': 'string',
-                                'example': 'John Doe'
-                            },
-                            'userId': {
-                                'type': 'integer',
-                                'example': 1
-                            },
-                            'token': {
-                                'type': 'string',
-                                'example': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImFkbWluQGVtYWlsLmNvbSIsImV4cCI6MTU2MjUwNzQyNn0.4x7z4FqRQwU5J3sXg'
                             }
                         }
                     }
