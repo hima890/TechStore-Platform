@@ -1,14 +1,14 @@
 #!/usr/bin/python3
 """ Activation API Endpoints """
-from .swaggerFile.activationSwagger import activiationDoc
 from flask import request, jsonify, url_for
 from flasgger import swag_from
 from flask_jwt_extended import decode_token
-from .. import limiter
+from .swaggerFile import activiationDoc
 from . import activation
+from .. import limiter
 from .. import db
-from ..models.user import User
-from ..models.provider import Provider
+from ..models import User, Provider
+
 
 
 

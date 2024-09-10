@@ -4,16 +4,14 @@ from flask import request, jsonify, url_for
 from werkzeug.security import generate_password_hash,check_password_hash
 from flask_jwt_extended import create_access_token
 from flasgger import swag_from
-from .swaggerFile.siginupSwagger import signuDoc
-from .swaggerFile.resendSwagger import resendDoc
 from datetime import timedelta
-from .. import limiter
+from .swaggerFile import signuDoc, resendDoc
 from . import signUp
-from ..utils.sendEmail import send_email
-from ..utils.saveProfilePicture import saveProfilePicture
+from .. import limiter
+from ..utils import send_email, saveProfilePicture
 from .. import db
-from ..models.user import User
-from ..models.provider import Provider
+from ..models import User, Provider
+
 
 
 @signUp.route('/signup', methods=['POST'])

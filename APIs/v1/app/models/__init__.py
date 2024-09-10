@@ -2,3 +2,4 @@
 """ All models for the application """
 
 from .user import User
+from .provider import Provider

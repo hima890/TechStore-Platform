@@ -1,16 +1,13 @@
 #!/usr/bin/python3
 """ OPT API send and resend Endpoints """
+from flask import request, jsonify
 from flasgger import swag_from
+from . import optCode
+from .swaggerFile import optCodeDoc
+from ..models import User, Provider
 from .. import db
 from .. import limiter
-from flask import request, jsonify
-from ..models.user import User
-from ..models.provider import Provider
-from . import optCode
-from ..utils.generateOtpCode import generate_otp
-from ..utils.sendEmail import send_email
-from .swaggerFile.optCodeSwagger import optCodeDoc
-
+from ..utils import generate_otp, sendEmail
 
 
 
