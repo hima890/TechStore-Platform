@@ -5,14 +5,16 @@ from flasgger import swag_from
 from werkzeug.security import generate_password_hash
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from . import passwordReset
+from .swaggerFile import resetDoc
 from ..models import User, Provider
 from .. import db
 from .. import limiter
 
 
-@passwordReset.route('/opt', methods=['POST'])
+@passwordReset.route('/password-reset', methods=['POST'])
 @jwt_required()
 @limiter.limit("5 per minute")
+@swag_from(resetDoc)
 # @swag_from(optCodeDoc)
 def reset():
     """Reset a user's password"""
