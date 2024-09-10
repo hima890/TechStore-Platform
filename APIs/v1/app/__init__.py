@@ -2,7 +2,7 @@
 """ Flask Application """
 import os
 from dotenv import load_dotenv
-from flask import Flask
+from flask import Flask, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_jwt_extended import JWTManager
@@ -22,8 +22,15 @@ config_name = os.environ.get('FLASK_CONFIG', 'testing')
 db = SQLAlchemy()
 migrate = Migrate()
 
-# intialize JWTManager
+# intialize and Configer JWTManager
 jwt = JWTManager()
+# Custom error handler for missing token
+@jwt.unauthorized_loader
+def custom_unauthorized_response(callback):
+    return jsonify({
+        "status": "error",
+        "message": "Missing Authorization Header"
+    }), 401
 
 # Create the Flask app instance
 app = Flask(__name__, instance_relative_config=True)
