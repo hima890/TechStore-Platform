@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-""" Signup API Endpoints """
+""" Signup API signUp """
 from flask import request, jsonify, url_for
 from werkzeug.security import generate_password_hash,check_password_hash
 from flask_jwt_extended import create_access_token
@@ -8,7 +8,7 @@ from .swaggerFile.swagger_docs import signup_doc
 from .swaggerFile.resendSwagger import resend
 from datetime import timedelta
 from .. import limiter
-from . import endPoints
+from . import signUp
 from ..utils.sendEmail import send_email
 from ..utils.saveProfilePicture import saveProfilePicture
 from .. import db
@@ -16,7 +16,7 @@ from ..models.user import User
 from ..models.provider import Provider
 
 
-@endPoints.route('/signup', methods=['POST'])
+@signUp.route('/signup', methods=['POST'])
 @limiter.limit("5 per minute")
 @swag_from(signup_doc)
 def signup():
@@ -108,7 +108,7 @@ def signup():
         return jsonify({"error": "An error occurred while creating the user."}), 500
 
 
-@endPoints.route('/resend-confirmation', methods=['POST'])
+@signUp.route('/resend-confirmation', methods=['POST'])
 @limiter.limit("5 per minute")
 @swag_from(resend)
 def resendConfirmation():
