@@ -5,7 +5,7 @@ from flask_jwt_extended import create_access_token
 from flasgger import swag_from
 from datetime import timedelta
 from . import optCode
-from .swaggerFile import optCodeDoc
+from .swaggerFile import optCodeDoc, verifyDoc
 from ..models import User, Provider
 from .. import db
 from .. import limiter
@@ -124,27 +124,28 @@ def sendNewOptCode():
 
 @optCode.route('/otp-verify', methods=['POST'])
 @limiter.limit("5 per minute")
+@swag_from(verifyDoc)
 def verify():
     # Get the opt code
     data = request.get_json()
-    optCode = data.get('optCode')
+    otpCode = int(data.get('otpCode'))
 
     # Check if the OPT code excit with account
-    user = User.query.filter_by(opt_code=optCode).first()
+    user = User.query.filter_by(opt_code=otpCode).first()
     if not user:
-        user = Provider.query.filter_by(opt_code=optCode).first()
+        user = Provider.query.filter_by(opt_code=otpCode).first()
         if not user:
             return jsonify({
                 "status": "error",
                 "message": "Invalid OPT code"
-                }), 404
+                }), 401
 
     # Check if the OPT code is valid
     otpCreationTime = user.opt_code_time
     if not isOtpValid(otpCreationTime):
         return jsonify({
                 "status": "error",
-                "message": "Invalid OPT code, time out"
+                "message": "Invalid OTP code, time out"
                 }), 404
     else:
         # Return a success message and a token for subrequests

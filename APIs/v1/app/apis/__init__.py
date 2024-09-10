@@ -12,4 +12,4 @@ optCode = Blueprint('sendOptCode', __name__,  url_prefix='/api/v1')
 from .signupEndPoint import *
 from .userActivationEndPoint import *
 from .signinEndPoint import *
-from .optCodeEndPoint import *
+from .otpCodeEndPoint import *

@@ -3,4 +3,4 @@
 from .generateOtpCode import generate_otp
 from .saveProfilePicture import saveProfilePicture
 from .sendEmail import send_email
-from .checkOptCode import isOtpValid
+from .checkOtpCode import isOtpValid
