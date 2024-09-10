@@ -39,7 +39,6 @@ def send_email(recipient):
             <p style="margin-top: 30px;">Best Regards,<br><strong>The TechStore Team</strong></p>
             <footer style="text-align: center; margin-top: 20px; color: #777;">
                 <p>&copy; 2024 TechStore. All rights reserved.</p>
-                <p><a href="https://techstore.example.com" style="color: #1a73e8;">Visit our website</a></p>
             </footer>
         </div>
     </body>
@@ -66,4 +65,4 @@ def send_email(recipient):
         print(f"Failed to send email: {e}")
 
 if __name__ == "__main__":
-    app.run(port=5004, debug=True)
+    app.run(port=5005, debug=True)
