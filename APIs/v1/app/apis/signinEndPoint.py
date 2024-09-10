@@ -8,14 +8,14 @@ from werkzeug.security import check_password_hash
 from flask_jwt_extended import create_access_token
 from ..models.user import User
 from ..models.provider import Provider
-from .swaggerFile.loginSwagger import login
+from .swaggerFile.signinSwagger import siginDoc
 from . import signIn
 
 
 
 @signIn.route('/signin', methods=['POST'])
 @limiter.limit("5 per minute")
-@swag_from(login)
+@swag_from(siginDoc)
 def signin():
     """Sign in a user"""
     # Get the request data based on the content_type

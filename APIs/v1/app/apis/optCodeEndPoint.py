@@ -9,14 +9,14 @@ from ..models.provider import Provider
 from . import optCode
 from ..utils.generateOtpCode import generate_otp
 from ..utils.sendEmail import send_email
-from .swaggerFile.opt_Code import opt_Code
+from .swaggerFile.optCodeSwagger import optCodeDoc
 
 
 
 
 @optCode.route('/opt', methods=['POST'])
 @limiter.limit("5 per minute")
-@swag_from(opt_Code)
+@swag_from(optCodeDoc)
 def sendNewOptCode():
     # Get the user account email
     data = request.get_json()

@@ -2,7 +2,7 @@
 # swagger_docs.py
 
 # Documentation for the activiation endpoint
-activate_account_doc = {
+activiationDoc = {
     'tags': ['User Activation'],
     'description': 'Activate user account by submitting the token received via email in JSON format.',
     'parameters': [

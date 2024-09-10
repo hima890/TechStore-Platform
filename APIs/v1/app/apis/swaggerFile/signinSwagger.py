@@ -1,8 +1,9 @@
-"""Sawqer documentation for the OPT code API endpoints"""
+"""Sawqer documentation for the login API endpoints"""
+# login.py
 
-# Documentation for the OPT code endpoint
-opt_Code = {
-    'tags': ['Password reset by OPT code'],
+# Documentation for the login endpoint
+siginDoc = {
+    'tags': ['User login'],
     'parameters': [
         {
             'name': 'body',
@@ -15,9 +16,14 @@ opt_Code = {
                         'type': 'string',
                         'example': 'hfibrahim90@gmail.com',
                         'description': 'The email of the user'
+                    },
+                    'password': {
+                        'type': 'string',
+                        'example': 'hima890',
+                        'description': 'The password of the user'
                     }
                 },
-                'required': ['email']
+                'required': ['email', 'password']
             }
         }
     ],
@@ -38,19 +44,19 @@ opt_Code = {
             }
         },
         401: {
-            'description': 'User acount need to be activated.',
+            'description': 'Invalid password.',
             'schema': {
                 'type': 'object',
                 'properties': {
                     'error': {
                         'type': 'string',
-                        'example': 'Invalid account.'
+                        'example': 'Invalid password.'
                     }
                 }
             }
         },
         200: {
-            'description': 'OPT code successful',
+            'description': 'Authentication successful',
             'schema': {
                 'type': 'object',
                 'properties': {
@@ -60,7 +66,7 @@ opt_Code = {
                     },
                     'message': {
                         'type': 'string',
-                        'example': 'OPT code successful'
+                        'example': 'Authentication successful'
                     },
                     'data': {
                         'type': 'object',
@@ -68,6 +74,18 @@ opt_Code = {
                             'email': {
                                 'type': 'string',
                                 'example': '  [email protected]'
+                            },
+                            'username': {
+                                'type': 'string',
+                                'example': 'John Doe'
+                            },
+                            'userId': {
+                                'type': 'integer',
+                                'example': 1
+                            },
+                            'token': {
+                                'type': 'string',
+                                'example': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImFkbWluQGVtYWlsLmNvbSIsImV4cCI6MTU2MjUwNzQyNn0.4x7z4FqRQwU5J3sXg'
                             }
                         }
                     }

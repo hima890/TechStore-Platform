@@ -1,7 +1,7 @@
 """Sawqer documentation for resend token API endpoints"""
 
 # Documentation for the OPT code endpoint
-resend = {
+resendDoc = {
     'tags': ['Resend conformation token by email'],
     'parameters': [
         {

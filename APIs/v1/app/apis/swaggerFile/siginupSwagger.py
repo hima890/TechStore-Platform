@@ -2,7 +2,7 @@
 # swagger_docs.py
 
 # Documentation for the signup endpoint
-signup_doc = {
+signuDoc = {
     'tags': ['User Registration'],
     'parameters': [
         {

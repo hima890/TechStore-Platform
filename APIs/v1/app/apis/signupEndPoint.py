@@ -4,8 +4,8 @@ from flask import request, jsonify, url_for
 from werkzeug.security import generate_password_hash,check_password_hash
 from flask_jwt_extended import create_access_token
 from flasgger import swag_from
-from .swaggerFile.swagger_docs import signup_doc
-from .swaggerFile.resendSwagger import resend
+from .swaggerFile.siginupSwagger import signuDoc
+from .swaggerFile.resendSwagger import resendDoc
 from datetime import timedelta
 from .. import limiter
 from . import signUp
@@ -18,7 +18,7 @@ from ..models.provider import Provider
 
 @signUp.route('/signup', methods=['POST'])
 @limiter.limit("5 per minute")
-@swag_from(signup_doc)
+@swag_from(signuDoc)
 def signup():
     """Create a new user"""
     # Get the data
@@ -110,7 +110,7 @@ def signup():
 
 @signUp.route('/resend-confirmation', methods=['POST'])
 @limiter.limit("5 per minute")
-@swag_from(resend)
+@swag_from(resendDoc)
 def resendConfirmation():
     # Get user email from the request
     email = request.json.get('email')
