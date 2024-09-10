@@ -7,9 +7,11 @@ signUp = Blueprint('signUp', __name__, url_prefix='/api/v1')
 activation = Blueprint('activation', __name__, url_prefix='/api/v1')
 signIn = Blueprint('signin', __name__, url_prefix='/api/v1')
 optCode = Blueprint('sendOptCode', __name__,  url_prefix='/api/v1')
+passwordReset = Blueprint('passwordReset', __name__,  url_prefix='/api/v1')
 
 # Import the API endpoints to register them with the Blueprint
 from .signupEndPoint import *
 from .userActivationEndPoint import *
 from .signinEndPoint import *
 from .otpCodeEndPoint import *
+from .passwordResetEndPiont import *

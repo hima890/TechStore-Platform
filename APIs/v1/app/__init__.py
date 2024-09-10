@@ -63,12 +63,13 @@ def create_app():
         # Import tabels after db is initialized
         from .models import User
         # Import the end-point
-        from .apis import signUp, activation, signIn, optCode
+        from .apis import signUp, activation, signIn, optCode, passwordReset
         # Register the end-pointe
         app.register_blueprint(signUp)
         app.register_blueprint(activation)
         app.register_blueprint(signIn)
         app.register_blueprint(optCode)
+        app.register_blueprint(passwordReset)
         # Create the database tabels
         db.create_all()
 
