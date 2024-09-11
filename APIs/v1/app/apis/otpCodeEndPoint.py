@@ -1,13 +1,15 @@
 #!/usr/bin/python3
 """ OPT API send and resend Endpoints """
 from flask import request, jsonify
+from flask_jwt_extended import create_access_token
 from flasgger import swag_from
+from datetime import timedelta
 from . import optCode
-from .swaggerFile import optCodeDoc
+from .swaggerFile import optCodeDoc, verifyDoc
 from ..models import User, Provider
 from .. import db
 from .. import limiter
-from ..utils import generate_otp, sendEmail
+from ..utils import generate_otp, send_email, isOtpValid
 
 
 
@@ -117,3 +119,58 @@ def sendNewOptCode():
                 "email": user.email
             }
         }), 200
+
+
+
+@optCode.route('/otp-verify', methods=['POST'])
+@limiter.limit("5 per minute")
+@swag_from(verifyDoc)
+def verify():
+    # Get the opt code
+    data = request.get_json()
+    otpCode = int(data.get('otpCode'))
+
+    # Check if the OPT code excit with account
+    user = User.query.filter_by(opt_code=otpCode).first()
+    if not user:
+        user = Provider.query.filter_by(opt_code=otpCode).first()
+        if not user:
+            return jsonify({
+                "status": "error",
+                "message": "Invalid OPT code"
+                }), 401
+
+    # Check if the OPT code is valid
+    otpCreationTime = user.opt_code_time
+    if not isOtpValid(otpCreationTime):
+        return jsonify({
+                "status": "error",
+                "message": "Invalid OTP code, time out"
+                }), 404
+    else:
+        # Return a success message and a token for subrequests
+        # Generate JWT token whit the user email as the identity and for 24 hours
+        email = user.email
+        try:
+            access_token = create_access_token(
+                identity=user.email,
+                expires_delta=timedelta(hours=24))
+            # return the a response with access token
+            return jsonify({
+                "status": "success",
+                "message": "Authentication successful",
+                "data": {
+                    "email": user.email,
+                    "username": user.username,
+                    "userId": user.id,
+                    "token": access_token
+                }
+            }), 200
+
+        except Exception as e:
+            # Return to the last change
+            print("{}".format(e))
+            return jsonify({
+                "status": "error",
+                "message": "An error occurred while authenicate the user."
+                }), 500

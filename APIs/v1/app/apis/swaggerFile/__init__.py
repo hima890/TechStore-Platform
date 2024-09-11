@@ -5,3 +5,5 @@ from .signinSwagger import siginDoc
 from .siginupSwagger import signuDoc
 from .resendSwagger import resendDoc
 from .optCodeSwagger import optCodeDoc
+from .otpVerifySwagger import verifyDoc
+from .passwordResetSwagger import resetDoc
