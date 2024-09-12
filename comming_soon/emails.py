@@ -10,6 +10,12 @@ from dotenv import load_dotenv
 load_dotenv("../.env")
 
 app = Flask(__name__)
+# Set the sekrite key
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+app.config['SENDER_EMAIL'] = os.getenv('SENDER_EMAIL')
+app.config['SENDER_PASSWORD'] = os.getenv('SENDER_PASSWORD')
+app.config['SMTP_SERVER'] = os.getenv('SMTP_SERVER')
+app.config['SMTP_PORT'] = os.getenv('SMTP_PORT')
 
 @app.route('/send_welcome_email', methods=['POST'])
 def send_welcome_email():
