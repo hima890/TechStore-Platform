@@ -1,4 +1,5 @@
 import requests
+import smtplib
 from models import Email
 from config import ProConfig
 from email.mime.multipart import MIMEMultipart
@@ -34,7 +35,7 @@ def userRegistration(email):
             </p>
             
             <div style="text-align: center; margin: 30px 0;">
-                <img src="https://example.com/launch-image.jpg" alt="Coming Soon" style="max-width: 100%; border-radius: 10px;">
+                <img src="https://tailwindflex.com/storage/thumbnails/simple-coming-soon-page-2/canvas.min.webp?v=1" alt="Coming Soon" style="max-width: 100%; border-radius: 10px;">
             </div>
             
             <p style="font-size: 1.1em; line-height: 1.6;">
@@ -50,11 +51,6 @@ def userRegistration(email):
                 <li><strong>Stay Informed:</strong> We’ll keep you in the loop with all the latest updates and offers.</li>
                 <li><strong>Connect:</strong> Easily reach out to tech providers and get personalized support.</li>
             </ul>
-            
-            <div style="text-align: center; margin-top: 40px;">
-                <a href="https://example.com" style="text-decoration: none; padding: 10px 20px; background-color: #1a73e8; color: white; border-radius: 5px; font-size: 1.1em;">Visit Our Website</a>
-            </div>
-
             <p style="margin-top: 40px; font-size: 1em; text-align: center;">Thank you for joining us on this exciting journey!</p>
 
             <p style="text-align: center; font-weight: bold; font-size: 1.2em;">The TechStore Team</p>
@@ -82,7 +78,7 @@ def userRegistration(email):
         server = smtplib.SMTP(server, serverPort)
         server.starttls()
         server.login(sender_email, sender_password)
-        server.sendmail(sender_email, recipient, msg.as_string())
+        server.sendmail(sender_email, email, msg.as_string())
         server.quit()
     except Exception as e:
         print(f"Failed to send email: {e}")

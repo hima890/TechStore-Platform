@@ -1,8 +1,8 @@
+import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from dotenv import load_dotenv
-import os
-from config import ProConfig, TestConfig
+from config import ProConfig
 
 # Load environment variables from .env file
 load_dotenv("../.env")
