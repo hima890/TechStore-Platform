@@ -19,6 +19,7 @@ def create_app(config_class=config_name):
     
     Return: The Flask app.
     """
+    print(os.getenv('SECRET_KEY'))
     # Initialize the app
     app = Flask(__name__)
 
