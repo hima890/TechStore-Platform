@@ -8,7 +8,7 @@ from config import ProConfig, TestConfig
 load_dotenv("../.env")
 
 # Determine which config class to use
-config_name = os.getenv('FLASK_CONFIG', 'config.ProConfig')  # Default to Config if not set
+config_name = ProConfig
 
 # Create the SQLAlchemy object
 db = SQLAlchemy()

@@ -25,19 +25,43 @@ def userRegistration(email):
     # HTML email content
     html_content = """
     <html>
-    <body style="font-family: Arial, sans-serif; color: #333;">
-        <div style="max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
-            <h2 style="color: #444;">Welcome to <span style="color: #1a73e8;">TechStore</span>!</h2>
-            <p>Thank you for registering with us. We are thrilled to have you on board.</p>
-            <p style="font-size: 1.1em;">Here are some next steps:</p>
-            <ul style="list-style-type: square;">
-                <li><strong>Explore:</strong> Browse our latest tech gadgets.</li>
-                <li><strong>Stay Updated:</strong> Subscribe to our newsletter for updates.</li>
-                <li><strong>Get Support:</strong> Contact us anytime for help.</li>
+    <body style="font-family: Arial, sans-serif; color: #333; background-color: #f4f4f9;">
+        <div style="max-width: 600px; margin: auto; padding: 30px; border: 1px solid #ddd; border-radius: 15px; background-color: white;">
+            <h2 style="color: #1a73e8; text-align: center;">Welcome to <span style="font-weight: bold;">TechStore</span>!</h2>
+            
+            <p style="font-size: 1.1em; line-height: 1.6; text-align: center;">
+                We're excited to have you join us! <strong>TechStore</strong> is a platform designed to bridge the gap between users and tech providers, creating a seamless way to discover the latest gadgets and connect with your favorite tech vendors.
+            </p>
+            
+            <div style="text-align: center; margin: 30px 0;">
+                <img src="https://example.com/launch-image.jpg" alt="Coming Soon" style="max-width: 100%; border-radius: 10px;">
+            </div>
+            
+            <p style="font-size: 1.1em; line-height: 1.6;">
+                We’re getting ready to launch something incredible very soon! Our mission is to make it easy for you to connect with the best tech gadgets and the people behind them. Whether you're a tech enthusiast or a gadget geek, you'll find something exciting on <strong>TechStore</strong>.
+            </p>
+            
+            <p style="font-size: 1.1em; line-height: 1.6; text-align: center;">
+                Here’s what to expect:
+            </p>
+            
+            <ul style="list-style-type: square; padding-left: 20px; font-size: 1.1em;">
+                <li><strong>Exclusive Access:</strong> Be among the first to explore our tech gadgets as soon as we launch.</li>
+                <li><strong>Stay Informed:</strong> We’ll keep you in the loop with all the latest updates and offers.</li>
+                <li><strong>Connect:</strong> Easily reach out to tech providers and get personalized support.</li>
             </ul>
-            <p style="margin-top: 30px;">Best Regards,<br><strong>The TechStore Team</strong></p>
-            <footer style="text-align: center; margin-top: 20px; color: #777;">
+            
+            <div style="text-align: center; margin-top: 40px;">
+                <a href="https://example.com" style="text-decoration: none; padding: 10px 20px; background-color: #1a73e8; color: white; border-radius: 5px; font-size: 1.1em;">Visit Our Website</a>
+            </div>
+
+            <p style="margin-top: 40px; font-size: 1em; text-align: center;">Thank you for joining us on this exciting journey!</p>
+
+            <p style="text-align: center; font-weight: bold; font-size: 1.2em;">The TechStore Team</p>
+
+            <footer style="text-align: center; margin-top: 30px; color: #777;">
                 <p>&copy; 2024 TechStore. All rights reserved.</p>
+                <p><a href="https://example.com/unsubscribe" style="color: #1a73e8; text-decoration: none;">Unsubscribe</a> | <a href="https://example.com/privacy" style="color: #1a73e8; text-decoration: none;">Privacy Policy</a></p>
             </footer>
         </div>
     </body>
