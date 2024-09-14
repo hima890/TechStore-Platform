@@ -5,7 +5,7 @@ from flasgger import swag_from # type: ignore
 from flask_jwt_extended import jwt_required, get_jwt_identity # type: ignore
 from werkzeug.security import check_password_hash
 from . import account
-from .swaggerFile import accountDoc, accountUpdateDoc
+from .swaggerFile import accountDoc, accountUpdateDoc, accountUpdatePasswordDoc
 from ..models import User, Provider
 from ..utils import saveProfilePicture
 from .. import db
