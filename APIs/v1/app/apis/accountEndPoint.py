@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """ Account mangment Endpoints """
 from flask import request, jsonify
-from flassger import swag_from
+from flasgger import swag_from
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from . import account
 from .swaggerFile import accountDoc
