@@ -25,26 +25,22 @@ migrate = Migrate()
 # intialize JWTManager
 jwt = JWTManager()
 
-# Create the Flask app instance
-app = Flask(__name__, instance_relative_config=True)
-
-# Config Flask-Limiter to limit the number of requests per user
-# redis = Redis(host='localhost', port=5007) # Config redis database
+# Initialize Flask-Limiter (don't bind to app yet)
 limiter = Limiter(
     get_remote_address,  # Function to get client IP address
-    app=app,              # Pass the Flask app instance
     default_limits=["200 per day", "50 per hour"],  # Default limits
-    # storage_uri="redis://localhost:6379" # Set the uri
+    # storage_uri="redis://localhost:6379"  # Uncomment if using Redis
 )
 
-# Initialize Swagger
+# Initialize Swagger (don't bind to app yet)
 swagger = Swagger()
 
 def create_app():
-    """Create the Flask app and tells Flask to look for a
-    configuration file in the instance/ directory"""
-    
-    
+    """Create the Flask app and initialize it with extensions"""
+
+    # Create the Flask app instance inside the function
+    app = Flask(__name__, instance_relative_config=True)
+
     # Load the configuration from the config.py file
     app.config.from_object(config[config_name])
     
@@ -52,24 +48,25 @@ def create_app():
     app.config.from_pyfile('../instance/config.py', silent=True)
 
     # Initialize extensions with the app
-    db.init_app(app) # Initialize the database
-    migrate.init_app(app, db) # Initialize the migration engine
-    jwt.init_app(app)   # Initialize JWT manager
+    db.init_app(app)  # Initialize the database
+    migrate.init_app(app, db)  # Initialize the migration engine
+    jwt.init_app(app)  # Initialize JWT manager
     limiter.init_app(app)  # Initialize the rate limiter
-    swagger.init_app(app)     # Initialize Swagger
+    swagger.init_app(app)  # Initialize Swagger
 
     # Register blueprints and other app-specific logic here
     with app.app_context():
-        # Import tabels after db is initialized
+        # Import models after db is initialized
         from .models import User
-        # Import the end-point
-        from .apis import signUp, activation, signIn, optCode
-        # Register the end-pointe
+        # Import and register the blueprints
+        from .apis import signUp, activation, signIn, optCode, store
         app.register_blueprint(signUp)
         app.register_blueprint(activation)
         app.register_blueprint(signIn)
         app.register_blueprint(optCode)
-        # Create the database tabels
+        app.register_blueprint(store)
+        
+        # Create the database tables
         db.create_all()
 
     return app
