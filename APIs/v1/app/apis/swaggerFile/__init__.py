@@ -7,3 +7,6 @@ from .resendSwagger import resendDoc
 from .optCodeSwagger import optCodeDoc
 from .otpVerifySwagger import verifyDoc
 from .passwordResetSwagger import resetDoc
+from .accountSwagger import accountDoc
+from .accountUpdateSwagger import accountUpdateDoc
+from .accountPasswordSwagger import accountUpdatePasswordDoc

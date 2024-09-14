@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 from flask import Flask, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
@@ -48,8 +49,9 @@ limiter = Limiter(
 swagger = Swagger()
 
 def create_app():
-    """Create the Flask app and tells Flask to look for a
-    configuration file in the instance/ directory"""
+    """This function is used to create the Flask app and register the blueprints.
+    
+    Return: The Flask app."""
     
     
     # Load the configuration from the config.py file
@@ -57,6 +59,9 @@ def create_app():
     
     # Load the configuration from the instance/config.py file (if it exists)
     app.config.from_pyfile('../instance/config.py', silent=True)
+
+    # Enable CORS for all routes and all origins
+    CORS(app, resources={r"/*": {"origins": "*"}})
 
     # Initialize extensions with the app
     db.init_app(app) # Initialize the database
@@ -70,13 +75,14 @@ def create_app():
         # Import tabels after db is initialized
         from .models import User
         # Import the end-point
-        from .apis import signUp, activation, signIn, optCode, passwordReset
+        from .apis import (signUp, activation, signIn, optCode, passwordReset, account)
         # Register the end-pointe
         app.register_blueprint(signUp)
         app.register_blueprint(activation)
         app.register_blueprint(signIn)
         app.register_blueprint(optCode)
         app.register_blueprint(passwordReset)
+        app.register_blueprint(account)
         # Create the database tabels
         db.create_all()
 
