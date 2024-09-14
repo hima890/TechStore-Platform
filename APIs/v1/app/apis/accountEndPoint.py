@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 """ Account mangment Endpoints """
 from flask import request, jsonify
-from flasgger import swag_from
-from flask_jwt_extended import jwt_required, get_jwt_identity
+from flasgger import swag_from # type: ignore
+from flask_jwt_extended import jwt_required, get_jwt_identity # type: ignore
 from . import account
 from .swaggerFile import accountDoc, accountUpdateDoc
 from ..models import User, Provider
@@ -94,7 +94,7 @@ def updateAccount():
     # Check if the request has a profile image
     file = request.files['profile_image']
     if file:
-        filename, picture_path = saveProfilePicture(profilePicture)
+        filename, picture_path = saveProfilePicture(file)
         user.profile_image = filename
 
     # Save the user updates
