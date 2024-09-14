@@ -35,8 +35,14 @@ def getAccount():
     return jsonify({
             "status": "success",
             "data": {
-                    "email": user.email,
+                    "userId": user.id,
+                    "first name": user.first_name,
+                    "last name": user.last_name,
                     "username": user.username,
-                    "userId": user.id
+                    "email": user.email,
+                    "phone number": user.phone_number,
+                    "gander": user.gander,
+                    "location": user.location,
+                    "profile image": user.profile_image,
                 }
             }), 200
