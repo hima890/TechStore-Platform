@@ -4,7 +4,7 @@ from flask import request, jsonify
 from flasgger import swag_from
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from . import account
-from .swaggerFile import accountDoc
+from .swaggerFile import accountDoc, accountUpdateDoc
 from ..models import User, Provider
 from ..utils import saveProfilePicture
 from .. import db
