@@ -57,7 +57,7 @@ def create_app():
     # Register blueprints and other app-specific logic here
     with app.app_context():
         # Import models after db is initialized
-        from .models import User
+        from .models import *
         # Import and register the blueprints
         from .apis import signUp, activation, signIn, optCode, store
         app.register_blueprint(signUp)
