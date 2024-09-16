@@ -6,3 +6,8 @@ from .siginupSwagger import signuDoc
 from .resendSwagger import resendDoc
 from .optCodeSwagger import optCodeDoc
 from .storeRegistration import createStoreDoc, updateStoreDoc, deleteStoreDoc
+from .otpVerifySwagger import verifyDoc
+from .passwordResetSwagger import resetDoc
+from .accountSwagger import accountDoc
+from .accountUpdateSwagger import accountUpdateDoc
+from .accountPasswordSwagger import accountUpdatePasswordDoc

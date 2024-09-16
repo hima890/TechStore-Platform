@@ -1,14 +1,14 @@
+import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from dotenv import load_dotenv
-import os
-from config import ProConfig, TestConfig
+from config import ProConfig
 
 # Load environment variables from .env file
 load_dotenv("../.env")
 
 # Determine which config class to use
-config_name = os.getenv('FLASK_CONFIG', 'config.TestConfig')  # Default to Config if not set
+config_name = ProConfig
 
 # Create the SQLAlchemy object
 db = SQLAlchemy()
@@ -19,6 +19,7 @@ def create_app(config_class=config_name):
     
     Return: The Flask app.
     """
+    print(os.getenv('SECRET_KEY'))
     # Initialize the app
     app = Flask(__name__)
 
