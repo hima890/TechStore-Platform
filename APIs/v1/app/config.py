@@ -16,8 +16,9 @@ class DevelopmentConfig(Config):
     """Development configuration."""
     SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(
         os.getcwd(),
+        'APIs/v1/'
         'databases',
-        'dev_database.db'
+        'test_database.db'
         )
     DEBUG = True
 
@@ -26,8 +27,9 @@ class ProductionConfig(Config):
     """Production configuration."""
     SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(
         os.getcwd(),
+        'APIs/v1/'
         'databases',
-        'prod_database.db'
+        'test_database.db'
         )
     DEBUG = False
 
@@ -36,9 +38,11 @@ class TestingConfig(Config):
     """Testing configuration."""
     SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(
         os.getcwd(),
+        'APIs/v1/'
         'databases',
         'test_database.db'
         )
+    print(SQLALCHEMY_DATABASE_URI)
     TESTING = True
     DEBUG = True
 
