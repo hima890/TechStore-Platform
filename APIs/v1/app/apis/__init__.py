@@ -16,7 +16,7 @@ account = Blueprint('account', __name__,  url_prefix='/api/v1')
 from .signupEndPoint import *
 from .userActivationEndPoint import *
 from .signinEndPoint import *
-from .optCodeEndPoint import *
+from .otpCodeEndPoint import *
 from .storeEndPoint import *
 from .passwordResetEndPiont import *
 from .accountEndPoint import *
