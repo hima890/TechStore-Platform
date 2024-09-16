@@ -5,7 +5,7 @@ from flasgger import swag_from # type: ignore
 from flask_jwt_extended import jwt_required, get_jwt_identity # type: ignore
 from . import product
 # from .swaggerFile import productDoc, productUpdateDoc
-from ..models import User, Provider
+from ..models import Product, Provider
 from ..utils import saveProfilePicture
 from .. import db
 from .. import limiter
