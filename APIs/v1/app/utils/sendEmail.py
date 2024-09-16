@@ -35,3 +35,4 @@ def send_email(recipient, htmlContent, subject):
         server.quit()
     except Exception as e:
         print("Failed to send email: {}".format(e))
+        

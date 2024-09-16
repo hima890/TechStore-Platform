@@ -5,6 +5,14 @@ createStoreDoc = {
     'tags': ['Store Management'],
     'parameters': [
         {
+            'name': 'Authorization',
+            'in': 'header',
+            'required': True,
+            'type': 'string',
+            'description': 'Bearer token' 
+        }
+        ,
+        {
             'name': 'store_name',
             'in': 'formData',
             'type': 'string',
