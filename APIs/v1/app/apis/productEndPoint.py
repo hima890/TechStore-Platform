@@ -4,9 +4,9 @@ from flask import request, jsonify
 from flasgger import swag_from # type: ignore
 from flask_jwt_extended import jwt_required, get_jwt_identity # type: ignore
 from . import product
-# from .swaggerFile import productDoc, productUpdateDoc
+from .swaggerFile import productDoc
 from ..models import Product, Provider
-from ..utils import saveProfilePicture
+from ..utils import saveProductImages
 from .. import db
 from .. import limiter
 
@@ -52,6 +52,9 @@ def addProduct():
     image_3 = request.form.get('image_3')
     image_4 = request.form.get('image_4')
 
+    # Validate and process the product pictures
+    newFileNames, newFilePath = saveProductImages([image_1, image_2, image_3, image_4])
+
     # Create new product
     newProduct = Product(storeId=storeId, name=name, brand=brand,
                          category=category, description=description,
@@ -59,6 +62,7 @@ def addProduct():
                          image_1=image_1, image_2=image_2, image_3=image_3,
                          image_4=image_4
                          )
+
     # Save the user updates
     db.session.commit()
     # Return success response

@@ -8,7 +8,7 @@ from datetime import datetime
 class Product(db.Model):
     __tablename__ = 'product'
     id = db.Column(db.Integer, primary_key=True)
-    store_id = db.Column(db.Integer, db.ForeignKey('store.id'), nullable=False)
+    store_id = db.Column(db.Integer, db.ForeignKey('stores.store_id'), nullable=False)
     name = db.Column(db.String(255), nullable=False)
     brand = db.Column(db.String(255), nullable=False)
     category = db.Column(db.String(255), nullable=False)

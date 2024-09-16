@@ -77,8 +77,7 @@ signuDoc = {
         }
     ],
     'consumes': [
-        'application/json',  # Set the content type to JSON
-        'multipart/form-data',  # Uncomment this line to use multipart form data
+        'multipart/form-data'  # Uncomment this line to use multipart form data
     ],
     'responses': {
         201: {
