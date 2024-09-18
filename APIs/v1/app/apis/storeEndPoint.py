@@ -8,8 +8,9 @@ from . import store
 from ..models import Store, Provider
 from .. import limiter, db
 from ..utils import saveProfilePicture
-from .swaggerFile import createStoreDoc, updateStoreDoc, deleteStoreDoc, getAllStoresDoc
-
+from .swaggerFile import (createStoreDoc, updateStoreDoc,
+                          deleteStoreDoc, getAllStoresDoc,
+                          getStoresDoc)
 
 def getAccount():
     """Get the authenticated provider"""
@@ -209,3 +210,40 @@ def getAllStores():
             'stores': storeList
         }
         ), 200
+
+
+
+@store.route('/stores-with-out-product', methods=['GET'])
+@limiter.limit("5 per minute")
+@swag_from(getStoresDoc)
+def getAllStores2():
+    # Query to get all stores from the database
+    stores = Store.query.all()
+    
+    # Check if there are stores
+    if not stores:
+        return jsonify({
+            'status': 'error',
+            'message': 'No stores found'
+        }), 404
+    
+    # Prepare the list of stores
+    store_list = []
+    for store in stores:
+        store_data = {
+            'id': store.id,
+            'owner': store.owner,
+            'phoneNumber': store.phoneNumber,
+            'email': store.email,
+            'storeName': store.storeName,
+            'outer_image': store.outer_image,
+            'inner_image': store.inner_image
+        }
+        store_list.append(store_data)
+    
+    # Return the list of stores as a JSON response
+    return jsonify({
+        'status': 'success',
+        'message': 'Stores successfully retrieved',
+        'stores': store_list
+    }), 200
