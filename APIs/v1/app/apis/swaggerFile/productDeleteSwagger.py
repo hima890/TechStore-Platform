@@ -1,3 +1,5 @@
+"""Sawqer documentation for product delete endpoints"""
+
 productDeleteDoc = {
     'tags': ['Delete product from the provider store'],
     'parameters': [

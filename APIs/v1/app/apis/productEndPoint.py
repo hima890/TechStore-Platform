@@ -4,7 +4,7 @@ from flask import request, jsonify
 from flasgger import swag_from # type: ignore
 from flask_jwt_extended import jwt_required, get_jwt_identity # type: ignore
 from . import product
-from .swaggerFile import productDoc, productUpdateDoc
+from .swaggerFile import productDoc, productUpdateDoc, productDeleteDoc
 from ..models import Product, Provider
 from ..utils import saveProductImages, updateProductImage, deleteProductImage
 from .. import db
@@ -152,7 +152,7 @@ def updateProduct():
 @product.route('/delete-product', methods=['DELETE'])
 @jwt_required()
 @limiter.limit("5 per minute")
-# @swag_from(productUpdateDoc)
+@swag_from(productDeleteDoc)
 def deleteProduct():
     """Update product details"""
     # Get the profivder's email from the token
