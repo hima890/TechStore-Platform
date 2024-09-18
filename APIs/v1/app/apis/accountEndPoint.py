@@ -29,10 +29,11 @@ def getAccount():
     user = User.query.filter_by(email=currentUserEmail).first()
     if not user:
         user = Provider.query.filter_by(email=currentUserEmail).first()
-        return jsonify({
-                "status": "error",
-                "message": "User not found"
-                }), 404
+        if not user:
+            return jsonify({
+                    "status": "error",
+                    "message": "User not found"
+                    }), 404
     # Return success response
     return jsonify({
             "status": "success",

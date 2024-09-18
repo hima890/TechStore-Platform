@@ -86,11 +86,20 @@ def signup():
 
         # Send email with activation link
         activationURL = "http://localhost:5001/api/v1/activate/{}".format(activationToken)
-        send_email(
+        print(activationURL)
+        emailFunction = send_email(
             email,
             "Please click the link to activate your account: {}".format(activationURL),
             "Account Activation"
             )
+        if not emailFunction:
+        # Return a success message with the user data
+            return jsonify(
+                {"status": "error",},
+                {"message": "Email was not send."},
+                {'data': newUser.to_dict()}
+            ), 400            
+
 
         # Return a success message with the user data
         return jsonify(
