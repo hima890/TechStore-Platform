@@ -3,7 +3,7 @@
 
 # Documentation for the product update endpoint
 productUpdateDoc = {
-    'tags': ['Update product in the provider store'],     
+    'tags': ['Store account Management'],     
     'parameters': [
         {
             'name': 'Authorization',

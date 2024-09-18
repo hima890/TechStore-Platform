@@ -8,7 +8,7 @@ from . import store
 from ..models import Store, Provider
 from .. import limiter, db
 from ..utils import saveProfilePicture
-from .swaggerFile import createStoreDoc, updateStoreDoc, deleteStoreDoc
+from .swaggerFile import createStoreDoc, updateStoreDoc, deleteStoreDoc, getAllStoresDoc
 
 
 def getAccount():
@@ -81,7 +81,7 @@ def create_store():
         return jsonify({
             'status': 'success',
             'message': 'Store successfully created!',
-            'data': new_store.to_dict()
+            'data': new_store.to_dect()
         }), 201
     except Exception as e:
         db.session.rollback()
@@ -134,7 +134,7 @@ def update_store(store_id):
         return jsonify({
             'status': 'success',
             'message': 'Store updated successfully!',
-            'data': store.to_dict()
+            'data': store.to_dect()
         }), 200
     except Exception as e:
         db.session.rollback()
@@ -154,12 +154,58 @@ def delete_store(store_id):
     store = Store.query.filter_by(store_id=store_id, provider_id=provider.id).first()
 
     if not store:
-        return jsonify({'error': 'Store not found or you are not authorized to delete this store'}), 404
+        return jsonify( 
+            {
+                'status': 'error',
+                'message': 'Store not found or you are not authorized to delete this store'
+            }
+            ), 404
 
     try:
         db.session.delete(store)
         db.session.commit()
-        return jsonify({'status': 'success', 'message': 'Store deleted successfully'}), 200
+        return jsonify(
+            {
+                'status': 'success',
+                'message': 'Store deleted successfully'
+            }
+            ), 200
     except Exception as e:
         db.session.rollback()
-        return jsonify({'error': 'An error occurred while deleting the store.'}), 500
+        return jsonify(
+            {
+                'status': 'error',
+                'message': 'An error occurred while deleting the store.'}
+            ), 500
+
+
+@store.route('/stores', methods=['GET'])
+@limiter.limit("5 per minute")
+@swag_from(getAllStoresDoc)
+def getAllStores():
+    # Query to get all stores from the database
+    stores = Store.query.all()
+    # Check of the there is stores
+    if not stores:
+        return jsonify( 
+            {
+                'status': 'error',
+                'message': 'No stores found'
+            }
+            ), 404
+    # Prepare the list of stores with their products
+    storeList = []
+    for store in stores:
+        storeData = store.to_dect()
+        # Add the products of the store to the response
+        storeData['products'] = [product.to_dect() for product in store.products]
+        storeList.append(storeData)
+
+    # Return the list of stores and their products as a JSON response
+    return jsonify(
+        {
+            'status': 'success',
+            'message': 'All stores in the database',
+            'stores': storeList
+        }
+        ), 200

@@ -3,7 +3,7 @@
 
 # Documentation for the activiation endpoint
 activiationDoc = {
-    'tags': ['User Activation'],
+    'tags': ['User account Management'],
     'description': 'Activate user account by submitting the token received via email in JSON format.',
     'parameters': [
         {

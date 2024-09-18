@@ -3,7 +3,7 @@
 
 # Documentation for the login endpoint
 siginDoc = {
-    'tags': ['User login'],
+    'tags': ['User Registration'],
     'parameters': [
         {
             'name': 'body',

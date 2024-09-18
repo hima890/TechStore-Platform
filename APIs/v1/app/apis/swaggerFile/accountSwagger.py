@@ -3,7 +3,7 @@
 
 # Documentation for the account endpoint
 accountDoc = {
-    'tags': ['User account'],
+    'tags': ['User account Management'],
     'parameters': [
         {
             'name': 'Authorization',

@@ -2,7 +2,7 @@
 
 # Documentation for the OPT code endpoint
 optCodeDoc = {
-    'tags': ['Password reset by OPT code'],
+    'tags': ['User account Management'],
     'parameters': [
         {
             'name': 'body',

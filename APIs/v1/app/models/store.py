@@ -22,6 +22,7 @@ class Store(db.Model):
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     provider = db.relationship('Provider', backref='stores', lazy=True)
+    products = db.relationship('Product', backref='stores', lazy=True)
 
     def __repr__(self):
         """ Return a string representation of the Store object. """

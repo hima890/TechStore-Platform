@@ -2,7 +2,7 @@
 
 # Documentation for the OPT code endpoint
 resendDoc = {
-    'tags': ['Resend conformation token by email'],
+    'tags': ['User account Management'],
     'parameters': [
         {
             'name': 'body',

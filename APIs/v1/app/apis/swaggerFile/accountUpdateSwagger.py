@@ -3,7 +3,7 @@
 
 # Documentation for the update account endpoint
 accountUpdateDoc = {
-    'tags': ['User account update'],     
+    'tags': ['User account Management'],     
     'parameters': [
         {
             'name': 'Authorization',

@@ -2,7 +2,7 @@
 
 # Documentation for creating a store endpoint
 createStoreDoc = {
-    'tags': ['Store Management'],
+    'tags': ['Store account Management'],
     'parameters': [
         {
             'name': 'Authorization',
@@ -202,7 +202,7 @@ createStoreDoc = {
 
 # Documentation for updating a store endpoint
 updateStoreDoc = {
-    'tags': ['Store Management'],
+    'tags': ['Store account Management'],
     'parameters': [
         {
             'name': 'store_id',
@@ -332,7 +332,7 @@ updateStoreDoc = {
 
 # Documentation for deleting a store endpoint
 deleteStoreDoc = {
-    'tags': ['Store Management'],
+    'tags': ['Store account Management'],
     'parameters': [
         {
             'name': 'store_id',

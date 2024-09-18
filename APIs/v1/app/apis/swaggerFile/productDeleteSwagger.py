@@ -1,7 +1,7 @@
 """Sawqer documentation for product delete endpoints"""
 
 productDeleteDoc = {
-    'tags': ['Delete product from the provider store'],
+    'tags': ['Store account Management'],
     'parameters': [
         {
             'name': 'Authorization',

@@ -41,8 +41,8 @@ class Product(db.Model):
             'description': self.description,
             'price': self.price,
             'deliveryStatus': self.deliveryStatus,
-            'image_1': self.image_1,
-            'image_2': self.image_2,
-            'image_3': self.image_3,
-            'image_4': self.image_4
+            'image_1': url_for('static', filename='product_images/' + self.image_1),
+            'image_2': url_for('static', filename='product_images/' + self.image_2),
+            'image_3': url_for('static', filename='product_images/' + self.image_3),
+            'image_4': url_for('static', filename='product_images/' + self.image_4)
         }
