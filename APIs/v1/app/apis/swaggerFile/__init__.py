@@ -15,3 +15,4 @@ from .productSwagger import productDoc
 from .productUpdateSwagger import productUpdateDoc
 from .productDeleteSwagger import productDeleteDoc
 from .storesSwagger import getAllStoresDoc
+from .allProductsSwagger import getAllProductsByCategoryDoc
