@@ -6,7 +6,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity # type: ignore
 from . import product
 from .swaggerFile import productDoc, productUpdateDoc
 from ..models import Product, Provider
-from ..utils import saveProductImages, updateProductImage
+from ..utils import saveProductImages, updateProductImage, deleteProductImage
 from .. import db
 from .. import limiter
 
@@ -188,3 +188,52 @@ def deleteProduct():
             }), 404
 
     # Delete the product images
+    if product.image_1:
+        if not deleteProductImage(product.image_1):
+            return jsonify(
+                {
+                    "status": "error",
+                    "message": "Error deleting image file"
+                }
+                ), 500
+    if product.image_2:
+        if not deleteProductImage(product.image_2):
+            return jsonify(
+                {
+                    "status": "error",
+                    "message": "Error deleting image file"
+                }
+                ), 500
+    if product.image_3:
+        if not deleteProductImage(product.image_3):
+            return jsonify(
+                {
+                    "status": "error",
+                    "message": "Error deleting image file"
+                }
+                ), 500
+    if product.image_4:
+        if not deleteProductImage(product.image_4):
+            return jsonify(
+                {
+                    "status": "error",
+                    "message": "Error deleting image file"
+                }
+                ), 500
+
+    # Delete the product from the database
+    try:
+        db.session.delete(product)
+        db.session.commit()
+        return jsonify({
+            "status": "success",
+            "message": "Product deleted successfully",
+            }), 200
+    except Exception as e:
+        db.session.rollback()  # Rollback if there's an error
+        return jsonify(
+            {
+                "status": "error",
+                "message": "Error deleting product from database"
+            }
+            ), 500
