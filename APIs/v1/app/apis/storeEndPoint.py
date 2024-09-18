@@ -181,7 +181,7 @@ def delete_store(store_id):
 
 @store.route('/stores', methods=['GET'])
 @limiter.limit("5 per minute")
-@swag_from(deleteStoreDoc)
+@swag_from(getAllStoresDoc)
 def getAllStores():
     # Query to get all stores from the database
     stores = Store.query.all()
