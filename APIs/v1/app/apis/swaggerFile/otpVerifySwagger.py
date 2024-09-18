@@ -2,7 +2,7 @@
 
 # Documentation for the OTP code verification endpoint
 verifyDoc = {
-    'tags': ['OTP code verification by email'],
+    'tags': ['User account Management'],
     'parameters': [
         {
             'name': 'body',

@@ -3,7 +3,7 @@
 
 # Documentation for the product endpoint
 productDoc = {
-    'tags': ['Add products to provider store'],     
+    'tags': ['Store account Management'],     
     'parameters': [
         {
             'name': 'Authorization',

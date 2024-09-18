@@ -2,7 +2,7 @@
 
 # Documentation for the OTP code verification endpoint
 resetDoc = {
-    'tags': ['Password reset using token'],
+    'tags': ['User account Management'],
     'parameters': [
         {
             'name': 'body',

@@ -3,7 +3,7 @@
 
 
 getAllStoresDoc = {
-    'tags': ['Store Management'],
+    'tags': ['Store account Management'],
     'summary': 'Retrieve all stores with their associated products',
     'description': 'This endpoint retrieves a list of all stores in the database, including the products associated with each store.',
     'responses': {
@@ -113,7 +113,7 @@ getAllStoresDoc = {
                                             },
                                             'deliveryStatus': {
                                                 'type': 'boolean',
-                                                'example': true
+                                                'example': 'true'
                                             },
                                             'image_1': {
                                                 'type': 'string',

@@ -2,7 +2,7 @@
 
 # Documentation for creating a store endpoint
 createStoreDoc = {
-    'tags': ['Store Management'],
+    'tags': ['Store account Management'],
     'parameters': [
         {
             'name': 'Authorization',
