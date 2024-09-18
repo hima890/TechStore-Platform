@@ -4,14 +4,14 @@ from flask import request, jsonify
 from flasgger import swag_from # type: ignore
 from flask_jwt_extended import jwt_required, get_jwt_identity # type: ignore
 from . import product
-from .swaggerFile import productDoc, productUpdateDoc, productDeleteDoc
+from .swaggerFile import productDoc, productUpdateDoc, productDeleteDoc, getAllProductsByCategoryDoc
 from ..models import Product, Provider
 from ..utils import saveProductImages, updateProductImage, deleteProductImage, generateProductId
 from .. import db
 from .. import limiter
 
 
-@product.route('/add-product', methods=['GET'])
+@product.route('/add-product', methods=['POST'])
 @jwt_required()
 @limiter.limit("5 per minute")
 @swag_from(productDoc)
@@ -238,3 +238,46 @@ def deleteProduct():
                 "message": "Error deleting product from database"
             }
             ), 500
+
+
+@product.route('/get-products', methods=['GET'])
+@limiter.limit("5 per minute")
+@swag_from(getAllProductsByCategoryDoc)
+def getAllProducts():
+    """Get all the products under every categores"""
+    # Query all distinct categories
+    categories = db.session.query(Product.category).distinct().all()
+
+    if not categories:
+        return jsonify({
+            'status': 'error',
+            'message': 'No categories found'
+        }), 404
+
+    # Prepare the list of categories with their products
+    categoryList = []
+    for category_tuple in categories:
+        category_name = category_tuple[0]
+        categoryData = {
+            'category_name': category_name,
+            'products': []
+        }
+        # Query products for each category
+        products = Product.query.filter_by(category=category_name).all()
+        for product in products:
+            productData = {
+                'id': product.id,
+                'name': product.name,
+                'brand': product.brand,
+                'description': product.description,
+                'price': product.price,
+                'image_url': product.image_url
+            }
+            categoryData['products'].append(productData)
+        categoryList.append(categoryData)
+
+    return jsonify({
+        'status': 'success',
+        'message': 'Products successfully retrieved',
+        'categories': categoryList
+    }), 200
