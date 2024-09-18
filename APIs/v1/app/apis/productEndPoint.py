@@ -6,7 +6,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity # type: ignore
 from . import product
 from .swaggerFile import productDoc, productUpdateDoc, productDeleteDoc
 from ..models import Product, Provider
-from ..utils import saveProductImages, updateProductImage, deleteProductImage
+from ..utils import saveProductImages, updateProductImage, deleteProductImage, generateProductId
 from .. import db
 from .. import limiter
 
@@ -54,9 +54,10 @@ def addProduct():
 
     # Validate and process the product pictures
     newFileNames, newFilePath = saveProductImages([image_1, image_2, image_3, image_4])
-
+    # Generate the product uniqe id
+    newId = generateProductId()
     # Create new product
-    newProduct = Product(storeId=storeId, name=name, brand=brand,
+    newProduct = Product(storeId=storeId, name=name, product_id=newId, brand=brand,
                          category=category, description=description,
                          price=price, deliveryStatus=deliveryStatus,
                          image_1=image_1, image_2=image_2, image_3=image_3,
