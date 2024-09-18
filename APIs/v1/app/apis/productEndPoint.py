@@ -4,7 +4,7 @@ from flask import request, jsonify
 from flasgger import swag_from # type: ignore
 from flask_jwt_extended import jwt_required, get_jwt_identity # type: ignore
 from . import product
-from .swaggerFile import productDoc
+from .swaggerFile import productDoc, productUpdateDoc
 from ..models import Product, Provider
 from ..utils import saveProductImages, updateProductImage
 from .. import db
@@ -74,9 +74,10 @@ def addProduct():
 
 
 
-@product.route('/update-product', methods=['GET'])
+@product.route('/update-product', methods=['PUT'])
 @jwt_required()
 @limiter.limit("5 per minute")
+@swag_from(productUpdateDoc)
 # @swag_from(productDoc)
 def updateProduct():
     """Update product details"""
@@ -146,3 +147,44 @@ def updateProduct():
             "message": "Product updated successfully",
             "data" : product.to_dict()
             }), 200
+
+
+@product.route('/delete-product', methods=['DELETE'])
+@jwt_required()
+@limiter.limit("5 per minute")
+# @swag_from(productUpdateDoc)
+def deleteProduct():
+    """Update product details"""
+    # Get the profivder's email from the token
+    currentUserEmail = get_jwt_identity()
+    if not currentUserEmail:
+        return jsonify({
+            "status": "error",
+            "message": "Bad request, no user token"
+            }), 400
+    # Get the provider
+    user = Provider.query.filter_by(email=currentUserEmail).first()
+    if not user:
+        return jsonify({
+                "status": "error",
+                "message": "User not found"
+                }), 404
+
+    # Check the request data
+    if not request.form:
+        return jsonify({
+            "status": "error",
+            "message": "Bad request, no data provided"
+            }), 400
+
+    # Get the product id
+    productID = request.form.get('product_id')
+    product = Product.query.filter_by(product_id=productID).first()
+    # Check if the product exists
+    if not product:
+        return jsonify({
+            "status": "error",
+            "message": "Product not found"
+            }), 404
+
+    # Delete the product images

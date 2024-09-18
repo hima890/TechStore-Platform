@@ -12,3 +12,4 @@ from .accountSwagger import accountDoc
 from .accountUpdateSwagger import accountUpdateDoc
 from .accountPasswordSwagger import accountUpdatePasswordDoc
 from .productSwagger import productDoc
+from .productUpdateSwagger import productUpdateDoc
