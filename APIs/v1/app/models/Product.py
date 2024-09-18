@@ -10,6 +10,7 @@ class Product(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     store_id = db.Column(db.Integer, db.ForeignKey('stores.store_id'), nullable=False)
     name = db.Column(db.String(255), nullable=False)
+    product_id = db.Column(db.String(10), nullable=False, unique=True)
     brand = db.Column(db.String(255), nullable=False)
     category = db.Column(db.String(255), nullable=False)
     description = db.Column(db.Text, nullable=False)
