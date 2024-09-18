@@ -38,22 +38,24 @@ def create_store():
     if error:
         return jsonify(error), status_code
 
-    # Get store details from the request
-    store_name = request.form.get('store_name')
-    store_location = request.form.get('store_location')
-    store_email = request.form.get('store_email')
-    store_phone_number = request.form.get('store_phone_number')
-    operation_times = request.form.get('operation_times')
-    social_media_accounts = request.form.get('social_media_accounts')
-    store_bio = request.form.get('store_bio')
-    inner_image = request.files.get('inner_image')
-    outer_image = request.files.get('outer_image')
+    # Get store details from the JSON body instead of form
+    data = request.get_json()
+    store_name = data.get('store_name')
+    store_location = data.get('store_location')
+    store_email = data.get('store_email')
+    store_phone_number = data.get('store_phone_number')
+    operation_times = data.get('operation_times')
+    social_media_accounts = data.get('social_media_accounts')
+    store_bio = data.get('store_bio')
 
     # Validate required fields
     if not store_name or not store_location or not store_email or not store_phone_number:
         return jsonify({'error': 'Missing required fields'}), 400
 
-    # Validate and process the store images
+    # If handling images, they would still come from request.files (not from JSON)
+    inner_image = request.files.get('inner_image')
+    outer_image = request.files.get('outer_image')
+
     inner_image_filename = None
     outer_image_filename = None
 
@@ -62,7 +64,6 @@ def create_store():
     if outer_image:
         outer_image_filename, outer_image_path = saveProfilePicture(outer_image, 'outer')
 
-    # Create a new Store instance
     new_store = Store(
         provider_id=provider.id,
         store_name=store_name,
@@ -103,23 +104,24 @@ def update_store(store_id):
     if not store:
         return jsonify({'error': 'Store not found or you are not authorized to update this store'}), 404
 
-    # Check and update store fields
-    if request.form.get("store_name"):
-        store.store_name = request.form.get("store_name")
-    if request.form.get("store_location"):
-        store.store_location = request.form.get("store_location")
-    if request.form.get("store_email"):
-        store.store_email = request.form.get("store_email")
-    if request.form.get("store_phone_number"):
-        store.store_phone_number = request.form.get("store_phone_number")
-    if request.form.get("operation_times"):
-        store.operation_times = request.form.get("operation_times")
-    if request.form.get("social_media_accounts"):
-        store.social_media_accounts = request.form.get("social_media_accounts")
-    if request.form.get("store_bio"):
-        store.store_bio = request.form.get("store_bio")
+    # Get data from JSON
+    data = request.get_json()
+    if data.get("store_name"):
+        store.store_name = data.get("store_name")
+    if data.get("store_location"):
+        store.store_location = data.get("store_location")
+    if data.get("store_email"):
+        store.store_email = data.get("store_email")
+    if data.get("store_phone_number"):
+        store.store_phone_number = data.get("store_phone_number")
+    if data.get("operation_times"):
+        store.operation_times = data.get("operation_times")
+    if data.get("social_media_accounts"):
+        store.social_media_accounts = data.get("social_media_accounts")
+    if data.get("store_bio"):
+        store.store_bio = data.get("store_bio")
 
-    # Process the images (if provided)
+    # Image handling can still be done using request.files
     inner_image = request.files.get('inner_image')
     outer_image = request.files.get('outer_image')
 

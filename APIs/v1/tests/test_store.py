@@ -7,10 +7,10 @@ from flask import Flask
 from flask_testing import TestCase
 from flask_jwt_extended import create_access_token
 
-# Add the `v1` directory to the Python path
+# Add the v1 directory to the Python path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from app import create_app, db  # Now Python should be able to find `app.py`
+from app import create_app, db
 from app.models import Provider, Store
 
 class StoreTestCase(TestCase):
@@ -18,7 +18,16 @@ class StoreTestCase(TestCase):
         # Set up the Flask application for testing
         app = create_app()
         app.config['TESTING'] = True
-        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'  # Use an in-memory database for testing
+        
+        # Dynamically set the SQLite database path relative to the project directory
+        base_dir = os.path.abspath(os.path.dirname(__file__))
+        db_path = os.path.join(base_dir, 'databases', 'test_database.db')
+        
+        # Ensure the directory for the database exists
+        os.makedirs(os.path.dirname(db_path), exist_ok=True)
+
+        # Use the dynamically generated database path
+        app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{db_path}'
         app.config['JWT_SECRET_KEY'] = 'super-secret'  # Change this in production
         return app
 
@@ -128,7 +137,7 @@ class StoreTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         data = response.get_json()
         self.assertEqual(data['status'], 'success')
-        self.assertEqual(data['message'], 'Store deleted successfully')
+        self.assertEqual(data['message'], 'Store deleted successfully')  # Ensure this matches the exact API response
 
 
 if __name__ == '__main__':
