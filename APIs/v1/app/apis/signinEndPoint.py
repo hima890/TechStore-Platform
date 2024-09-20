@@ -11,13 +11,11 @@ from .. import limiter
 from ..models import User, Provider
 
 
-
 @signIn.route('/signin', methods=['POST'])
 @limiter.limit("5 per minute")
 @swag_from(siginDoc)
 def signin():
     """Sign in a user"""
-    # Get the request data based on the content_type
     if request.content_type == 'application/json':
         data = request.get_json()
         email = data.get('email')
@@ -32,24 +30,20 @@ def signin():
                 "message": "User not found"
                 }), 404
 
-    # Check if the account is active
     if user.is_active != True:
         return jsonify({
                 "status": "error",
                 "message": "User acount need to be activated"
                 }), 401
 
-    # Check if the password is correct
     if not check_password_hash(user.password_hash, password):
         return jsonify({"error": "Invalid password"}), 401
 
-    # Return a success message and a token for subrequests
-    # Generate JWT token whit the user email as the identity and for 24 hours
     try:
         access_token = create_access_token(
             identity=user.email,
             expires_delta=timedelta(hours=24))
-        # return the a response with access token
+
         return jsonify({
             "status": "success",
             "message": "Authentication successful",
@@ -62,7 +56,6 @@ def signin():
         }), 200
 
     except Exception as e:
-        # Return to the last change
         print("{}".format(e))
         return jsonify({
             "status": "error",
