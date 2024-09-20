@@ -29,13 +29,13 @@ class Provider(db.Model):
 
     def to_dict(self):
         """Convert the Provider object to a dictionary."""
-        # Check if the provider has a profile image
+
         if self.profile_image:
             profile_image_url = url_for('static', filename='profile_pics' + self.profile_image)
         else:
-            # Set a default profile image
+
             profile_image_url = 'defult_profile_image.png'
-        # Return the provider data as a dictionary
+
         return {
             'id': self.id,
             'first_name': self.first_name,
