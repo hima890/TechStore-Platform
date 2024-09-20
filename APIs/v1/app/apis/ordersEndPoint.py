@@ -1,22 +1,21 @@
 #!/usr/bin/python3
 """ Orders API Endpoints """
 from flask import request, jsonify
-from flask_jwt_extended import create_access_token
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from flasgger import swag_from
-from datetime import timedelta
-from . import ordersEndPoint
-from .swaggerFile import optCodeDoc, verifyDoc
+from . import orders
+from .swaggerFile import createOrderDoc, getStoreOrdersDoc
 from ..models import User, Store, Order
 from .. import db
 from .. import limiter
-from ..utils import generate_otp, send_email, isOtpValid
+from ..utils import saveOrdersPicture
 
 
-@ordersEndPoint.route('/opt', methods=['POST'])
+@orders.route('/add-order', methods=['POST'])
 @jwt_required()
 @limiter.limit("5 per minute")
-# @swag_from(optCodeDoc)
-def orders():
+@swag_from(createOrderDoc)
+def addOrders():
     """Orders end point"""
     # Get the user's email from the token
     currentUserEmail = get_jwt_identity()
@@ -45,6 +44,7 @@ def orders():
     store_id = request.form.get('store_id')
     title = request.form.get('title')
     brand = request.form.get('brand')
+    orderImage = request.files.get('img')
     description = request.form.get('description')
     price = float(request.form.get('price'))
     quantity = int(request.form.get('quantity'))
@@ -57,4 +57,103 @@ def orders():
             "status": "error",
             "message": "Store not found"
             }), 404
-    
+
+    # Validate and process the profile picture
+    if orderImage:
+        filename, _ = saveOrdersPicture(orderImage)
+    else:
+        filename = None  # Handle cases where no picture is uploaded
+        
+    newOrder = Order(
+        name=name,
+        email=email,
+        store_id=store_id,
+        title=title,
+        brand=brand,
+        description=description,
+        price=price,
+        img=filename,
+        quantity=quantity,
+        total=total
+    )
+
+    # Save the order to the database
+    db.session.add(newOrder)
+    db.session.commit()
+
+    # Return the order details
+    return jsonify({
+            "status": "success",
+            "message": "Order created successfully!",
+            "data": {
+                newOrder.to_dict()
+            }
+        }), 201
+
+
+@orders.route('/get-order', methods=['POST'])
+@jwt_required()
+@limiter.limit("5 per minute")
+@swag_from(getStoreOrdersDoc)
+def getOrder():
+    """Get the store orders"""
+    # Get the user's email from the token
+    currentUserEmail = get_jwt_identity()
+    if not currentUserEmail:
+        return jsonify({
+            "status": "error",
+            "message": "Bad request, no user token"
+            }), 400
+    user = User.query.filter_by(email=currentUserEmail).first()
+    if not user:
+        return jsonify({
+                    "status": "error",
+                    "message": "User not found"
+                    }), 404
+
+    # Check the request data
+    if not request.form:
+        return jsonify({
+            "status": "error",
+            "message": "Bad request, no data provided"
+            }), 400
+
+    # Get the store id
+    store_id = request.form.get('store_id')
+    store = Store.query.get(store_id)
+    if not store:
+        return jsonify({
+            "status": "error",
+            "message": "Store not found"
+            }), 404
+
+    # Get the store orders
+    orders = Order.query.filter_by(store_id=store_id).all()
+    if not orders:
+        return jsonify({
+            "status": "success",
+            "message": "No orders found for this store"
+            }), 200
+
+    # Return the store orders
+    orderList = []
+    for order in orders:
+        orderList.append({
+            "order_id": order.id,
+            "name": order.name,
+            "email": order.email,
+            "store_id": order.store_id,
+            "title": order.title,
+            "brand": order.brand,
+            "description": order.description,
+            "price": order.price,
+            "quantity": order.quantity,
+            "total": order.total,
+            "img": order.img
+        })
+
+    return jsonify({
+        "status": "success",
+        "message": "Orders found",
+        "data": orderList
+    }), 200
