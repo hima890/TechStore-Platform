@@ -17,3 +17,5 @@ from .productDeleteSwagger import productDeleteDoc
 from .storesSwagger import getAllStoresDoc
 from .allProductsSwagger import getAllProductsByCategoryDoc
 from .storesInfoSwagger import getStoresDoc
+from .ordersSwagger import createOrderDoc, updateOrderDoc, deleteOrderDoc
+from .ordesInfoSwagger import getAllOrdersDoc, getOrderDoc
