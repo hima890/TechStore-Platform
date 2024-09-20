@@ -19,3 +19,4 @@ from .allProductsSwagger import getAllProductsByCategoryDoc
 from .storesInfoSwagger import getStoresDoc
 from .addOrdersSwagger import createOrderDoc
 from .getOrdersSwagger import getStoreOrdersDoc
+from .deleteOrderSwagger import deleteOrderDoc
