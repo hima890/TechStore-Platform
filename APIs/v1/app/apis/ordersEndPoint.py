@@ -17,7 +17,6 @@ from ..utils import saveOrdersPicture
 @swag_from(createOrderDoc)
 def addOrders():
     """Orders end point"""
-    # Get the user's email from the token
     currentUserEmail = get_jwt_identity()
     if not currentUserEmail:
         return jsonify({
@@ -31,14 +30,12 @@ def addOrders():
                     "message": "User not found"
                     }), 404
 
-    # Check the request data
     if not request.form:
         return jsonify({
             "status": "error",
             "message": "Bad request, no data provided"
             }), 400
 
-    # Get the order data
     name = request.form.get('name')
     email = request.form.get('email')
     store_id = request.form.get('store_id')
@@ -50,7 +47,6 @@ def addOrders():
     quantity = int(request.form.get('quantity'))
     total = price * quantity
 
-    # Check if the store exists
     store = Store.query.get(store_id)
     if not store:
         return jsonify({
@@ -58,11 +54,10 @@ def addOrders():
             "message": "Store not found"
             }), 404
 
-    # Validate and process the profile picture
     if orderImage:
         filename, _ = saveOrdersPicture(orderImage)
     else:
-        filename = None  # Handle cases where no picture is uploaded
+        filename = None
         
     newOrder = Order(
         name=name,
@@ -77,11 +72,9 @@ def addOrders():
         total=total
     )
 
-    # Save the order to the database
     db.session.add(newOrder)
     db.session.commit()
 
-    # Return the order details
     return jsonify({
             "status": "success",
             "message": "Order created successfully!",
@@ -95,7 +88,6 @@ def addOrders():
 @swag_from(getStoreOrdersDoc)
 def getOrder():
     """Get the store orders"""
-    # Get the user's email from the token
     currentUserEmail = get_jwt_identity()
     if not currentUserEmail:
         return jsonify({
@@ -109,14 +101,12 @@ def getOrder():
                     "message": "User not found"
                     }), 404
 
-    # Check the request data
     if not request.form:
         return jsonify({
             "status": "error",
             "message": "Bad request, no data provided"
             }), 400
 
-    # Get the store id
     store_id = request.form.get('store_id')
     store = Store.query.get(store_id)
     if not store:
@@ -125,7 +115,6 @@ def getOrder():
             "message": "Store not found"
             }), 404
 
-    # Get the store orders
     orders = Order.query.filter_by(store_id=store_id).all()
     if not orders:
         return jsonify({
@@ -133,7 +122,6 @@ def getOrder():
             "message": "No orders found for this store"
             }), 200
 
-    # Return the store orders
     orderList = []
     for order in orders:
         orderList.append({
@@ -160,10 +148,9 @@ def getOrder():
 @orders.route('/delete-order', methods=['DELETE'])
 @jwt_required()
 @limiter.limit("5 per minute")
-@swag_from(deleteOrderDoc)  # Use the Swagger doc for deleting orders
+@swag_from(deleteOrderDoc)
 def deleteOrder():
     """Delete an order"""
-    # Get the user's email from the token
     currentUserEmail = get_jwt_identity()
     if not currentUserEmail:
         return jsonify({
@@ -178,7 +165,6 @@ def deleteOrder():
             "message": "User not found"
         }), 404
 
-    # Get the request data for the order ID
     order_id = request.form.get('order_id')
     if not order_id:
         return jsonify({
@@ -186,7 +172,6 @@ def deleteOrder():
             "message": "Order ID is required"
         }), 400
 
-    # Get the order by ID
     order = Order.query.get(order_id)
     if not order:
         return jsonify({
@@ -194,7 +179,6 @@ def deleteOrder():
             "message": "Order not found"
         }), 404
 
-    # Delete the order
     try:
         db.session.delete(order)
         db.session.commit()
