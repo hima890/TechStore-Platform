@@ -18,15 +18,13 @@ from .. import limiter
 # @swag_from(optCodeDoc)
 def reset():
     """Reset a user's password"""
-    # Get the user's email from the token
-    currentUserEmail = get_jwt_identity()  # Get the user's email from the token
+    currentUserEmail = get_jwt_identity()
     if not currentUserEmail:
         return jsonify({
             "status": "error",
             "message": "Bad request, no user token"
             }), 400
 
-    # Get the new password fron the reqeust
     data = request.get_json()
     newPassword = data.get('newPassword')
     if not newPassword:
@@ -34,7 +32,7 @@ def reset():
             "status": "error",
             "message": "Bad request, no password found"
             }), 400
-    # Get the user
+
     user = User.query.filter_by(email=currentUserEmail).first()
     if not user:
         user = Provider.query.filter_by(email=currentUserEmail).first()
@@ -42,10 +40,10 @@ def reset():
                 "status": "error",
                 "message": "User not found"
                 }), 404
-    # Hash and update the new password
+
     user.password_hash = generate_password_hash(newPassword)
     db.session.commit()
-    # Return success respound
+
     return jsonify({
             "status": "success",
             "message": "Password reset successful",
