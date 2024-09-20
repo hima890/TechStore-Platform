@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 """ Account management Endpoints """
 from flask import request, jsonify
-from flasgger import swag_from # type: ignore
-from flask_jwt_extended import jwt_required, get_jwt_identity # type: ignore
+from flasgger import swag_from
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from werkzeug.security import check_password_hash
 from . import account
 from .swaggerFile import accountDoc, accountUpdateDoc, accountUpdatePasswordDoc
@@ -18,14 +18,12 @@ from .. import limiter
 @swag_from(accountDoc)
 def getAccount():
     """Get the user's account"""
-    # Get the user's email from the token
     currentUserEmail = get_jwt_identity()
     if not currentUserEmail:
         return jsonify({
             "status": "error",
             "message": "Bad request, no user token"
         }), 400
-    # Get the user
     user = User.query.filter_by(email=currentUserEmail).first()
     if not user:
         user = Provider.query.filter_by(email=currentUserEmail).first()
@@ -34,7 +32,7 @@ def getAccount():
                 "status": "error",
                 "message": "User not found"
             }), 404
-    # Return success response
+
     return jsonify({
         "status": "success",
         "data": {
@@ -63,7 +61,6 @@ def updateAccount():
             "status": "error",
             "message": "Bad request, no user token"
         }), 400
-    # Get the user
     user = User.query.filter_by(email=currentUserEmail).first()
     if not user:
         user = Provider.query.filter_by(email=currentUserEmail).first()
@@ -73,14 +70,12 @@ def updateAccount():
                 "message": "User not found"
             }), 404
 
-    # Check the request data
     if not request.form:
         return jsonify({
             "status": "error",
             "message": "Bad request, no data provided"
         }), 400
 
-    # Update the user's account
     if request.form.get("first_name"):
         user.first_name = request.form.get("first_name")
     if request.form.get("last_name"):
@@ -96,16 +91,13 @@ def updateAccount():
     if request.form.get("email"):
         user.email = request.form.get("email")
 
-    # Check if the request has a profile image
     file = request.files.get('profile_image')
     if file:
         filename, picture_path = saveProfilePicture(file)
         user.profile_image = filename
 
-    # Save the user updates
     db.session.commit()
 
-    # Return success response
     return jsonify({
         "status": "success",
         "message": "User account updated successfully",
@@ -136,7 +128,6 @@ def updatePassword():
             "message": "Bad request, no user token"
         }), 400
 
-    # Get the user
     user = User.query.filter_by(email=currentUserEmail).first()
     if not user:
         user = Provider.query.filter_by(email=currentUserEmail).first()
@@ -146,7 +137,6 @@ def updatePassword():
                 "message": "User not found"
             }), 404
 
-    # Check the request data
     data = request.get_json()
     if not data:
         return jsonify({
@@ -154,30 +144,25 @@ def updatePassword():
             "message": "Bad request, no data provided"
         }), 400
 
-    # Update the user's password
     oldPassword = data.get("oldPassword")
     newPassword = data.get("newPassword")
-    # Check if the request has the necessary fields
+ 
     if not oldPassword or not newPassword:
         return jsonify({
             "status": "error",
             "message": "Bad request, oldPassword and newPassword are required"
         }), 400
 
-    # Check if the old password is correct
     if not check_password_hash(user.password_hash, oldPassword):
         return jsonify({
             "status": "error",
             "message": "Old password is incorrect"
         }), 400
 
-    # Update the user's password
     user.password_hash = newPassword
 
-    # Save the user updates
     db.session.commit()
 
-    # Return success response
     return jsonify({
         "status": "success",
         "message": "User password updated successfully",
