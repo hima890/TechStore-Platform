@@ -32,7 +32,7 @@ class Product(db.Model):
 
     def to_dict(self):
         """Convert the Product object to a dictionary."""
-        # Return the product data as a dictionary
+
         return {
             'id': self.id,
             'store_id': self.store_id,
