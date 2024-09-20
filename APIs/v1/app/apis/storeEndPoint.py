@@ -19,7 +19,6 @@ def getAccount():
     if not currentUserEmail:
         return None, {'status': 'error', 'message': 'Bad request, no user token'}, 400
 
-    # Fetch the provider by email
     provider = Provider.query.filter_by(email=currentUserEmail).first()
 
     if not provider:
@@ -39,7 +38,7 @@ def create_store():
         return jsonify(error), status_code
 
     try:
-        # Get store details from the JSON body instead of form
+
         data = request.get_json()
         store_name = data.get('store_name')
         store_location = data.get('store_location')
@@ -49,11 +48,9 @@ def create_store():
         social_media_accounts = data.get('social_media_accounts')
         store_bio = data.get('store_bio')
 
-        # Validate required fields
         if not store_name or not store_location or not store_email or not store_phone_number:
             return jsonify({'error': 'Missing required fields'}), 400
 
-        # If handling images, they would still come from request.files (not from JSON)
         inner_image = request.files.get('inner_image')
         outer_image = request.files.get('outer_image')
 
@@ -65,7 +62,6 @@ def create_store():
         if outer_image:
             outer_image_filename, outer_image_path = saveProfilePicture(outer_image, 'outer')
 
-        # Create the store instance
         new_store = Store(
             provider_id=provider.id,
             store_name=store_name,
@@ -79,21 +75,18 @@ def create_store():
             outer_image=outer_image_filename
         )
 
-        # Add store to the database
         db.session.add(new_store)
         db.session.commit()
 
-        # Return success response
         return jsonify({
             'status': 'success',
             'message': 'Store successfully created!',
-            'data': new_store.to_dict()  # Assuming `to_dect` is defined on Store model
+            'data': new_store.to_dict()
         }), 201
 
     except Exception as e:
-        # Log the exception for debugging
         db.session.rollback()
-        print(f"Error occurred during store creation: {str(e)}")  # Log the exception
+        print(f"Error occurred during store creation: {str(e)}")
         return jsonify({'error': f'An error occurred while creating the store: {str(e)}'}), 500
 
 
@@ -111,7 +104,6 @@ def update_store(store_id):
     if not store:
         return jsonify({'error': 'Store not found or you are not authorized to update this store'}), 404
 
-    # Get data from JSON
     data = request.get_json()
     if data.get("store_name"):
         store.store_name = data.get("store_name")
@@ -128,7 +120,6 @@ def update_store(store_id):
     if data.get("store_bio"):
         store.store_bio = data.get("store_bio")
 
-    # Image handling can still be done using request.files
     inner_image = request.files.get('inner_image')
     outer_image = request.files.get('outer_image')
 
@@ -193,9 +184,7 @@ def delete_store(store_id):
 @limiter.limit("5 per minute")
 @swag_from(getAllStoresDoc)
 def getAllStores():
-    # Query to get all stores from the database
     stores = Store.query.all()
-    # Check of the there is stores
     if not stores:
         return jsonify( 
             {
@@ -203,15 +192,12 @@ def getAllStores():
                 'message': 'No stores found'
             }
             ), 404
-    # Prepare the list of stores with their products
     storeList = []
     for store in stores:
         storeData = store.to_dict()
-        # Add the products of the store to the response
         storeData['products'] = [product.to_dect() for product in store.products]
         storeList.append(storeData)
 
-    # Return the list of stores and their products as a JSON response
     return jsonify(
         {
             'status': 'success',
@@ -226,17 +212,14 @@ def getAllStores():
 @limiter.limit("5 per minute")
 @swag_from(getStoresDoc)
 def getAllStores2():
-    # Query to get all stores from the database
     stores = Store.query.all()
     
-    # Check if there are stores
     if not stores:
         return jsonify({
             'status': 'error',
             'message': 'No stores found'
         }), 404
     
-    # Prepare the list of stores
     store_list = []
     for store in stores:
         store_data = {
@@ -249,8 +232,7 @@ def getAllStores2():
             'inner_image': store.inner_image
         }
         store_list.append(store_data)
-    
-    # Return the list of stores as a JSON response
+
     return jsonify({
         'status': 'success',
         'message': 'Stores successfully retrieved',
