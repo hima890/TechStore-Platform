@@ -72,7 +72,7 @@ def create_app():
         # Import and register the blueprints
         from .apis import (signUp, activation, signIn, optCode,
                            passwordReset, account, store,
-                           product)
+                           product, orders)
 
         app.register_blueprint(signUp)
         app.register_blueprint(activation)
@@ -82,6 +82,7 @@ def create_app():
         app.register_blueprint(account)
         app.register_blueprint(store)
         app.register_blueprint(product)
+        app.register_blueprint(orders)
 
         # Create the database tables
         db.create_all()
