@@ -13,19 +13,15 @@ from redis import Redis
 from flasgger import Swagger
 from .config import config
 
-# Load environment variables from .env file
 load_dotenv("./.env")
 
-# Get the configuration name from the environment variable, default is testing
 config_name = os.environ.get('FLASK_CONFIG', 'testing')
 
-# Initialize database extensions and migration engine
 db = SQLAlchemy()
 migrate = Migrate()
 
-# intialize and Configer JWTManager
 jwt = JWTManager()
-# Custom error handler for missing token
+
 @jwt.unauthorized_loader
 def custom_unauthorized_response(callback):
     return jsonify({
@@ -33,43 +29,34 @@ def custom_unauthorized_response(callback):
         "message": "Missing Authorization Header"
     }), 401
 
-# Initialize Flask-Limiter (don't bind to app yet)
 limiter = Limiter(
-    get_remote_address,  # Function to get client IP address
-    default_limits=["200 per day", "50 per hour"],  # Default limits
-    # storage_uri="redis://localhost:6379"  # Uncomment if using Redis
+    get_remote_address,
+    default_limits=["200 per day", "50 per hour"],
 )
 
-# Initialize Swagger (don't bind to app yet)
 swagger = Swagger()
 
 def create_app():
     """Create the Flask app and initialize it with extensions"""
-
-    # Create the Flask app instance inside the function
     app = Flask(__name__, instance_relative_config=True)
 
-    # Load the configuration from the config.py file
     app.config.from_object(config[config_name])
     
-    # Load the configuration from the instance/config.py file (if it exists)
     app.config.from_pyfile('../instance/config.py', silent=True)
 
-    # Enable CORS for all routes and all origins
     CORS(app, resources={r"/*": {"origins": "*"}})
 
-    # Initialize extensions with the app
-    db.init_app(app)  # Initialize the database
-    migrate.init_app(app, db)  # Initialize the migration engine
-    jwt.init_app(app)  # Initialize JWT manager
-    limiter.init_app(app)  # Initialize the rate limiter
-    swagger.init_app(app)  # Initialize Swagger
+    db.init_app(app)
+    migrate.init_app(app, db)
+    jwt.init_app(app)
+    limiter.init_app(app)
+    swagger.init_app(app)
 
-    # Register blueprints and other app-specific logic here
+
     with app.app_context():
-        # Import models after db is initialized
+
         from .models import User, Provider, Store 
-        # Import and register the blueprints
+
         from .apis import (signUp, activation, signIn, optCode,
                            passwordReset, account, store,
                            product, orders)
@@ -84,7 +71,6 @@ def create_app():
         app.register_blueprint(product)
         app.register_blueprint(orders)
 
-        # Create the database tables
         db.create_all()
 
     return app
