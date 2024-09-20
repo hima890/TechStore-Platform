@@ -12,5 +12,13 @@ def deleteProductImage(image):
             if os.path.exists(imagePath):
                 os.remove(imagePath)
                 return True
+            else:
+                # Log or print if the file does not exist
+                print(f"File not found: {imagePath}")
+                return False
         except Exception as e:
-            return False         
+            # Log or print the error for debugging purposes
+            print(f"Error deleting image {image}: {e}")
+            return False
+    # Return False if no image was provided
+    return False

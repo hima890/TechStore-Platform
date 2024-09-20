@@ -29,7 +29,8 @@ class Product(db.Model):
             self.brand,
             self.store_id
             )
-    def to_dect(self):
+
+    def to_dict(self):
         """Convert the Product object to a dictionary."""
         # Return the product data as a dictionary
         return {
@@ -41,8 +42,8 @@ class Product(db.Model):
             'description': self.description,
             'price': self.price,
             'deliveryStatus': self.deliveryStatus,
-            'image_1': url_for('static', filename='product_images/' + self.image_1),
-            'image_2': url_for('static', filename='product_images/' + self.image_2),
-            'image_3': url_for('static', filename='product_images/' + self.image_3),
-            'image_4': url_for('static', filename='product_images/' + self.image_4)
+            'image_1': url_for('static', filename='product_images/' + self.image_1) if self.image_1 else None,
+            'image_2': url_for('static', filename='product_images/' + self.image_2) if self.image_1 else None,
+            'image_3': url_for('static', filename='product_images/' + self.image_3) if self.image_1 else None,
+            'image_4': url_for('static', filename='product_images/' + self.image_4) if self.image_1 else None
         }
