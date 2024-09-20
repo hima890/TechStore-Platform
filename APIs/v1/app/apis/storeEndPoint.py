@@ -38,56 +38,63 @@ def create_store():
     if error:
         return jsonify(error), status_code
 
-    # Get store details from the JSON body instead of form
-    data = request.get_json()
-    store_name = data.get('store_name')
-    store_location = data.get('store_location')
-    store_email = data.get('store_email')
-    store_phone_number = data.get('store_phone_number')
-    operation_times = data.get('operation_times')
-    social_media_accounts = data.get('social_media_accounts')
-    store_bio = data.get('store_bio')
-
-    # Validate required fields
-    if not store_name or not store_location or not store_email or not store_phone_number:
-        return jsonify({'error': 'Missing required fields'}), 400
-
-    # If handling images, they would still come from request.files (not from JSON)
-    inner_image = request.files.get('inner_image')
-    outer_image = request.files.get('outer_image')
-
-    inner_image_filename = None
-    outer_image_filename = None
-
-    if inner_image:
-        inner_image_filename, inner_image_path = saveProfilePicture(inner_image, 'inner')
-    if outer_image:
-        outer_image_filename, outer_image_path = saveProfilePicture(outer_image, 'outer')
-
-    new_store = Store(
-        provider_id=provider.id,
-        store_name=store_name,
-        store_location=store_location,
-        store_email=store_email,
-        store_phone_number=store_phone_number,
-        operation_times=operation_times,
-        social_media_accounts=social_media_accounts,
-        store_bio=store_bio,
-        inner_image=inner_image_filename,
-        outer_image=outer_image_filename
-    )
-
     try:
+        # Get store details from the JSON body instead of form
+        data = request.get_json()
+        store_name = data.get('store_name')
+        store_location = data.get('store_location')
+        store_email = data.get('store_email')
+        store_phone_number = data.get('store_phone_number')
+        operation_times = data.get('operation_times')
+        social_media_accounts = data.get('social_media_accounts')
+        store_bio = data.get('store_bio')
+
+        # Validate required fields
+        if not store_name or not store_location or not store_email or not store_phone_number:
+            return jsonify({'error': 'Missing required fields'}), 400
+
+        # If handling images, they would still come from request.files (not from JSON)
+        inner_image = request.files.get('inner_image')
+        outer_image = request.files.get('outer_image')
+
+        inner_image_filename = None
+        outer_image_filename = None
+
+        if inner_image:
+            inner_image_filename, inner_image_path = saveProfilePicture(inner_image, 'inner')
+        if outer_image:
+            outer_image_filename, outer_image_path = saveProfilePicture(outer_image, 'outer')
+
+        # Create the store instance
+        new_store = Store(
+            provider_id=provider.id,
+            store_name=store_name,
+            store_location=store_location,
+            store_email=store_email,
+            store_phone_number=store_phone_number,
+            operation_times=operation_times,
+            social_media_accounts=social_media_accounts,
+            store_bio=store_bio,
+            inner_image=inner_image_filename,
+            outer_image=outer_image_filename
+        )
+
+        # Add store to the database
         db.session.add(new_store)
         db.session.commit()
+
+        # Return success response
         return jsonify({
             'status': 'success',
             'message': 'Store successfully created!',
-            'data': new_store.to_dect()
+            'data': new_store.to_dict()  # Assuming `to_dect` is defined on Store model
         }), 201
+
     except Exception as e:
+        # Log the exception for debugging
         db.session.rollback()
-        return jsonify({'error': 'An error occurred while creating the store.'}), 500
+        print(f"Error occurred during store creation: {str(e)}")  # Log the exception
+        return jsonify({'error': f'An error occurred while creating the store: {str(e)}'}), 500
 
 
 @store.route('/update-store/<int:store_id>', methods=['PUT'])
@@ -137,7 +144,7 @@ def update_store(store_id):
         return jsonify({
             'status': 'success',
             'message': 'Store updated successfully!',
-            'data': store.to_dect()
+            'data': store.to_dict()
         }), 200
     except Exception as e:
         db.session.rollback()
@@ -199,7 +206,7 @@ def getAllStores():
     # Prepare the list of stores with their products
     storeList = []
     for store in stores:
-        storeData = store.to_dect()
+        storeData = store.to_dict()
         # Add the products of the store to the response
         storeData['products'] = [product.to_dect() for product in store.products]
         storeList.append(storeData)

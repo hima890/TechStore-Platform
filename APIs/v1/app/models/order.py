@@ -9,7 +9,7 @@ class Order(db.Model):
     __tablename__ =  'orders'
 
     id = db.Column(db.Integer, primary_key=True)
-    store_id = db.Column(db.Integer, db.ForeignKey('stores.id'), nullable=False)
+    store_id = db.Column(db.Integer, db.ForeignKey('stores.store_id'), nullable=False)
     name = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(120), nullable=False)
     img = db.Column(db.String(120), nullable=True)
@@ -36,7 +36,7 @@ class Order(db.Model):
             'store_id': self.store_id,
             'name': self.name,
             'email': self.email,
-            'img': url_for('static', filename='orders_pics/' + self.img),
+            'img': url_for('static', filename='orders_pics/' + self.img) if self.img else None,
             'title': self.title,
             'brand': self.brand,
             'description': self.description,
