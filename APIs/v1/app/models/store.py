@@ -9,10 +9,10 @@ class Store(db.Model):
 
     store_id = db.Column(db.Integer, primary_key=True)
     provider_id = db.Column(db.Integer, db.ForeignKey('providers.id'), nullable=False)
-    store_name = db.Column(db.String(255), nullable=False)  # Added store name
+    store_name = db.Column(db.String(255), nullable=False)
     store_location = db.Column(db.String(255), nullable=False)
-    store_email = db.Column(db.String(255), nullable=False)  # Added store email
-    store_phone_number = db.Column(db.String(20), nullable=False)  # Added store phone number
+    store_email = db.Column(db.String(255), nullable=False)
+    store_phone_number = db.Column(db.String(20), nullable=False)
     operation_times = db.Column(db.String(100), nullable=True)
     social_media_accounts = db.Column(db.Text, nullable=True)
     store_bio = db.Column(db.Text, nullable=True)
@@ -44,10 +44,10 @@ class Store(db.Model):
         return {
             'store_id': self.store_id,
             'provider_id': self.provider_id,
-            'store_name': self.store_name,  # Include store name in the dictionary
+            'store_name': self.store_name,
             'store_location': self.store_location,
-            'store_email': self.store_email,  # Include store email in the dictionary
-            'store_phone_number': self.store_phone_number,  # Include store phone number in the dictionary
+            'store_email': self.store_email,
+            'store_phone_number': self.store_phone_number,
             'operation_times': self.operation_times,
             'social_media_accounts': self.social_media_accounts,
             'store_bio': self.store_bio,
