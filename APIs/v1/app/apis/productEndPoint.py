@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 """ Products mangment Endpoints """
 from flask import request, jsonify
-from flasgger import swag_from # type: ignore
-from flask_jwt_extended import jwt_required, get_jwt_identity # type: ignore
+from flasgger import swag_from
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from . import product
 from .swaggerFile import productDoc, productUpdateDoc, productDeleteDoc, getAllProductsByCategoryDoc
 from ..models import Product, Provider
@@ -20,14 +20,14 @@ from .. import limiter
 @swag_from(productDoc)
 def addProduct():
     """Add products to the provider store account"""
-    # Get the profivder's email from the token
+
     currentUserEmail = get_jwt_identity()
     if not currentUserEmail:
         return jsonify({
             "status": "error",
             "message": "Bad request, no user token"
             }), 400
-    # Get the provider
+
     user = Provider.query.filter_by(email=currentUserEmail).first()
     if not user:
         return jsonify({
@@ -35,14 +35,12 @@ def addProduct():
                 "message": "User not found"
                 }), 404
 
-    # Check the request data
     if not request.form:
         return jsonify({
             "status": "error",
             "message": "Bad request, no data provided"
             }), 400
 
-    # Get the store id 
     storeId = request.form.get('store_id')
     name = request.form.get('name')
     brand = request.form.get('brand')
@@ -55,11 +53,8 @@ def addProduct():
     image_3 = request.files.get('image_3')
     image_4 = request.files.get('image_4')
 
-    # Validate and process the product pictures
     newFileNames, newFilePath = saveProductImages([image_1, image_2, image_3, image_4])
-    # Generate the product uniqe id
     newId = generateProductId()
-    # Create new product
     newProduct = Product(store_id=storeId, name=name, product_id=newId, brand=brand,
                          category=category, description=description,
                          price=price, deliveryStatus=deliveryStatus,
@@ -67,9 +62,7 @@ def addProduct():
                          image_4=image_4
                          )
 
-    # Save the user updates
     db.session.commit()
-    # Return success response
     return jsonify({
             "status": "success",
             "message": "Product added successfully",
@@ -85,14 +78,13 @@ def addProduct():
 # @swag_from(productDoc)
 def updateProduct():
     """Update product details"""
-    # Get the profivder's email from the token
     currentUserEmail = get_jwt_identity()
     if not currentUserEmail:
         return jsonify({
             "status": "error",
             "message": "Bad request, no user token"
             }), 400
-    # Get the provider
+
     user = Provider.query.filter_by(email=currentUserEmail).first()
     if not user:
         return jsonify({
@@ -100,24 +92,21 @@ def updateProduct():
                 "message": "User not found"
                 }), 404
 
-    # Check the request data
     if not request.form:
         return jsonify({
             "status": "error",
             "message": "Bad request, no data provided"
             }), 400
     
-    # Get the product id
     productID = request.form.get('product_id')
     product = Product.query.filter_by(product_id=productID).first()
-    # Check if the product exists
+
     if not product:
         return jsonify({
             "status": "error",
             "message": "Product not found"
             }), 404
 
-    # Update the product details
     if request.form.get('name'):
         product.name = request.form.get('name')
     if request.form.get('brand'):
@@ -142,10 +131,9 @@ def updateProduct():
     if request.files.get('image_4'):
         unique_filename_4, _ = updateProductImage(request.form.get('image_4'))
         product.image_4 = unique_filename_4
-        
-    # Save the user updates
+
     db.session.commit()
-    # Return success response
+
     return jsonify({
             "status": "success",
             "message": "Product updated successfully",
@@ -159,7 +147,6 @@ def updateProduct():
 @swag_from(productDeleteDoc)
 def deleteProduct():
     """Delete a product and its images."""
-    # Get the provider's email from the token
     currentUserEmail = get_jwt_identity()
     if not currentUserEmail:
         return jsonify({
@@ -167,7 +154,6 @@ def deleteProduct():
             "message": "Bad request, no user token"
         }), 400
 
-    # Get the provider
     user = Provider.query.filter_by(email=currentUserEmail).first()
     if not user:
         return jsonify({
@@ -175,7 +161,6 @@ def deleteProduct():
             "message": "User not found"
         }), 404
 
-    # Get the product id
     productID = request.form.get('product_id')
     product = Product.query.filter_by(product_id=productID).first()
     if not product:
@@ -184,7 +169,6 @@ def deleteProduct():
             "message": "Product not found"
         }), 404
 
-    # Delete the product images (ignore missing images)
     if product.image_1:
         if not deleteProductImage(product.image_1):
             print(f"Failed to delete image {product.image_1}, but proceeding.")
@@ -198,7 +182,6 @@ def deleteProduct():
         if not deleteProductImage(product.image_4):
             print(f"Failed to delete image {product.image_4}, but proceeding.")
 
-    # Delete the product from the database
     try:
         db.session.delete(product)
         db.session.commit()
@@ -207,7 +190,7 @@ def deleteProduct():
             "message": "Product deleted successfully"
         }), 200
     except Exception as e:
-        db.session.rollback()  # Rollback if there's an error
+        db.session.rollback()
         print(f"Error deleting product from database: {e}")
         return jsonify({
             "status": "error",
@@ -220,7 +203,7 @@ def deleteProduct():
 @swag_from(getAllProductsByCategoryDoc)
 def getAllProducts():
     """Get all the products under every categores"""
-    # Query all distinct categories
+
     categories = db.session.query(Product.category).distinct().all()
 
     if not categories:
@@ -229,7 +212,6 @@ def getAllProducts():
             'message': 'No categories found'
         }), 404
 
-    # Prepare the list of categories with their products
     categoryList = []
     for category_tuple in categories:
         category_name = category_tuple[0]
@@ -237,7 +219,7 @@ def getAllProducts():
             'category_name': category_name,
             'products': []
         }
-        # Query products for each category
+
         products = Product.query.filter_by(category=category_name).all()
         for product in products:
             productData = {
