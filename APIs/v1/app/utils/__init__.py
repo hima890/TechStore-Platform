@@ -9,3 +9,4 @@ from .deleteProductImage import deleteProductImage
 from .updateProductImage import saveProductImage
 from .deleteProductImage import deleteProductImage
 from .generateProductId import generateProductId
+from .saveOrdersImages import saveOrdersPicture
