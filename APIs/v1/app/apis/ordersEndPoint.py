@@ -4,7 +4,7 @@ from flask import request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from flasgger import swag_from
 from . import orders
-from .swaggerFile import createOrderDoc, getStoreOrdersDoc
+from .swaggerFile import createOrderDoc, getStoreOrdersDoc, deleteOrderDoc
 from ..models import User, Store, Order
 from .. import db
 from .. import limiter
@@ -157,3 +157,56 @@ def getOrder():
         "message": "Orders found",
         "data": orderList
     }), 200
+
+
+@orders.route('/delete-order', methods=['DELETE'])
+@jwt_required()
+@limiter.limit("5 per minute")
+@swag_from(deleteOrderDoc)  # Use the Swagger doc for deleting orders
+def deleteOrder():
+    """Delete an order"""
+    # Get the user's email from the token
+    currentUserEmail = get_jwt_identity()
+    if not currentUserEmail:
+        return jsonify({
+            "status": "error",
+            "message": "Bad request, no user token"
+        }), 400
+
+    user = User.query.filter_by(email=currentUserEmail).first()
+    if not user:
+        return jsonify({
+            "status": "error",
+            "message": "User not found"
+        }), 404
+
+    # Get the request data for the order ID
+    order_id = request.form.get('order_id')
+    if not order_id:
+        return jsonify({
+            "status": "error",
+            "message": "Order ID is required"
+        }), 400
+
+    # Get the order by ID
+    order = Order.query.get(order_id)
+    if not order:
+        return jsonify({
+            "status": "error",
+            "message": "Order not found"
+        }), 404
+
+    # Delete the order
+    try:
+        db.session.delete(order)
+        db.session.commit()
+        return jsonify({
+            "status": "success",
+            "message": "Order deleted successfully"
+        }), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({
+            "status": "error",
+            "message": "An error occurred while deleting the order"
+        }), 500
