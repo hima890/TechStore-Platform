@@ -1,9 +1,10 @@
 #!/usr/bin/python3
 """ Flask Application """
+from app.config import config  # Import the config dictionary from your config.py
 from app import create_app
 
 # Create the Flask app instance
-app = create_app()
+app = create_app(config['testing'])
 
 @app.route('/')
 def home():

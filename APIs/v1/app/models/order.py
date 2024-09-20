@@ -9,7 +9,7 @@ class Order(db.Model):
     __tablename__ =  'orders'
 
     id = db.Column(db.Integer, primary_key=True)
-    store_id = db.Column(db.Integer, db.ForeignKey('stores.id'), nullable=False)
+    store_id = db.Column(db.Integer, db.ForeignKey('stores.store_id'), nullable=False)
     name = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(120), nullable=False)
     img = db.Column(db.String(120), nullable=True)
