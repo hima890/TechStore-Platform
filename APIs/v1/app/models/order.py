@@ -30,7 +30,7 @@ class Order(db.Model):
 
     def to_dict(self):
         """Convert the Order object to a dictionary."""
-        # Return the order data as a dictionary
+
         return {
             'id': self.id,
             'store_id': self.store_id,
