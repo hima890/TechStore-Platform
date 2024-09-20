@@ -11,7 +11,7 @@ store = Blueprint('store', __name__, url_prefix='/api/v1/stores')
 passwordReset = Blueprint('passwordReset', __name__,  url_prefix='/api/v1')
 account = Blueprint('account', __name__,  url_prefix='/api/v1')
 product = Blueprint('product', __name__,  url_prefix='/api/v1/products')
-orders = Blueprint('orders', __name__,  url_prefix='/api/v1')
+orders = Blueprint('orders', __name__,  url_prefix='/api/v1/orders')
 
 # Import the API endpoints to register them with the Blueprint
 from .signupEndPoint import *

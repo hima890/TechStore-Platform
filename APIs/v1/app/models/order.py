@@ -36,7 +36,7 @@ class Order(db.Model):
             'store_id': self.store_id,
             'name': self.name,
             'email': self.email,
-            'img': url_for('static', filename='orders_pics/' + self.img),
+            'img': url_for('static', filename='orders_pics/' + self.img) if self.img else None,
             'title': self.title,
             'brand': self.brand,
             'description': self.description,

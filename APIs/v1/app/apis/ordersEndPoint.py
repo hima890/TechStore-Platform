@@ -85,9 +85,7 @@ def addOrders():
     return jsonify({
             "status": "success",
             "message": "Order created successfully!",
-            "data": {
-                newOrder.to_dict()
-            }
+            "data": newOrder.to_dict()
         }), 201
 
 
