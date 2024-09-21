@@ -12,6 +12,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '.
 from app import create_app, db  # Import from the 'v1' directory
 from app.models import Product, Store, Provider
 
+
 class ProductManagementTestCase(TestCase):
     def create_app(self):
         """ Set up the Flask application for testing. """
@@ -74,17 +75,19 @@ class ProductManagementTestCase(TestCase):
             'category': 'Test Category',
             'description': 'Test Description',
             'price': 99.99,
-            'status': True,
-            'image_1': 'image1.jpg',
-            'image_2': 'image2.jpg',
-            'image_3': 'image3.jpg',
-            'image_4': 'image4.jpg'
+            'status': True
+        }
+        files = {
+            'image_1': (open('tests/files/image1.jpg', 'rb'), 'image1.jpg'),
+            'image_2': (open('tests/files/image2.jpg', 'rb'), 'image2.jpg'),
+            'image_3': (open('tests/files/image3.jpg', 'rb'), 'image3.jpg'),
+            'image_4': (open('tests/files/image4.jpg', 'rb'), 'image4.jpg')
         }
         headers = {
             'Authorization': f'Bearer {self.token}'
         }
 
-        response = self.client.post('/api/v1/products/add-product', data=data, headers=headers)
+        response = self.client.post('/api/v1/products/add-product', data=data, content_type='multipart/form-data', headers=headers, files=files)
         self.assertEqual(response.status_code, 200)
         self.assertIn('Product added successfully', response.json['message'])
 
