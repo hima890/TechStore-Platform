@@ -1,10 +1,11 @@
 #!/usr/bin/python3
-""" Products mangment Endpoints """
+""" Product Management Endpoints """
 from flask import request, jsonify
 from flasgger import swag_from
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from . import product
-from .swaggerFile import productDoc, productUpdateDoc, productDeleteDoc, getAllProductsByCategoryDoc
+from ..models import Store
+from .swaggerFile import productDoc, productUpdateDoc, productDeleteDoc, getAllProductsByCategoryDoc, searchProductDoc
 from ..models import Product, Provider
 from app.utils.saveProductImages import saveProductImages
 from app.utils.updateProductImage import updateProductImage
@@ -20,26 +21,25 @@ from .. import limiter
 @swag_from(productDoc)
 def addProduct():
     """Add products to the provider store account"""
-
     currentUserEmail = get_jwt_identity()
     if not currentUserEmail:
         return jsonify({
             "status": "error",
             "message": "Bad request, no user token"
-            }), 400
+        }), 400
 
     user = Provider.query.filter_by(email=currentUserEmail).first()
     if not user:
         return jsonify({
-                "status": "error",
-                "message": "User not found"
-                }), 404
+            "status": "error",
+            "message": "User not found"
+        }), 404
 
     if not request.form:
         return jsonify({
             "status": "error",
             "message": "Bad request, no data provided"
-            }), 400
+        }), 400
 
     storeId = request.form.get('store_id')
     name = request.form.get('name')
@@ -53,29 +53,43 @@ def addProduct():
     image_3 = request.files.get('image_3')
     image_4 = request.files.get('image_4')
 
+    # Save product images
     newFileNames, newFilePath = saveProductImages([image_1, image_2, image_3, image_4])
+
+    # Generate a unique product ID
     newId = generateProductId()
-    newProduct = Product(store_id=storeId, name=name, product_id=newId, brand=brand,
-                         category=category, description=description,
-                         price=price, deliveryStatus=deliveryStatus,
-                         image_1=image_1, image_2=image_2, image_3=image_3,
-                         image_4=image_4
-                         )
 
+    # Create a new Product instance
+    newProduct = Product(
+        store_id=storeId,
+        name=name,
+        product_id=newId,
+        brand=brand,
+        category=category,
+        description=description,
+        price=price,
+        deliveryStatus=deliveryStatus,
+        image_1=newFileNames[0],
+        image_2=newFileNames[1],
+        image_3=newFileNames[2],
+        image_4=newFileNames[3]
+    )
+
+    # Add and commit new product to the database
+    db.session.add(newProduct)
     db.session.commit()
-    return jsonify({
-            "status": "success",
-            "message": "Product added successfully",
-            "data" : newProduct.to_dict()
-            }), 200
 
+    return jsonify({
+        "status": "success",
+        "message": "Product added successfully",
+        "data": newProduct.to_dict()
+    }), 200
 
 
 @product.route('/update-product', methods=['PUT'])
 @jwt_required()
 @limiter.limit("5 per minute")
 @swag_from(productUpdateDoc)
-# @swag_from(productDoc)
 def updateProduct():
     """Update product details"""
     currentUserEmail = get_jwt_identity()
@@ -83,21 +97,21 @@ def updateProduct():
         return jsonify({
             "status": "error",
             "message": "Bad request, no user token"
-            }), 400
+        }), 400
 
     user = Provider.query.filter_by(email=currentUserEmail).first()
     if not user:
         return jsonify({
-                "status": "error",
-                "message": "User not found"
-                }), 404
+            "status": "error",
+            "message": "User not found"
+        }), 404
 
     if not request.form:
         return jsonify({
             "status": "error",
             "message": "Bad request, no data provided"
-            }), 400
-    
+        }), 400
+
     productID = request.form.get('product_id')
     product = Product.query.filter_by(product_id=productID).first()
 
@@ -105,8 +119,9 @@ def updateProduct():
         return jsonify({
             "status": "error",
             "message": "Product not found"
-            }), 404
+        }), 404
 
+    # Update product fields
     if request.form.get('name'):
         product.name = request.form.get('name')
     if request.form.get('brand'):
@@ -119,26 +134,28 @@ def updateProduct():
         product.price = request.form.get('price')
     if request.form.get('status'):
         product.deliveryStatus = request.form.get('status')
+
+    # Update product images if provided
     if request.files.get('image_1'):
-        unique_filename_1, _ = updateProductImage(request.form.get('image_1'))
+        unique_filename_1, _ = updateProductImage(request.files.get('image_1'))
         product.image_1 = unique_filename_1
     if request.files.get('image_2'):
-        unique_filename_2, _ = updateProductImage(request.form.get('image_2'))
+        unique_filename_2, _ = updateProductImage(request.files.get('image_2'))
         product.image_2 = unique_filename_2
     if request.files.get('image_3'):
-        unique_filename_3, _ =  updateProductImage(request.form.get('image_3'))
+        unique_filename_3, _ = updateProductImage(request.files.get('image_3'))
         product.image_3 = unique_filename_3
     if request.files.get('image_4'):
-        unique_filename_4, _ = updateProductImage(request.form.get('image_4'))
+        unique_filename_4, _ = updateProductImage(request.files.get('image_4'))
         product.image_4 = unique_filename_4
 
     db.session.commit()
 
     return jsonify({
-            "status": "success",
-            "message": "Product updated successfully",
-            "data" : product.to_dict()
-            }), 200
+        "status": "success",
+        "message": "Product updated successfully",
+        "data": product.to_dict()
+    }), 200
 
 
 @product.route('/delete-product', methods=['DELETE'])
@@ -163,24 +180,22 @@ def deleteProduct():
 
     productID = request.form.get('product_id')
     product = Product.query.filter_by(product_id=productID).first()
+
     if not product:
         return jsonify({
             "status": "error",
             "message": "Product not found"
         }), 404
 
+    # Delete product images
     if product.image_1:
-        if not deleteProductImage(product.image_1):
-            print(f"Failed to delete image {product.image_1}, but proceeding.")
+        deleteProductImage(product.image_1)
     if product.image_2:
-        if not deleteProductImage(product.image_2):
-            print(f"Failed to delete image {product.image_2}, but proceeding.")
+        deleteProductImage(product.image_2)
     if product.image_3:
-        if not deleteProductImage(product.image_3):
-            print(f"Failed to delete image {product.image_3}, but proceeding.")
+        deleteProductImage(product.image_3)
     if product.image_4:
-        if not deleteProductImage(product.image_4):
-            print(f"Failed to delete image {product.image_4}, but proceeding.")
+        deleteProductImage(product.image_4)
 
     try:
         db.session.delete(product)
@@ -191,10 +206,9 @@ def deleteProduct():
         }), 200
     except Exception as e:
         db.session.rollback()
-        print(f"Error deleting product from database: {e}")
         return jsonify({
             "status": "error",
-            "message": "Error deleting product from database"
+            "message": f"Error deleting product from database: {e}"
         }), 500
 
 
@@ -202,8 +216,7 @@ def deleteProduct():
 @limiter.limit("5 per minute")
 @swag_from(getAllProductsByCategoryDoc)
 def getAllProducts():
-    """Get all the products under every categores"""
-
+    """Get all the products under every category"""
     categories = db.session.query(Product.category).distinct().all()
 
     if not categories:
@@ -240,4 +253,48 @@ def getAllProducts():
         'status': 'success',
         'message': 'Products successfully retrieved',
         'categories': categoryList
+    }), 200
+
+
+@product.route('/search-products', methods=['GET'])
+@limiter.limit("5 per minute")
+@swag_from(searchProductDoc)
+def searchProducts():
+    """Search products by category and store name"""
+    category = request.args.get('category')
+    store_name = request.args.get('store_name')
+
+    if not category and not store_name:
+        products = Product.query.all()  # Get all products if no filter is applied
+    else:
+        query = Product.query
+        if category:
+            query = query.filter_by(category=category)
+        if store_name:
+            query = query.join(Store).filter(Store.store_name.ilike(f'%{store_name}%'))
+        products = query.all()
+
+    if not products:
+        return jsonify({
+            'status': 'error',
+            'message': 'No products found for the provided criteria'
+        }), 404
+
+    productList = []
+    for product in products:
+        productList.append({
+            'id': product.id,
+            'name': product.name,
+            'brand': product.brand,
+            'category': product.category,
+            'price': product.price,
+            'description': product.description,
+            'store_name': product.store.store_name,
+            'image_1': product.image_1
+        })
+
+    return jsonify({
+        'status': 'success',
+        'message': 'Products found',
+        'data': productList
     }), 200
