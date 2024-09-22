@@ -3,110 +3,105 @@
 
 # Documentation for the product endpoint
 productDoc = {
-    'tags': ['Store account Management'],     
+    'tags': ['Store account Management'],
     'parameters': [
         {
             'name': 'Authorization',
             'in': 'header',
             'required': True,
-            'type': 'string',
-            'description': 'Bearer token' 
-        }
-        ,
+            'schema': {
+                'type': 'string'
+            },
+            'description': 'Bearer token for authorization'
+        },
         {
             'name': 'storeId',
             'in': 'formData',
-            'type': 'string',
-            'required': True
-        }
-        ,
+            'schema': {
+                'type': 'string'
+            },
+            'required': True,
+            'description': 'ID of the store'
+        },
         {
             'name': 'name',
             'in': 'formData',
-            'type': 'string',
-            'required': True
-        }
-        ,
+            'schema': {
+                'type': 'string'
+            },
+            'required': True,
+            'description': 'Product name'
+        },
         {
             'name': 'brand',
             'in': 'formData',
-            'type': 'string',
-            'required': True
-        }
-        ,
+            'schema': {
+                'type': 'string'
+            },
+            'required': True,
+            'description': 'Brand of the product'
+        },
         {
             'name': 'category',
             'in': 'formData',
-            'type': 'string',
-            'required': True
-        }
-        ,
+            'schema': {
+                'type': 'string'
+            },
+            'required': True,
+            'description': 'Product category'
+        },
         {
             'name': 'description',
             'in': 'formData',
-            'type': 'string',
-            'required': True
-        }
-        ,
+            'schema': {
+                'type': 'string'
+            },
+            'required': True,
+            'description': 'Product description'
+        },
         {
             'name': 'price',
             'in': 'formData',
-            'type': 'string',
-            'required': True
-        }
-        ,
+            'schema': {
+                'type': 'string'
+            },
+            'required': True,
+            'description': 'Price of the product'
+        },
         {
             'name': 'deliveryStatus',
             'in': 'formData',
-            'type': 'string',
-            'required': True
-        }
-        ,
+            'schema': {
+                'type': 'string'
+            },
+            'required': True,
+            'description': 'Delivery status (True/False)'
+        },
         {
             'name': 'location',
             'in': 'formData',
-            'type': 'string',
-            'required': True
-        }
-        ,
+            'schema': {
+                'type': 'string'
+            },
+            'required': True,
+            'description': 'Location of the product'
+        },
         {
             'name': 'image_1',
             'in': 'formData',
-            'type': 'file',
-            'required': True,
-            'description': 'Product image'
-        }
-        ,
-        {
-            'name': 'image_2',
-            'in': 'formData',
-            'type': 'file',
-            'required': True,
-            'description': 'Product image'
-        }
-        ,
-        {
-            'name': 'image_3',
-            'in': 'formData',
-            'type': 'file',
-            'required': True,
-            'description': 'OProduct image'
-        }
-         ,
-        {
-            'name': 'image_4',
-            'in': 'formData',
-            'type': 'file',
+            'schema': {
+                'type': 'file'
+            },
             'required': True,
             'description': 'Product image'
         }
     ],
     'consumes': [
-        'multipart/form-data',  # Set the content type to JSON
+        'multipart/form-data'
     ],
     'responses': {
         200: {
-            'description': 'User account.',
+            'description': 'Product information successfully retrieved.',
             'schema': {
                 'type': 'object',
                 'properties': {
@@ -125,7 +120,7 @@ productDoc = {
                                 'type': 'string',
                                 'example': 'Power Bank'
                             },
-                            'brand name': {
+                            'brand': {
                                 'type': 'string',
                                 'example': 'AKJ'
                             },
@@ -135,38 +130,19 @@ productDoc = {
                             },
                             'description': {
                                 'type': 'string',
-                                'example': 'High power powerbanck',
+                                'example': 'High power powerbank'
                             },
                             'price': {
                                 'type': 'string',
-                                'example': '125.600'
-                            },
-                            'gander': {
-                                'type': 'string',
-                                'example': 'male'
+                                'example': '125.60'
                             },
                             'deliveryStatus': {
                                 'type': 'string',
-                                'example': 'True/False'
+                                'example': 'True'
                             },
                             'image_1': {
                                 'type': 'string',
                                 'example': 'image_1.png'
-                            }
-                            ,
-                            'image_2': {
-                                'type': 'string',
-                                'example': 'image_2.png'
-                            }
-                            ,
-                            'image_3': {
-                                'type': 'string',
-                                'example': 'image_3.png'
-                            }
-                            ,
-                            'image_4': {
-                                'type': 'string',
-                                'example': 'image_4.png'
                             }
                         }
                     }
@@ -174,7 +150,7 @@ productDoc = {
             }
         },
         400: {
-            'description': 'Bad request, no user token.',
+            'description': 'Bad request, missing user token.',
             'schema': {
                 'type': 'object',
                 'properties': {
@@ -190,7 +166,7 @@ productDoc = {
             }
         },
         404: {
-            'description': 'Bad request or Provider not found.',
+            'description': 'Store not found or bad request.',
             'schema': {
                 'type': 'object',
                 'properties': {
@@ -200,7 +176,7 @@ productDoc = {
                     },
                     'message': {
                         'type': 'string',
-                        'example': 'Bad request.'
+                        'example': 'Store not found.'
                     }
                 }
             }
