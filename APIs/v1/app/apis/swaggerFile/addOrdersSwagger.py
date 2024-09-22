@@ -1,81 +1,74 @@
-# Swagger documentation for the create order endpoint
 createOrderDoc = {
-    'tags': ['Order Management'],     
+    'tags': ['Order Management'],
+    'summary': 'Create a new order',
+    'description': 'Create an order by providing order details',
     'parameters': [
         {
             'name': 'Authorization',
             'in': 'header',
             'required': True,
-            'type': 'string',
-            'description': 'Bearer token'
+            'schema': {
+                'type': 'string'
+            },
+            'description': 'Bearer token for authorization'
         },
         {
-            'name': 'name',
-            'in': 'formData',
-            'type': 'string',
+            'name': 'body',
+            'in': 'body',
             'required': True,
-            'description': 'Customer name'
-        },
-        {
-            'name': 'email',
-            'in': 'formData',
-            'type': 'string',
-            'required': True,
-            'description': 'Customer email'
-        },
-        {
-            'name': 'store_id',
-            'in': 'formData',
-            'type': 'integer',
-            'required': True,
-            'description': 'ID of the store placing the order'
-        },
-        {
-            'name': 'title',
-            'in': 'formData',
-            'type': 'string',
-            'required': True,
-            'description': 'Product title'
-        },
-        {
-            'name': 'brand',
-            'in': 'formData',
-            'type': 'string',
-            'required': True,
-            'description': 'Product brand'
-        },
-        {
-            'name': 'description',
-            'in': 'formData',
-            'type': 'string',
-            'required': True,
-            'description': 'Product description'
-        },
-        {
-            'name': 'price',
-            'in': 'formData',
-            'type': 'float',
-            'required': True,
-            'description': 'Product price'
-        },
-        {
-            'name': 'quantity',
-            'in': 'formData',
-            'type': 'integer',
-            'required': True,
-            'description': 'Quantity of product ordered'
-        },
-        {
-            'name': 'img',
-            'in': 'formData',
-            'type': 'file',
-            'required': False,
-            'description': 'Product image'
+            'schema': {
+                'type': 'object',
+                'properties': {
+                    'requester_name': {
+                        'type': 'string',
+                        'description': 'Name of the customer placing the order',
+                        'example': 'John Doe'
+                    },
+                    'requester_email': {
+                        'type': 'string',
+                        'description': 'Email of the customer placing the order',
+                        'example': 'johndoe@example.com'
+                    },
+                    'store_id': {
+                        'type': 'integer',
+                        'description': 'ID of the store processing the order',
+                        'example': 1
+                    },
+                    'title': {
+                        'type': 'string',
+                        'description': 'Product title',
+                        'example': 'Smartphone'
+                    },
+                    'brand': {
+                        'type': 'string',
+                        'description': 'Brand of the product',
+                        'example': 'TechBrand'
+                    },
+                    'description': {
+                        'type': 'string',
+                        'description': 'Product description',
+                        'example': 'Latest model smartphone'
+                    },
+                    'price': {
+                        'type': 'float',
+                        'description': 'Product price',
+                        'example': 599.99
+                    },
+                    'quantity': {
+                        'type': 'integer',
+                        'description': 'Quantity of the product ordered',
+                        'example': 2
+                    },
+                    'img': {
+                        'type': 'string',
+                        'description': 'Optional image of the product',
+                        'example': 'smartphone.png'
+                    }
+                }
+            }
         }
     ],
-    'consumes': [
-        'multipart/form-data',
-    ],
+    'consumes': ['application/json'],
     'responses': {
         201: {
             'description': 'Order created successfully.',
@@ -93,11 +86,11 @@ createOrderDoc = {
                                 'type': 'integer',
                                 'example': 1
                             },
-                            'name': {
+                            'requester_name': {
                                 'type': 'string',
                                 'example': 'John Doe'
                             },
-                            'email': {
+                            'requester_email': {
                                 'type': 'string',
                                 'example': 'johndoe@example.com'
                             },

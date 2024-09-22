@@ -1,22 +1,34 @@
-# Swagger documentation for retrieving store orders
 getStoreOrdersDoc = {
-    'tags': ['Order Management'],     
+    'tags': ['Order Management'],
+    'summary': 'Retrieve orders for a specific store',
+    'description': 'Fetch all orders for a store based on its store_id',
     'parameters': [
         {
             'name': 'Authorization',
             'in': 'header',
             'required': True,
-            'type': 'string',
-            'description': 'Bearer token'
+            'schema': {
+                'type': 'string'
+            },
+            'description': 'Bearer token for authorization'
         },
         {
-            'name': 'store_id',
-            'in': 'path',
-            'type': 'integer',
+            'name': 'body',
+            'in': 'body',
             'required': True,
-            'description': 'ID of the store whose orders are to be fetched'
+            'schema': {
+                'type': 'object',
+                'properties': {
+                    'store_id': {
+                        'type': 'integer',
+                        'description': 'ID of the store whose orders are to be fetched',
+                        'example': 1
+                    }
+                }
+            }
         }
     ],
+    'consumes': ['application/json'],
     'responses': {
         200: {
             'description': 'Orders fetched successfully.',
@@ -44,40 +56,49 @@ getStoreOrdersDoc = {
                                     'type': 'integer',
                                     'example': 1
                                 },
-                                'name': {
+                                'requester_name': {
                                     'type': 'string',
+                                    'description': 'Name of the user who requested the order',
                                     'example': 'John Doe'
                                 },
-                                'email': {
+                                'requester_email': {
                                     'type': 'string',
+                                    'description': 'Email of the user who requested the order',
                                     'example': 'johndoe@example.com'
                                 },
                                 'title': {
                                     'type': 'string',
+                                    'description': 'Product title',
                                     'example': 'Smartphone'
                                 },
                                 'brand': {
                                     'type': 'string',
+                                    'description': 'Product brand',
                                     'example': 'TechBrand'
                                 },
                                 'description': {
                                     'type': 'string',
+                                    'description': 'Product description',
                                     'example': 'Latest model smartphone'
                                 },
                                 'price': {
                                     'type': 'float',
+                                    'description': 'Product price',
                                     'example': 599.99
                                 },
                                 'quantity': {
                                     'type': 'integer',
+                                    'description': 'Quantity ordered',
                                     'example': 2
                                 },
                                 'total': {
                                     'type': 'float',
+                                    'description': 'Total price of the order',
                                     'example': 1199.98
                                 },
                                 'img': {
                                     'type': 'string',
+                                    'description': 'Image of the product',
                                     'example': 'smartphone.png'
                                 }
                             }
