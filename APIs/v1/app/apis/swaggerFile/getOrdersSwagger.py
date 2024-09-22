@@ -1,19 +1,23 @@
 # Swagger documentation for retrieving store orders
 getStoreOrdersDoc = {
-    'tags': ['Order Management'],     
+    'tags': ['Order Management'],
     'parameters': [
         {
             'name': 'Authorization',
             'in': 'header',
             'required': True,
-            'type': 'string',
-            'description': 'Bearer token'
+            'schema': {
+                'type': 'string'
+            },
+            'description': 'Bearer token for authorization'
         },
         {
             'name': 'store_id',
             'in': 'path',
-            'type': 'integer',
             'required': True,
+            'schema': {
+                'type': 'integer'
+            },
             'description': 'ID of the store whose orders are to be fetched'
         }
     ],
@@ -46,38 +50,47 @@ getStoreOrdersDoc = {
                                 },
                                 'name': {
                                     'type': 'string',
+                                    'description': 'Name of the user who requested the order',
                                     'example': 'John Doe'
                                 },
                                 'email': {
                                     'type': 'string',
+                                    'description': 'Email of the user who requested the order',
                                     'example': 'johndoe@example.com'
                                 },
                                 'title': {
                                     'type': 'string',
+                                    'description': 'Product title',
                                     'example': 'Smartphone'
                                 },
                                 'brand': {
                                     'type': 'string',
+                                    'description': 'Product brand',
                                     'example': 'TechBrand'
                                 },
                                 'description': {
                                     'type': 'string',
+                                    'description': 'Product description',
                                     'example': 'Latest model smartphone'
                                 },
                                 'price': {
                                     'type': 'float',
+                                    'description': 'Product price',
                                     'example': 599.99
                                 },
                                 'quantity': {
                                     'type': 'integer',
+                                    'description': 'Quantity ordered',
                                     'example': 2
                                 },
                                 'total': {
                                     'type': 'float',
+                                    'description': 'Total price of the order',
                                     'example': 1199.98
                                 },
                                 'img': {
                                     'type': 'string',
+                                    'description': 'Image of the product',
                                     'example': 'smartphone.png'
                                 }
                             }

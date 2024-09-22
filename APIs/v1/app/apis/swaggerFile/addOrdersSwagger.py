@@ -6,75 +6,95 @@ createOrderDoc = {
             'name': 'Authorization',
             'in': 'header',
             'required': True,
-            'type': 'string',
-            'description': 'Bearer token'
+            'schema': {
+                'type': 'string'
+            },
+            'description': 'Bearer token for authorization'
         },
         {
-            'name': 'name',
+            'name': 'requester_name',
             'in': 'formData',
-            'type': 'string',
+            'schema': {
+                'type': 'string'
+            },
             'required': True,
-            'description': 'Customer name'
+            'description': 'Requester (customer) name'
         },
         {
-            'name': 'email',
+            'name': 'requester_email',
             'in': 'formData',
-            'type': 'string',
+            'schema': {
+                'type': 'string'
+            },
             'required': True,
-            'description': 'Customer email'
+            'description': 'Requester (customer) email'
         },
         {
             'name': 'store_id',
             'in': 'formData',
-            'type': 'integer',
+            'schema': {
+                'type': 'integer'
+            },
             'required': True,
             'description': 'ID of the store placing the order'
         },
         {
             'name': 'title',
             'in': 'formData',
-            'type': 'string',
+            'schema': {
+                'type': 'string'
+            },
             'required': True,
-            'description': 'Product title'
+            'description': 'Product Name'
         },
         {
             'name': 'brand',
             'in': 'formData',
-            'type': 'string',
+            'schema': {
+                'type': 'string'
+            },
             'required': True,
             'description': 'Product brand'
         },
         {
             'name': 'description',
             'in': 'formData',
-            'type': 'string',
+            'schema': {
+                'type': 'string'
+            },
             'required': True,
             'description': 'Product description'
         },
         {
             'name': 'price',
             'in': 'formData',
-            'type': 'float',
+            'schema': {
+                'type': 'float'
+            },
             'required': True,
             'description': 'Product price'
         },
         {
             'name': 'quantity',
             'in': 'formData',
-            'type': 'integer',
+            'schema': {
+                'type': 'integer'
+            },
             'required': True,
             'description': 'Quantity of product ordered'
         },
         {
             'name': 'img',
             'in': 'formData',
-            'type': 'file',
+            'schema': {
+                'type': 'file'
+            },
             'required': False,
-            'description': 'Product image'
+            'description': 'Product image (optional)'
         }
     ],
     'consumes': [
-        'multipart/form-data',
+        'multipart/form-data'
     ],
     'responses': {
         201: {
@@ -93,11 +113,11 @@ createOrderDoc = {
                                 'type': 'integer',
                                 'example': 1
                             },
-                            'name': {
+                            'requester_name': {
                                 'type': 'string',
                                 'example': 'John Doe'
                             },
-                            'email': {
+                            'requester_email': {
                                 'type': 'string',
                                 'example': 'johndoe@example.com'
                             },
