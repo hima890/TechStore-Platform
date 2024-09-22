@@ -62,5 +62,6 @@ TechStore-Platform/ ├── app/ │ ├── models/ │ ├── APIs/ │
    cd TechStore-Platform
 
 ## Create a virtual environment:
-<python3 -m venv venv
-source venv/bin/activate>
+```bash
+python3 -m venv venv
+source venv/bin/activate
