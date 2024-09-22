@@ -61,7 +61,12 @@ TechStore-Platform/ ├── app/ │ ├── models/ │ ├── APIs/ │
    git clone https://github.com/yourusername/TechStore-Platform.git
    cd TechStore-Platform
 
-## Create a virtual environment:
+2. **Create a virtual environment:**
 ```bash
 python3 -m venv venv
 source venv/bin/activate
+
+3. **Install the dependencies:**
+```bash
+pip install -r requirements.txt
+
