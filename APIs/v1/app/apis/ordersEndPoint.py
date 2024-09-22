@@ -87,62 +87,53 @@ def addOrders():
 @limiter.limit("5 per minute")
 @swag_from(getStoreOrdersDoc)
 def getOrder():
-    """Get the store orders"""
+    """Get the orders for the store or the user"""
     currentUserEmail = get_jwt_identity()
-    if not currentUserEmail:
+
+    current_user = User.query.filter_by(email=currentUserEmail).first()
+
+    if not current_user:
         return jsonify({
             "status": "error",
-            "message": "Bad request, no user token"
-            }), 400
-    user = User.query.filter_by(email=currentUserEmail).first()
-    if not user:
-        return jsonify({
-                    "status": "error",
-                    "message": "User not found"
-                    }), 404
+            "message": "User not found"
+        }), 404
 
     if not request.form:
         return jsonify({
             "status": "error",
             "message": "Bad request, no data provided"
-            }), 400
+        }), 400
 
     store_id = request.form.get('store_id')
+
     store = Store.query.get(store_id)
     if not store:
         return jsonify({
             "status": "error",
             "message": "Store not found"
-            }), 404
+        }), 404
 
-    orders = Order.query.filter_by(store_id=store_id).all()
-    if not orders:
-        return jsonify({
-            "status": "success",
-            "message": "No orders found for this store"
+    if current_user.id == store.provider_id or current_user.id == store.user_id:
+        orders = Order.query.filter_by(store_id=store_id).all()
+
+        if not orders:
+            return jsonify({
+                "status": "success",
+                "message": "No orders found for this store"
             }), 200
 
-    orderList = []
-    for order in orders:
-        orderList.append({
-            "order_id": order.id,
-            "name": order.name,
-            "email": order.email,
-            "store_id": order.store_id,
-            "title": order.title,
-            "brand": order.brand,
-            "description": order.description,
-            "price": order.price,
-            "quantity": order.quantity,
-            "total": order.total,
-            "img": order.img
-        })
+        orderList = [order.to_dict() for order in orders]
+
+        return jsonify({
+            "status": "success",
+            "message": "Orders found",
+            "data": orderList
+        }), 200
 
     return jsonify({
-        "status": "success",
-        "message": "Orders found",
-        "data": orderList
-    }), 200
+        "status": "error",
+        "message": "You do not have permission to view these orders"
+    }), 403
 
 
 @orders.route('/delete-order', methods=['DELETE'])

@@ -1,6 +1,7 @@
-# Swagger documentation for retrieving store orders
 getStoreOrdersDoc = {
     'tags': ['Order Management'],
+    'summary': 'Retrieve orders for a specific store',
+    'description': 'Fetch all orders for a store based on its store_id',
     'parameters': [
         {
             'name': 'Authorization',
@@ -48,12 +49,12 @@ getStoreOrdersDoc = {
                                     'type': 'integer',
                                     'example': 1
                                 },
-                                'name': {
+                                'requester_name': {
                                     'type': 'string',
                                     'description': 'Name of the user who requested the order',
                                     'example': 'John Doe'
                                 },
-                                'email': {
+                                'requester_email': {
                                     'type': 'string',
                                     'description': 'Email of the user who requested the order',
                                     'example': 'johndoe@example.com'

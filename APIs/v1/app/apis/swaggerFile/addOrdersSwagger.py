@@ -18,7 +18,7 @@ createOrderDoc = {
                 'type': 'string'
             },
             'required': True,
-            'description': 'Requester (customer) name'
+            'description': 'Name of the customer placing the order'
         },
         {
             'name': 'requester_email',
@@ -27,7 +27,7 @@ createOrderDoc = {
                 'type': 'string'
             },
             'required': True,
-            'description': 'Requester (customer) email'
+            'description': 'Email of the customer placing the order'
         },
         {
             'name': 'store_id',
@@ -36,7 +36,7 @@ createOrderDoc = {
                 'type': 'integer'
             },
             'required': True,
-            'description': 'ID of the store placing the order'
+            'description': 'ID of the store processing the order'
         },
         {
             'name': 'title',
@@ -45,7 +45,7 @@ createOrderDoc = {
                 'type': 'string'
             },
             'required': True,
-            'description': 'Product Name'
+            'description': 'Product title'
         },
         {
             'name': 'brand',
@@ -54,7 +54,7 @@ createOrderDoc = {
                 'type': 'string'
             },
             'required': True,
-            'description': 'Product brand'
+            'description': 'Brand of the product'
         },
         {
             'name': 'description',
@@ -81,7 +81,7 @@ createOrderDoc = {
                 'type': 'integer'
             },
             'required': True,
-            'description': 'Quantity of product ordered'
+            'description': 'Quantity of the product ordered'
         },
         {
             'name': 'img',
@@ -90,7 +90,7 @@ createOrderDoc = {
                 'type': 'file'
             },
             'required': False,
-            'description': 'Product image (optional)'
+            'description': 'Optional image of the product'
         }
     ],
     'consumes': [
