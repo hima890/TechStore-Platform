@@ -103,9 +103,9 @@ If you want to contribute to TechStore Platform, please follow these steps:
 4. Push your branch and create a pull request.
 
 ## Authors
-Ibrahim hanafi - Github
-Ruba Salih - Github
-Mohamed Alamen - Github
+- Ibrahim hanafi - Github
+- Ruba Salih - Github
+- Mohamed Alamen - Github
 
 ## License
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
