@@ -49,12 +49,9 @@ def addProduct():
     price = request.form.get('price')
     deliveryStatus = request.form.get('status')
     image_1 = request.files.get('image_1')
-    image_2 = request.files.get('image_2')
-    image_3 = request.files.get('image_3')
-    image_4 = request.files.get('image_4')
 
-    # Save product images
-    newFileNames, newFilePath = saveProductImages([image_1, image_2, image_3, image_4])
+    # Save product image
+    newFileName, newFilePath = saveProductImages([image_1])
 
     # Generate a unique product ID
     newId = generateProductId()
@@ -69,10 +66,7 @@ def addProduct():
         description=description,
         price=price,
         deliveryStatus=deliveryStatus,
-        image_1=newFileNames[0],
-        image_2=newFileNames[1],
-        image_3=newFileNames[2],
-        image_4=newFileNames[3]
+        image_1=newFileName[0]
     )
 
     # Add and commit new product to the database
@@ -135,19 +129,10 @@ def updateProduct():
     if request.form.get('status'):
         product.deliveryStatus = request.form.get('status')
 
-    # Update product images if provided
+    # Update product image if provided
     if request.files.get('image_1'):
         unique_filename_1, _ = updateProductImage(request.files.get('image_1'))
         product.image_1 = unique_filename_1
-    if request.files.get('image_2'):
-        unique_filename_2, _ = updateProductImage(request.files.get('image_2'))
-        product.image_2 = unique_filename_2
-    if request.files.get('image_3'):
-        unique_filename_3, _ = updateProductImage(request.files.get('image_3'))
-        product.image_3 = unique_filename_3
-    if request.files.get('image_4'):
-        unique_filename_4, _ = updateProductImage(request.files.get('image_4'))
-        product.image_4 = unique_filename_4
 
     db.session.commit()
 
@@ -163,7 +148,7 @@ def updateProduct():
 @limiter.limit("5 per minute")
 @swag_from(productDeleteDoc)
 def deleteProduct():
-    """Delete a product and its images."""
+    """Delete a product and its image."""
     currentUserEmail = get_jwt_identity()
     if not currentUserEmail:
         return jsonify({
@@ -187,15 +172,9 @@ def deleteProduct():
             "message": "Product not found"
         }), 404
 
-    # Delete product images
+    # Delete product image
     if product.image_1:
         deleteProductImage(product.image_1)
-    if product.image_2:
-        deleteProductImage(product.image_2)
-    if product.image_3:
-        deleteProductImage(product.image_3)
-    if product.image_4:
-        deleteProductImage(product.image_4)
 
     try:
         db.session.delete(product)
@@ -241,10 +220,7 @@ def getAllProducts():
                 'brand': product.brand,
                 'description': product.description,
                 'price': product.price,
-                'image_1': product.image_1,
-                'image_2': product.image_2,
-                'image_3': product.image_3,
-                'image_4': product.image_4
+                'image_1': product.image_1
             }
             categoryData['products'].append(productData)
         categoryList.append(categoryData)

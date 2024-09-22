@@ -1,25 +1,31 @@
-"""Sawqer documentation for product delete endpoints"""
+"""Swagger documentation for product delete endpoints"""
 
 productDeleteDoc = {
     'tags': ['Store account Management'],
+    'summary': 'Delete a product from the store',
+    'description': 'Endpoint to delete a product by its ID from the store, accessible to authorized users',
     'parameters': [
         {
             'name': 'Authorization',
             'in': 'header',
             'required': True,
-            'type': 'string',
+            'schema': {
+                'type': 'string'
+            },
             'description': 'Bearer token for authentication'
         },
         {
             'name': 'product_id',
             'in': 'formData',
             'required': True,
-            'type': 'integer',
+            'schema': {
+                'type': 'integer'
+            },
             'description': 'ID of the product to be deleted'
         }
     ],
     'consumes': [
-        'application/json',  # Set the content type for form data
+        'application/json'  # Content type for the request
     ],
     'responses': {
         200: {
