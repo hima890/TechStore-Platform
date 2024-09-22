@@ -1,22 +1,34 @@
-# Swagger documentation for the delete order endpoint
 deleteOrderDoc = {
-    'tags': ['Order Management'],     
+    'tags': ['Order Management'],
+    'summary': 'Delete an order',
+    'description': 'Delete a specific order by its order_id',
     'parameters': [
         {
             'name': 'Authorization',
             'in': 'header',
             'required': True,
-            'type': 'string',
-            'description': 'Bearer token'
+            'schema': {
+                'type': 'string'
+            },
+            'description': 'Bearer token for authorization'
         },
         {
-            'name': 'order_id',
-            'in': 'path',
-            'type': 'integer',
+            'name': 'body',
+            'in': 'body',
             'required': True,
-            'description': 'ID of the order to be deleted'
+            'schema': {
+                'type': 'object',
+                'properties': {
+                    'order_id': {
+                        'type': 'integer',
+                        'description': 'ID of the order to be deleted',
+                        'example': 1
+                    }
+                }
+            }
         }
     ],
+    'consumes': ['application/json'],
     'responses': {
         200: {
             'description': 'Order deleted successfully.',
