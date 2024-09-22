@@ -13,15 +13,22 @@ getStoreOrdersDoc = {
             'description': 'Bearer token for authorization'
         },
         {
-            'name': 'store_id',
-            'in': 'path',
+            'name': 'body',
+            'in': 'body',
             'required': True,
             'schema': {
-                'type': 'integer'
-            },
-            'description': 'ID of the store whose orders are to be fetched'
+                'type': 'object',
+                'properties': {
+                    'store_id': {
+                        'type': 'integer',
+                        'description': 'ID of the store whose orders are to be fetched',
+                        'example': 1
+                    }
+                }
+            }
         }
     ],
+    'consumes': ['application/json'],
     'responses': {
         200: {
             'description': 'Orders fetched successfully.',

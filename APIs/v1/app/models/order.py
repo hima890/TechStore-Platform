@@ -20,7 +20,12 @@ class Order(db.Model):
     quantity = db.Column(db.Integer, nullable=False)  # Quantity ordered
     total = db.Column(db.Float, nullable=False)  # Total price of the order
 
+    # New fields for visibility
+    is_visible_to_user = db.Column(db.Boolean, default=True)  # If visible to the user
+    is_visible_to_provider = db.Column(db.Boolean, default=True)  # If visible to the store/provider
+
     user = db.relationship('User', backref='orders')  # Relationship to the User model
+    store = db.relationship('Store', backref='orders')  # Relationship to the Store model
 
     def __repr__(self):
         """ Return a string representation of the Order object. """
@@ -44,5 +49,7 @@ class Order(db.Model):
             'description': self.description,
             'price': self.price,
             'quantity': self.quantity,
-            'total': self.total
+            'total': self.total,
+            'is_visible_to_user': self.is_visible_to_user,
+            'is_visible_to_provider': self.is_visible_to_provider
         }
