@@ -70,24 +70,27 @@ def signup():
             )
 
     try:
-        db.session.add(newUser)
-        db.session.commit()
-
         activationToken = create_access_token(identity=email, expires_delta=timedelta(hours=1))
+        activationURL = "https://techstoreplatform.tech/api/v1/activate/{}".format(activationToken)
+        plainTextContent = "Please click the link to activate your account: {}".format(activationURL)
+        htmlContent = "<html><body><p>Please click the link to activate your account: <a href='{}'>Activate</a></p></body></html>".format(activationURL)
 
-        activationURL = "http://localhost:5001/api/v1/activate/{}".format(activationToken)
-        print(activationURL)
         emailFunction = send_email(
             email,
-            "Please click the link to activate your account: {}".format(activationURL),
+            htmlContent,
+            plainTextContent,  # Add plain text content here
             "Account Activation"
-            )
+        )
+
         if not emailFunction:
             return jsonify(
                 {"status": "error",},
-                {"message": "Email was not send."},
+                {"message": "Email was not sent."},
                 {'data': newUser.to_dict()}
-            ), 400            
+            ), 400
+
+        db.session.add(newUser)
+        db.session.commit()
 
         return jsonify(
             {"status": "success",},
