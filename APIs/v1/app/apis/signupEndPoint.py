@@ -71,7 +71,7 @@ def signup():
 
     try:
         activationToken = create_access_token(identity=email, expires_delta=timedelta(hours=1))
-        activationURL = "http://localhost:5001/api/v1/activate/{}".format(activationToken)
+        activationURL = "https://techstoreplatform.tech/api/v1/activate/{}".format(activationToken)
         plainTextContent = "Please click the link to activate your account: {}".format(activationURL)
         htmlContent = "<html><body><p>Please click the link to activate your account: <a href='{}'>Activate</a></p></body></html>".format(activationURL)
 
