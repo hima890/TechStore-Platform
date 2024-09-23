@@ -37,72 +37,99 @@ def sendNewOptCode():
     optCode, creationTime = generate_otp()
     user.opt_code = optCode
     user.opt_code_time = creationTime
-    db.session.commit()
-
+   
     userFirstName = user.first_name
-    send_email(
-        email,
-        """
-        <!DOCTYPE html>
-        <html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Password Reset OTP</title>
-            <style>
-                body {{
-                    font-family: Arial, sans-serif;
-                    background-color: #f4f4f4;
-                    padding: 20px;
-                }}
-                .container {{
-                    max-width: 600px;
-                    margin: 0 auto;
-                    background-color: #ffffff;
-                    padding: 20px;
-                    border-radius: 8px;
-                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-                }}
-                h1 {{
-                    color: #333333;
-                    font-size: 24px;
-                }}
-                p {{
-                    color: #555555;
-                    font-size: 16px;
-                }}
-                .otp-code {{
-                    font-size: 22px;
-                    color: #1a73e8;
-                    font-weight: bold;
-                }}
-                .footer {{
-                    margin-top: 20px;
-                    color: #999999;
-                    font-size: 14px;
-                }}
-            </style>
-        </head>
-        <body>
-            <div class="container">
-                <h1>Password Reset Request</h1>
-                <p>Dear <strong>{}</strong>,</p>
-                <p>We received a request to reset your password. Please use the One-Time Password (OTP) below to reset your password. This code is valid for the next 10 minutes.</p>
-                
-                <p class="otp-code">Your OTP Code: <strong>{}</strong></p>
-                
-                <p>If you did not request a password reset, please ignore this email or contact our support team immediately.</p>
-                
-                <p>Best regards,<br><strong>TechStore</strong> Support Team</p>
-                
-                <p class="footer">Note: For security reasons, this code will expire after 10 minutes.</p>
-            </div>
-        </body>
-        </html>
-        """.format(userFirstName, optCode),
-        "Password reset"
-    )
+    plainTextContent = """\
+    Dear {},
 
+    We received a request to reset your password. Please use the One-Time Password (OTP) below to reset your password. This code is valid for the next 10 minutes.
+
+    Your OTP Code: {}
+
+    If you did not request a password reset, please ignore this email or contact our support team immediately.
+
+    Best regards,
+    TechStore Support Team
+
+    Note: For security reasons, this code will expire after 10 minutes.
+    """.format(userFirstName, optCode)
+
+    htmlContent = """\
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Password Reset OTP</title>
+        <style>
+            body {{
+                font-family: Arial, sans-serif;
+                background-color: #f4f4f4;
+                padding: 20px;
+            }}
+            .container {{
+                max-width: 600px;
+                margin: 0 auto;
+                background-color: #ffffff;
+                padding: 20px;
+                border-radius: 8px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            }}
+            h1 {{
+                color: #333333;
+                font-size: 24px;
+            }}
+            p {{
+                color: #555555;
+                font-size: 16px;
+            }}
+            .otp-code {{
+                font-size: 22px;
+                color: #1a73e8;
+                font-weight: bold;
+            }}
+            .footer {{
+                margin-top: 20px;
+                color: #999999;
+                font-size: 14px;
+            }}
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Password Reset Request</h1>
+            <p>Dear <strong>{}</strong>,</p>
+            <p>We received a request to reset your password. Please use the One-Time Password (OTP) below to reset your password. This code is valid for the next 10 minutes.</p>
+            
+            <p class="otp-code">Your OTP Code: <strong>{}</strong></p>
+            
+            <p>If you did not request a password reset, please ignore this email or contact our support team immediately.</p>
+            
+            <p>Best regards,<br><strong>TechStore</strong> Support Team</p>
+            
+            <p class="footer">Note: For security reasons, this code will expire after 10 minutes.</p>
+        </div>
+    </body>
+    </html>
+    """.format(userFirstName, optCode)
+
+    # Call the send_email function with both plain text and HTML content
+    emailFunction = send_email(
+        email,
+        htmlContent,        # HTML version
+        plainTextContent,   # Plain text version
+        "Password reset"    # Subject
+    )
+    # Check of the email was sent successfully
+    if not emailFunction:
+        return jsonify(
+            {"status": "error"},
+            {"message": "OTP code email was not sent."},
+        ), 400
+
+    # Save the OPT code to the database
+    db.session.commit()
+    # Retrun success message
     return jsonify({
             "status": "success",
             "message": "OPT code has been sent successful",

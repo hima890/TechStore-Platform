@@ -3,6 +3,15 @@
 import os
 
 
+# Define the path to the database file
+db_dir = os.path.join(os.getcwd(), 'databases')
+db_path = os.path.join(db_dir, 'test_database.db')
+
+# Create the 'databases' directory if it doesn't exist
+if not os.path.exists(db_dir):
+    os.makedirs(db_dir)
+
+
 class Config:
     """Base configuration."""
     SECRET_KEY = os.environ.get('SECRET_KEY', 'default_secret_key')
@@ -15,30 +24,21 @@ class Config:
 class DevelopmentConfig(Config):
     """Development configuration."""
     # Use an environment variable or fall back to 'dev_database.db' by default
-    SQLALCHEMY_DATABASE_URI = os.getenv(
-        'DEV_DATABASE_URL', 
-        'sqlite:///' + os.path.join(os.getcwd(), 'databases', 'dev_database.db')
-    )
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + db_path
     DEBUG = True
 
 
 class ProductionConfig(Config):
     """Production configuration."""
     # Use an environment variable or fall back to 'prod_database.db' by default
-    SQLALCHEMY_DATABASE_URI = os.getenv(
-        'PROD_DATABASE_URL',
-        'sqlite:///' + os.path.join(os.getcwd(), 'databases', 'prod_database.db')
-    )
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + db_path
     DEBUG = False
 
 
 class TestingConfig(Config):
     """Testing configuration."""
     # Use an environment variable or fall back to 'test_database.db' by default
-    SQLALCHEMY_DATABASE_URI = os.getenv(
-        'TEST_DATABASE_URL',
-        'sqlite:///' + os.path.join(os.getcwd(), 'databases', 'test_database.db')
-    )
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + db_path
     print(SQLALCHEMY_DATABASE_URI)
     TESTING = True
     DEBUG = True
@@ -50,3 +50,4 @@ config = {
     'production': ProductionConfig,
     'testing': TestingConfig
 }
+
