@@ -31,7 +31,7 @@ class DevelopmentConfig(Config):
 class ProductionConfig(Config):
     """Production configuration."""
     # Use an environment variable or fall back to 'prod_database.db' by default
-    SQLALCHEMY_DATABASE_URI = os.environ.get(SQLALCHEMY_DATABASE_URI)
+    SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI')
     DEBUG = False
 
 
