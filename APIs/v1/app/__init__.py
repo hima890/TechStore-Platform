@@ -38,7 +38,7 @@ limiter = Limiter(
 # Swagger setup for API documentation
 swagger = Swagger()
 
-def create_app(config_name='default'):
+def create_app(config_name='production'):
     """Create the Flask app and initialize it with extensions"""
     app = Flask(__name__, instance_relative_config=True)
 
