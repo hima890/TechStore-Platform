@@ -14,7 +14,7 @@ class Provider(db.Model):
     phone_number = db.Column(db.String(50), unique=True, nullable=True)
     gander = db.Column(db.String(50), nullable=True)
     account_type = db.Column(db.String(150), nullable=True)    
-    password_hash = db.Column(db.String(128), nullable=False)
+    password_hash = db.Column(db.String(512), nullable=False)
     is_active = db.Column(db.Boolean, default=False)
     opt_code = db.Column(db.Integer, nullable=True)
     opt_code_time = db.Column(db.DateTime, nullable=True)
@@ -27,13 +27,6 @@ class Provider(db.Model):
 
     def to_dict(self):
         """Convert the Provider object to a dictionary."""
-
-        if self.profile_image:
-            profile_image_url = url_for('static', filename='profile_pics' + self.profile_image)
-        else:
-
-            profile_image_url = 'defult_profile_image.png'
-
         return {
             'id': self.id,
             'username': self.username,

@@ -6,20 +6,6 @@ signuDoc = {
     'tags': ['User Registration'],
     'parameters': [
         {
-            'name': 'first_name',
-            'in': 'formData',
-            'type': 'string',
-            'required': True
-        }
-        ,
-        {
-            'name': 'last_name',
-            'in': 'formData',
-            'type': 'string',
-            'required': True
-        }
-        ,
-        {
             'name': 'username',
             'in': 'formData',
             'type': 'string',
@@ -59,14 +45,6 @@ signuDoc = {
             'in': 'formData',
             'type': 'string',
             'required': True
-        }
-        ,
-        {
-            'name': 'profile_image',
-            'in': 'formData',
-            'type': 'file',
-            'required': False,
-            'description': 'Optional profile image for the user'
         }
         ,
         {
