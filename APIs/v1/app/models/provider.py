@@ -16,6 +16,7 @@ class Provider(db.Model):
     phone_number = db.Column(db.String(50), unique=True, nullable=True)
     profile_image = db.Column(db.String(200), nullable=True)
     gander = db.Column(db.String(50), nullable=True)
+    account_type = db.Column(db.String(150), nullable=True)    
     password_hash = db.Column(db.String(128), nullable=False)
     is_active = db.Column(db.Boolean, default=False)
     opt_code = db.Column(db.Integer, nullable=True)
@@ -45,7 +46,8 @@ class Provider(db.Model):
             'phone_number': self.phone_number,
             'gander': self.gander,
             'is_active': self.is_active,
-            'profile_image_path': profile_image_url,
+            #'profile_image_path': profile_image_url,
             'created_at': self.created_at.isoformat(),
-            'updated_at': self.updated_at.isoformat()
+            'updated_at': self.updated_at.isoformat(),
+            'account_type': self.account_type
         }

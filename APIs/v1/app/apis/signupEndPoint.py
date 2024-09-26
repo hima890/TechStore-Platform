@@ -54,7 +54,8 @@ def signup():
             location=userLocation,
             password_hash=generate_password_hash(password),
             is_active=False,
-            profile_image=filename
+            profile_image=filename,
+            account_type=accountType
             )
     elif accountType == 'provider':
         newUser = Provider(
@@ -66,7 +67,8 @@ def signup():
             gander=ganderType,
             password_hash=generate_password_hash(password),
             is_active=False,
-            profile_image=filename
+            profile_image=filename,
+            account_type=accountType
             )
 
     try:
