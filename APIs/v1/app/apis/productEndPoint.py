@@ -7,10 +7,10 @@ from . import product
 from ..models import Store
 from .swaggerFile import productDoc, productUpdateDoc, productDeleteDoc, getAllProductsByCategoryDoc, searchProductDoc
 from ..models import Product, Provider
-from app.utils.saveProductImages import saveProductImages
-from app.utils.updateProductImage import updateProductImage
-from app.utils.deleteProductImage import deleteProductImage
-from app.utils.generateProductId import generateProductId
+from ..utils import saveProductImages
+from ..utils import updateProductImage
+from ..utils import deleteProductImage
+from ..utils import generateProductId
 from .. import db
 from .. import limiter
 

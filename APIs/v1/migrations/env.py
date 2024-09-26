@@ -36,10 +36,8 @@ def get_engine_url():
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-from v1.app import db
 config.set_main_option('sqlalchemy.url', get_engine_url())
 target_db = current_app.extensions['migrate'].db
-target_metadata = db.metadata
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:

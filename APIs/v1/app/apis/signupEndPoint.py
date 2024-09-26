@@ -19,9 +19,6 @@ from ..models import User, Provider
 @swag_from(signuDoc)
 def signup():
     """Create a new user"""
-
-    firstName = request.form.get('first_name')
-    lastName = request.form.get('last_name')
     username = request.form.get('username')
     email = request.form.get('email')
     accountType = request.form.get('type')
@@ -29,7 +26,6 @@ def signup():
     ganderType = request.form.get('gender')
     userLocation = request.form.get('location')
     password = request.form.get('password')
-    profilePicture = request.files.get('profile_image')
 
     if not username or not email or not password:
         print(str(username) + str(email) + str(password))
@@ -38,15 +34,8 @@ def signup():
     if User.query.filter_by(email=email).first() or Provider.query.filter_by(email=email).first():
         return jsonify({"error": "User already exists"}), 409
 
-    if profilePicture:
-        filename, picture_path = saveProfilePicture(profilePicture)
-    else:
-        filename = None
-
     if accountType == 'user':
         newUser = User(
-            first_name=firstName,
-            last_name=lastName,
             username=username,
             email=email,
             phone_number=phoneNumber,
@@ -54,20 +43,16 @@ def signup():
             location=userLocation,
             password_hash=generate_password_hash(password),
             is_active=False,
-            profile_image=filename,
             account_type=accountType
             )
     elif accountType == 'provider':
         newUser = Provider(
-            first_name=firstName,
-            last_name=lastName,
             username=username,
             email=email,
             phone_number=phoneNumber,
             gander=ganderType,
             password_hash=generate_password_hash(password),
             is_active=False,
-            profile_image=filename,
             account_type=accountType
             )
 

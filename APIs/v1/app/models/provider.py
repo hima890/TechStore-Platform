@@ -9,12 +9,9 @@ class Provider(db.Model):
     __tablename__ = 'providers'
 
     id = db.Column(db.Integer, primary_key=True)
-    first_name = db.Column(db.String(150), nullable=False)
-    last_name = db.Column(db.String(150), nullable=False)
     username = db.Column(db.String(150), nullable=False)
     email = db.Column(db.String(150), unique=True, nullable=False)
     phone_number = db.Column(db.String(50), unique=True, nullable=True)
-    profile_image = db.Column(db.String(200), nullable=True)
     gander = db.Column(db.String(50), nullable=True)
     account_type = db.Column(db.String(150), nullable=True)    
     password_hash = db.Column(db.String(128), nullable=False)
@@ -39,14 +36,11 @@ class Provider(db.Model):
 
         return {
             'id': self.id,
-            'first_name': self.first_name,
-            'last_name': self.last_name,
             'username': self.username,
             'email': self.email,
             'phone_number': self.phone_number,
             'gander': self.gander,
             'is_active': self.is_active,
-            #'profile_image_path': profile_image_url,
             'created_at': self.created_at.isoformat(),
             'updated_at': self.updated_at.isoformat(),
             'account_type': self.account_type

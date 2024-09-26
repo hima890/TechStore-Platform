@@ -9,12 +9,9 @@ class User(db.Model):
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
-    first_name = db.Column(db.String(150), nullable=False)
-    last_name = db.Column(db.String(150), nullable=False)
     username = db.Column(db.String(150), nullable=False)
     email = db.Column(db.String(150), unique=True, nullable=False)
     phone_number = db.Column(db.String(50), unique=True, nullable=True)
-    profile_image = db.Column(db.String(200), nullable=True)
     gander = db.Column(db.String(50), nullable=True)
     location = db.Column(db.String(150), nullable=True)
     account_type = db.Column(db.String(150), nullable=True)
@@ -31,13 +28,6 @@ class User(db.Model):
 
     def to_dict(self):
         """Convert the User object to a dictionary."""
-
-        if self.profile_image:
-            profile_image_url = url_for('static', filename='profile_pics' + self.profile_image)
-        else:
-
-            profile_image_url = 'defult_profile_image.png' 
-
         return {
             'id': self.id,
             'first_name': self.first_name,
@@ -48,7 +38,6 @@ class User(db.Model):
             'gander': self.gander,
             'location': self.location,
             'is_active': self.is_active,
-            #'profile_image_path': profile_image_url,
             'created_at': self.created_at.isoformat(),
             'updated_at': self.updated_at.isoformat(),
             'account_type': self.account_type
