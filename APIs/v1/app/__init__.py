@@ -35,11 +35,10 @@ limiter = Limiter(
     default_limits=["200 per day", "50 per hour"],
 )
 
-
 # Swagger setup for API documentation
 swagger = Swagger()
 
-def create_app(config_name='production'):
+def create_app(config_name='development'):
     """Create the Flask app and initialize it with extensions"""
     app = Flask(__name__, instance_relative_config=True)
 
@@ -56,8 +55,8 @@ def create_app(config_name='production'):
     db.init_app(app)
     migrate.init_app(app, db)
     jwt.init_app(app)
-    swagger.init_app(app)
     limiter.init_app(app)
+    swagger.init_app(app)
 
     with app.app_context():
         # Import models to make sure they are registered with SQLAlchemy
@@ -87,3 +86,4 @@ def create_app(config_name='production'):
         db.create_all()
 
     return app
+
