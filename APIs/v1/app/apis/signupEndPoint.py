@@ -34,7 +34,7 @@ def signup():
     if User.query.filter_by(email=email).first() or Provider.query.filter_by(email=email).first():
         return jsonify({"error": "User already exists"}), 409
 
-    if accountType == 'user':
+    if accountType == 'customer':
         newUser = User(
             username=username,
             email=email,
