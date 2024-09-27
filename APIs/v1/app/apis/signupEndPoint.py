@@ -56,39 +56,39 @@ def signup():
             account_type=accountType
             )
 
-    try:
-        activationToken = create_access_token(identity=email, expires_delta=timedelta(hours=1))
-        activationURL = "https://techstoreplatform.tech/api/v1/activate/{}".format(activationToken)
-        plainTextContent = "Please click the link to activate your account: {}".format(activationURL)
-        htmlContent = "<html><body><p>Please click the link to activate your account: <a href='{}'>Activate</a></p></body></html>".format(activationURL)
+    # try:
+    activationToken = create_access_token(identity=email, expires_delta=timedelta(hours=1))
+    activationURL = "https://techstoreplatform.tech/api/v1/activate/{}".format(activationToken)
+    plainTextContent = "Please click the link to activate your account: {}".format(activationURL)
+    htmlContent = "<html><body><p>Please click the link to activate your account: <a href='{}'>Activate</a></p></body></html>".format(activationURL)
 
-        emailFunction = send_email(
-            email,
-            htmlContent,
-            plainTextContent,  # Add plain text content here
-            "Account Activation"
-        )
+    emailFunction = send_email(
+        email,
+        htmlContent,
+        plainTextContent,  # Add plain text content here
+        "Account Activation"
+    )
 
-        if not emailFunction:
-            return jsonify(
-                {"status": "error",},
-                {"message": "Email was not sent."},
-                {'data': newUser.to_dict()}
-            ), 400
-
-        db.session.add(newUser)
-        db.session.commit()
-
+    if not emailFunction:
         return jsonify(
-            {"status": "success",},
-            {"message": "User created! Un email was sent to activate the account."},
+            {"status": "error",},
+            {"message": "Email was not sent."},
             {'data': newUser.to_dict()}
-            ), 201
-    except Exception as e:
-        print(e)
-        db.session.rollback()
-        db.session.commit()
-        return jsonify({"error": "An error occurred while creating the user."}), 500
+        ), 400
+
+    db.session.add(newUser)
+    db.session.commit()
+
+    return jsonify(
+        {"status": "success",},
+        {"message": "User created! Un email was sent to activate the account."},
+        {'data': newUser.to_dict()}
+        ), 201
+    # except Exception as e:
+    #     print(e)
+    #     db.session.rollback()
+    #     db.session.commit()
+    #     return jsonify({"error": "An error occurred while creating the user."}), 500
 
 
 @signUp.route('/resend-confirmation', methods=['POST'])
