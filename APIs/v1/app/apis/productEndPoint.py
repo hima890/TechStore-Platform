@@ -76,7 +76,7 @@ def addProduct():
     return jsonify({
         "status": "success",
         "message": "Product added successfully",
-        "data": {newProduct.to_dict()}
+        "data": newProduct.to_dict()
     }), 200
 
 
@@ -139,7 +139,7 @@ def updateProduct():
     return jsonify({
         "status": "success",
         "message": "Product updated successfully",
-        "data": {product.to_dict()}
+        "data": product.to_dict()
     }), 200
 
 
@@ -228,7 +228,7 @@ def getAllProducts():
     return jsonify({
         'status': 'success',
         'message': 'Products successfully retrieved',
-        'categories': {categoryList}
+        'categories': categoryList
     }), 200
 
 

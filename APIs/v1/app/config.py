@@ -43,7 +43,6 @@ class TestingConfig(Config):
     """Testing configuration."""
     # Use an environment variable or fall back to 'test_database.db' by default
     SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI')
-    print(SQLALCHEMY_DATABASE_URI)
     TESTING = True
     DEBUG = True
 

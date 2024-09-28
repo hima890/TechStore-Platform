@@ -90,7 +90,7 @@ def create_store():
         return jsonify({
             'status': 'success',
             'message': 'Store successfully created!',
-            'data':{ new_store.to_dict()}
+            'data': new_store.to_dict()
         }), 201
 
     except Exception as e:
@@ -150,7 +150,7 @@ def update_store(store_id):
         return jsonify({
             'status': 'success',
             'message': 'Store updated successfully!',
-            'data': {store.to_dict()}
+            'data': store.to_dict()
         }), 200
     except Exception as e:
         db.session.rollback()
@@ -245,5 +245,5 @@ def getAllStores2():
     return jsonify({
         'status': 'success',
         'message': 'Stores successfully retrieved',
-        'stores': {store_list}
+        'stores': store_list
     }), 200

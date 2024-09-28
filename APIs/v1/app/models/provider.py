@@ -11,7 +11,7 @@ class Provider(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(150), nullable=False)
     email = db.Column(db.String(150), unique=True, nullable=False)
-    phone_number = db.Column(db.String(50), unique=True, nullable=True)
+    phone_number = db.Column(db.String(50), unique=False, nullable=True)
     gander = db.Column(db.String(50), nullable=True)
     account_type = db.Column(db.String(150), nullable=True)    
     password_hash = db.Column(db.String(512), nullable=False)
