@@ -23,7 +23,8 @@ class Store(db.Model):
 
     provider = db.relationship('Provider', backref='stores', lazy=True)
     products = db.relationship('Product', backref='stores', lazy=True)
-    orders = db.relationship('Order', backref='stores', lazy=True)
+    orders = db.relationship('Order', back_populates='store')
+
 
     def __repr__(self):
         """ Return a string representation of the Store object. """
