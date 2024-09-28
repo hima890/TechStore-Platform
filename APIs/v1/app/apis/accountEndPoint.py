@@ -35,6 +35,7 @@ def getAccount():
 
     return jsonify({
         "status": "success",
+        "message": "User account info",
         "data": {
             "userId": user.id,
             "first name": user.first_name,
@@ -61,6 +62,7 @@ def updateAccount():
             "status": "error",
             "message": "Bad request, no user token"
         }), 400
+
     user = User.query.filter_by(email=currentUserEmail).first()
     if not user:
         user = Provider.query.filter_by(email=currentUserEmail).first()

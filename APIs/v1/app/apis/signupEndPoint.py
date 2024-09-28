@@ -70,25 +70,28 @@ def signup():
         )
 
         if not emailFunction:
-            return jsonify(
-                {"status": "error",},
-                {"message": "Email was not sent."},
-                {'data': newUser.to_dict()}
-            ), 400
+            return jsonify({
+                "status": "error",
+                "message": "Email was not sent.",
+                'data': {newUser.to_dict()}
+            }), 400
 
         db.session.add(newUser)
         db.session.commit()
 
-        return jsonify(
-            {"status": "success",},
-            {"message": "User created! Un email was sent to activate the account."},
-            {'data': newUser.to_dict()}
-            ), 201
+        return jsonify({
+            "status": "success",
+            "message": "User created! Un email was sent to activate the account.",
+            'data': {newUser.to_dict()}
+            }), 201
     except Exception as e:
         print(e)
         db.session.rollback()
         db.session.commit()
-        return jsonify({"error": "An error occurred while creating the user."}), 500
+        return jsonify({
+            "status": "error",
+            "message": "An error occurred while creating the user."
+            }), 500
 
 
 @signUp.route('/resend-confirmation', methods=['POST'])
@@ -125,16 +128,16 @@ def resendConfirmation():
         )
 
         if not emailFunction:
-            return jsonify(
-                {"status": "error",},
-                {"message": "Email was not sent."},
-                {'data': user.to_dict()}
-            ), 400
+            return jsonify({
+                "status": "error",
+                "message": "Email was not sent.",
+                'data': {user.to_dict()}
+            }), 400
 
-        return jsonify(
-            {"status": "success",},
-            {"message": "Confirmation email resent. Please check your inbox."},
-            ), 200
+        return jsonify({
+            "status": "success",
+            "message": "Confirmation email resent. Please check your inbox."
+            }), 200
     except Exception as e:
         print(e)
         return jsonify({

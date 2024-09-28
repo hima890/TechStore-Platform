@@ -17,12 +17,18 @@ def getAccount():
     currentUserEmail = get_jwt_identity()
 
     if not currentUserEmail:
-        return None, {'status': 'error', 'message': 'Bad request, no user token'}, 400
+        return None, {
+            'status': 'error',
+            'message': 'Bad request, no user token'
+            }, 400
 
     provider = Provider.query.filter_by(email=currentUserEmail).first()
 
     if not provider:
-        return None, {'status': 'error', 'message': 'Provider not found'}, 404
+        return None, {
+            'status': 'error',
+            'message': 'Provider not found'
+            }, 404
 
     return provider, None, 200
 
@@ -49,7 +55,10 @@ def create_store():
         store_bio = data.get('store_bio')
 
         if not store_name or not store_location or not store_email or not store_phone_number:
-            return jsonify({'error': 'Missing required fields'}), 400
+            return jsonify({
+                'status': 'error',
+                'message': 'Missing required fields'
+                }), 400
 
         inner_image = request.files.get('inner_image')
         outer_image = request.files.get('outer_image')
@@ -81,13 +90,16 @@ def create_store():
         return jsonify({
             'status': 'success',
             'message': 'Store successfully created!',
-            'data': new_store.to_dict()
+            'data':{ new_store.to_dict()}
         }), 201
 
     except Exception as e:
         db.session.rollback()
         print(f"Error occurred during store creation: {str(e)}")
-        return jsonify({'error': f'An error occurred while creating the store: {str(e)}'}), 500
+        return jsonify({
+            'status': 'error',
+            'message': 'An error occurred while creating the store: {}'.format(str(e))
+            }), 500
 
 
 @store.route('/update-store/<int:store_id>', methods=['PUT'])
@@ -102,7 +114,10 @@ def update_store(store_id):
 
     store = Store.query.filter_by(store_id=store_id, provider_id=provider.id).first()
     if not store:
-        return jsonify({'error': 'Store not found or you are not authorized to update this store'}), 404
+        return jsonify({
+            'status': 'error',
+            'message': 'Store not found or you are not authorized to update this store'
+            }), 404
 
     data = request.get_json()
     if data.get("store_name"):
@@ -135,11 +150,14 @@ def update_store(store_id):
         return jsonify({
             'status': 'success',
             'message': 'Store updated successfully!',
-            'data': store.to_dict()
+            'data': {store.to_dict()}
         }), 200
     except Exception as e:
         db.session.rollback()
-        return jsonify({'error': 'An error occurred while updating the store.'}), 500
+        return jsonify({
+            'status': 'error',
+            'message': 'An error occurred while updating the store.'
+            }), 500
 
 
 @store.route('/delete-store/<int:store_id>', methods=['DELETE'])
@@ -155,29 +173,24 @@ def delete_store(store_id):
     store = Store.query.filter_by(store_id=store_id, provider_id=provider.id).first()
 
     if not store:
-        return jsonify( 
-            {
+        return jsonify({
                 'status': 'error',
                 'message': 'Store not found or you are not authorized to delete this store'
-            }
-            ), 404
+            }), 404
 
     try:
         db.session.delete(store)
         db.session.commit()
-        return jsonify(
-            {
+        return jsonify({
                 'status': 'success',
                 'message': 'Store deleted successfully'
-            }
-            ), 200
+            }), 200
     except Exception as e:
         db.session.rollback()
-        return jsonify(
-            {
+        return jsonify({
                 'status': 'error',
-                'message': 'An error occurred while deleting the store.'}
-            ), 500
+                'message': 'An error occurred while deleting the store.'
+            }), 500
 
 
 @store.route('/stores', methods=['GET'])
@@ -186,25 +199,21 @@ def delete_store(store_id):
 def getAllStores():
     stores = Store.query.all()
     if not stores:
-        return jsonify( 
-            {
+        return jsonify({
                 'status': 'error',
                 'message': 'No stores found'
-            }
-            ), 404
+            }), 404
     storeList = []
     for store in stores:
         storeData = store.to_dict()
         storeData['products'] = [product.to_dect() for product in store.products]
         storeList.append(storeData)
 
-    return jsonify(
-        {
+    return jsonify({
             'status': 'success',
             'message': 'All stores in the database',
             'stores': storeList
-        }
-        ), 200
+        }), 200
 
 
 
@@ -236,5 +245,5 @@ def getAllStores2():
     return jsonify({
         'status': 'success',
         'message': 'Stores successfully retrieved',
-        'stores': store_list
+        'stores': {store_list}
     }), 200

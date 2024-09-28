@@ -19,32 +19,31 @@ def activate_account(token):
     current_user =  decoded_token.get('sub')
 
     if not current_user:
+        return jsonify({
+            "status": "error",
+            "message": "Invalid or expired token"
+        }), 400
 
-        return jsonify(
-            {"error": "Invalid or expired token"}
-            ), 400
     user = User.query.filter_by(email=current_user).first()
-
     if not user:
         user = Provider.query.filter_by(email=current_user).first()
         if not user:
-
-            return jsonify(
-                {"status": "error",},
-                {"message": "User dose not exist"}
-                ), 407
+            return jsonify({
+                "status": "error",
+                "message": "User dose not exist"
+                }), 407
 
     if user.is_active == True:
-        return jsonify(
-        {"status": "error",},
-        {"message": "Account already activated"}
-        ), 200
+        return jsonify({ 
+            "status": "error",
+            "message": "Account already activated"
+        }), 200
 
     user.is_active = True
 
     db.session.commit()
 
-    return jsonify(
-        {"status": "success",},
-        {"message": "Account activated successfully"}
-        ), 200
+    return jsonify({
+        "status": "success",
+        "message": "Account activated successfully"
+    }), 200
