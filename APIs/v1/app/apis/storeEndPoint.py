@@ -63,13 +63,10 @@ def create_store():
         inner_image = request.files.get('inner_image')
         outer_image = request.files.get('outer_image')
 
-        inner_image_filename = None
-        outer_image_filename = None
-
         if inner_image:
-            inner_image_filename, inner_image_path = saveProfilePicture(inner_image, 'inner')
+            inner_image_filename, inner_image_path = saveProfilePicture(inner_image, (600, 600), 'static/store_pics')
         if outer_image:
-            outer_image_filename, outer_image_path = saveProfilePicture(outer_image, 'outer')
+            outer_image_filename, outer_image_path = saveProfilePicture(outer_image, (600, 600), 'static/store_pics')
 
         new_store = Store(
             provider_id=provider.id,
@@ -139,10 +136,10 @@ def update_store(store_id):
     outer_image = request.files.get('outer_image')
 
     if inner_image:
-        inner_image_filename, inner_image_path = saveProfilePicture(inner_image, 'inner')
+        inner_image_filename, inner_image_path = saveProfilePicture(inner_image, (600, 600), 'static/store_pics')
         store.inner_image = inner_image_filename
     if outer_image:
-        outer_image_filename, outer_image_path = saveProfilePicture(outer_image, 'outer')
+        outer_image_filename, outer_image_path = saveProfilePicture(outer_image, (600, 600), 'static/store_pics')
         store.outer_image = outer_image_filename
 
     try:
