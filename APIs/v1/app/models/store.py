@@ -33,14 +33,14 @@ class Store(db.Model):
     def to_dict(self):
         """Convert the Store object to a dictionary."""
         if self.inner_image:
-            inner_image_url = url_for('static', filename='store_images/' + self.inner_image)
+            inner_image_url = url_for('static', filename='https://techstoreplatform.tech/store_pics/' + self.inner_image)
         else:
             inner_image_url = 'default_inner_image.png'
 
         if self.outer_image:
-            outer_image_url = url_for('static', filename='store_images/' + self.outer_image)
+            outer_image_url = url_for('static', filename='https://techstoreplatform.tech/store_pics/' + self.outer_image)
         else:
-            outer_image_url = 'default_outer_image.png'
+            outer_image_url = 'https://techstoreplatform.tech/store_pics/default_outer_image.png'
         
         return {
             'store_id': self.store_id,

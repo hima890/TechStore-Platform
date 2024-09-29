@@ -43,7 +43,7 @@ class Order(db.Model):
             'user_id': self.user_id,
             'requester_name': self.requester_name,
             'requester_email': self.requester_email,
-            'img': url_for('static', filename='orders_pics/' + self.img) if self.img else None,
+            'img': url_for('static', filename='https://techstoreplatform.tech/orders_pics/' + self.img) if self.img else None,
             'title': self.title,
             'brand': self.brand,
             'description': self.description,
