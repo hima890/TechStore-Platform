@@ -45,14 +45,13 @@ def create_store():
 
     try:
 
-        data = request.get_json()
-        store_name = data.get('store_name')
-        store_location = data.get('store_location')
-        store_email = data.get('store_email')
-        store_phone_number = data.get('store_phone_number')
-        operation_times = data.get('operation_times')
-        social_media_accounts = data.get('social_media_accounts')
-        store_bio = data.get('store_bio')
+        store_name = request.form.get('store_name')
+        store_location = request.form.get('store_location')
+        store_email = request.form.get('store_email')
+        store_phone_number = request.form.get('store_phone_number')
+        operation_times = request.form.get('operation_times')
+        social_media_accounts = request.form.get('social_media_accounts')
+        store_bio = request.form.get('store_bio')
 
         if not store_name or not store_location or not store_email or not store_phone_number:
             return jsonify({
@@ -121,21 +120,20 @@ def update_store(store_id):
             'message': 'Store not found or you are not authorized to update this store'
             }), 404
 
-    data = request.get_json()
-    if data.get("store_name"):
-        store.store_name = data.get("store_name")
-    if data.get("store_location"):
-        store.store_location = data.get("store_location")
-    if data.get("store_email"):
-        store.store_email = data.get("store_email")
-    if data.get("store_phone_number"):
-        store.store_phone_number = data.get("store_phone_number")
-    if data.get("operation_times"):
-        store.operation_times = data.get("operation_times")
-    if data.get("social_media_accounts"):
-        store.social_media_accounts = data.get("social_media_accounts")
-    if data.get("store_bio"):
-        store.store_bio = data.get("store_bio")
+    if request.form.get("store_name"):
+        store.store_name = request.form.get("store_name")
+    if request.form.get("store_location"):
+        store.store_location = request.form.get("store_location")
+    if request.form.get("store_email"):
+        store.store_email = request.form.get("store_email")
+    if request.form.get("store_phone_number"):
+        store.store_phone_number = request.form.get("store_phone_number")
+    if request.form.get("operation_times"):
+        store.operation_times = request.form.get("operation_times")
+    if request.form.get("social_media_accounts"):
+        store.social_media_accounts = request.form.get("social_media_accounts")
+    if request.form.get("store_bio"):
+        store.store_bio = request.form.get("store_bio")
 
     inner_image = request.files.get('inner_image')
     outer_image = request.files.get('outer_image')
