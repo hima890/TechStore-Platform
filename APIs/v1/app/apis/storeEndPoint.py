@@ -65,8 +65,13 @@ def create_store():
 
         if inner_image:
             inner_image_filename, inner_image_path = saveProfilePicture(inner_image, (600, 600), 'static/store_pics')
+        else:
+            inner_image_filename = None
+
         if outer_image:
             outer_image_filename, outer_image_path = saveProfilePicture(outer_image, (600, 600), 'static/store_pics')
+        else:
+            outer_image_filename = None
 
         new_store = Store(
             provider_id=provider.id,
