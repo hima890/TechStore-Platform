@@ -38,7 +38,7 @@ def sendNewOptCode():
     user.opt_code = optCode
     user.opt_code_time = creationTime
    
-    userFirstName = user.first_name
+    userFirstName = "User"
     plainTextContent = """\
     Dear {},
 
