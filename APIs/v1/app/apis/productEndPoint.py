@@ -134,7 +134,14 @@ def updateProduct():
     if request.form.get('description'):
         product.description = request.form.get('description')
     if request.form.get('price'):
-        product.price = request.form.get('price')
+        price = request.form.get('price')
+        try:
+            product.price = float(price)
+        except ValueError:
+            return jsonify({
+                "status": "error",
+                "message": "Invalid price format"
+            }), 400
     if request.form.get('status'):
         # Convert deliveryStatus to boolean
         deliveryStatus = request.form.get('status')
@@ -178,14 +185,15 @@ def deleteProduct():
         }), 404
 
     productID = request.form.get('product_id')
-    product = Product.query.filter_by(product_id=productID).first()
+    product = Product.query.filter_by(id=productID).first()
 
     if not product:
-        return jsonify({
+        product = Product.query.filter_by(product_id=productID).first()
+        if not product:
+            return jsonify({
             "status": "error",
             "message": "Product not found"
         }), 404
-
     # Delete product image
     if product.image_1:
         deleteProductImageFunc(product.image_1)
