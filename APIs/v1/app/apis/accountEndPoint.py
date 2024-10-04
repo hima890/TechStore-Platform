@@ -36,17 +36,7 @@ def getAccount():
     return jsonify({
         "status": "success",
         "message": "User account info",
-        "data": {
-            "userId": user.id,
-            "first name": user.first_name,
-            "last name": user.last_name,
-            "username": user.username,
-            "email": user.email,
-            "phone number": user.phone_number,
-            "gander": user.gander,
-            "location": user.location,
-            "profile image": user.profile_image,
-        }
+        "data": user.to_dict()
     }), 200
 
 
@@ -97,17 +87,7 @@ def updateAccount():
     return jsonify({
         "status": "success",
         "message": "User account updated successfully",
-        "data": {
-            "userId": user.id,
-            "first name": user.first_name,
-            "last name": user.last_name,
-            "username": user.username,
-            "email": user.email,
-            "phone number": user.phone_number,
-            "gander": user.gander,
-            "location": user.location,
-            "profile image": user.profile_image
-        }
+        "data": user.to_dict()
     }), 200
 
 
