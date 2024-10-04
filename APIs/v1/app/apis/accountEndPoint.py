@@ -72,12 +72,6 @@ def updateAccount():
                 "message": "User not found"
             }), 404
 
-    if not request.form:
-        return jsonify({
-            "status": "error",
-            "message": "Bad request, no data provided"
-        }), 400
-
     if request.form.get("first_name"):
         user.first_name = request.form.get("first_name")
     if request.form.get("last_name"):
