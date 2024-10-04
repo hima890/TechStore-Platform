@@ -214,14 +214,7 @@ def getAllProducts():
 
         products = Product.query.filter_by(category=category_name).all()
         for product in products:
-            productData = {
-                'id': product.id,
-                'name': product.name,
-                'brand': product.brand,
-                'description': product.description,
-                'price': product.price,
-                'image_1': product.image_1
-            }
+            productData = product.to_dict()
             categoryData['products'].append(productData)
         categoryList.append(categoryData)
 
