@@ -48,6 +48,7 @@ def addProduct():
     description = request.form.get('description')
     price = request.form.get('price')
     deliveryStatus = request.form.get('status')
+    print("the deliveryStatus: " + str(deliveryStatus))
     image_1 = request.files.get('image_1')
 
     # Convert deliveryStatus to boolean
