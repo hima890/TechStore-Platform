@@ -231,17 +231,7 @@ def getAllStores2():
     
     store_list = []
     for store in stores:
-        storeOwner = Provider.query.filter_by(id=store.provider_id).first()
-        storeOwnerName = storeOwner.username
-        store_data = {
-            'id': store.store_id,
-            'owner': storeOwnerName,
-            'phoneNumber': store.store_phone_number,
-            'email': store.store_email,
-            'storeName': store.store_name,
-            'outer_image': store.outer_image_url,
-            'inner_image': store.inner_image_url
-        }
+        store_data = store.to_dict()
         store_list.append(store_data)
 
     return jsonify({

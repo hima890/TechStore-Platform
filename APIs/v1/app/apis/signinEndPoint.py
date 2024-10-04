@@ -52,7 +52,8 @@ def signin():
                 "username": user.username,
                 "userId": user.id,
                 "token": access_token,
-                'account_type': user.account_type
+                'account_type': user.account_type,
+                'phone_number': user.phone_number
             }
         }), 200
 

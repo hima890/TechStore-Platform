@@ -48,6 +48,7 @@ class Store(db.Model):
         return {
             'store_id': self.store_id,
             'provider_id': self.provider_id,
+            'store_owner': self.provider.username,
             'store_name': self.store_name,
             'store_location': self.store_location,
             'store_email': self.store_email,
