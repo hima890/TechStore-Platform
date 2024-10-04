@@ -114,13 +114,16 @@ def updateProduct():
         }), 400
 
     productID = request.form.get('product_id')
-    product = Product.query.filter_by(product_id=productID).first()
+    product = Product.query.filter_by(id=productID).first()
 
     if not product:
-        return jsonify({
+        product = Product.query.filter_by(product_id=productID).first()
+        if not product:
+            return jsonify({
             "status": "error",
             "message": "Product not found"
         }), 404
+       
 
     # Update product fields
     if request.form.get('name'):
@@ -258,16 +261,8 @@ def searchProducts():
 
     productList = []
     for product in products:
-        productList.append({
-            'id': product.id,
-            'name': product.name,
-            'brand': product.brand,
-            'category': product.category,
-            'price': product.price,
-            'description': product.description,
-            'store_name': product.store.store_name,
-            'image_1': product.image_1
-        })
+        data = product.to_dict()
+        productList.append(data)
 
     return jsonify({
         'status': 'success',
