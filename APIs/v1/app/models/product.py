@@ -37,6 +37,5 @@ class Product(db.Model):
             'description': self.description,
             'price': self.price,
             'deliveryStatus': self.deliveryStatus,
-            'product_id' : self.product_id,
             'image_1': 'https://techstoreplatform.tech/products_images/' + str(self.image_1) if self.image_1 else None
         }
