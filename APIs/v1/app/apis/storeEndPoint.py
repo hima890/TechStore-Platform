@@ -206,7 +206,7 @@ def getAllStores():
     storeList = []
     for store in stores:
         storeData = store.to_dict()
-        storeData['products'] = [product.to_dect() for product in store.products]
+        storeData['products'] = [product.to_dict() for product in store.products]
         storeList.append(storeData)
 
     return jsonify({
