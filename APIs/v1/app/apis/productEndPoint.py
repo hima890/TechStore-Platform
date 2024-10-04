@@ -7,10 +7,10 @@ from . import product
 from ..models import Store
 from .swaggerFile import productDoc, productUpdateDoc, productDeleteDoc, getAllProductsByCategoryDoc, searchProductDoc
 from ..models import Product, Provider
-from ..utils import saveProductImages
-from ..utils import updateProductImage
-from ..utils import deleteProductImage
-from ..utils import generateProductId
+from ..utils import saveProductImagesFunc
+from ..utils import updateProductImageFunc
+from ..utils import deleteProductImageFunc
+from ..utils import generateProductIdFunc
 from .. import db
 from .. import limiter
 
@@ -51,10 +51,10 @@ def addProduct():
     image_1 = request.files.get('image_1')
 
     # Save product image
-    newFileName, newFilePath = saveProductImages([image_1])
+    newFileName, newFilePath = saveProductImagesFunc([image_1])
 
     # Generate a unique product ID
-    newId = generateProductId()
+    newId = generateProductIdFunc()
 
     # Create a new Product instance
     newProduct = Product(
@@ -131,7 +131,7 @@ def updateProduct():
 
     # Update product image if provided
     if request.files.get('image_1'):
-        unique_filename_1, _ = updateProductImage(request.files.get('image_1'))
+        unique_filename_1, _ = updateProductImageFunc(request.files.get('image_1'))
         product.image_1 = unique_filename_1
 
     db.session.commit()
@@ -174,7 +174,7 @@ def deleteProduct():
 
     # Delete product image
     if product.image_1:
-        deleteProductImage(product.image_1)
+        deleteProductImageFunc(product.image_1)
 
     try:
         db.session.delete(product)
