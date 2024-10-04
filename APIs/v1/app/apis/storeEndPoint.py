@@ -239,8 +239,8 @@ def getAllStores2():
             'phoneNumber': store.store_phone_number,
             'email': store.store_email,
             'storeName': store.store_name,
-            'outer_image': store.outer_image,
-            'inner_image': store.inner_image
+            'outer_image': store.outer_image_url,
+            'inner_image': store.inner_image_url
         }
         store_list.append(store_data)
 

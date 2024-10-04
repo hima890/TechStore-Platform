@@ -25,23 +25,26 @@ class Store(db.Model):
     products = db.relationship('Product', backref='stores', lazy=True)
     orders = db.relationship('Order', back_populates='store')
 
+    @property
+    def inner_image_url(self):
+        """ Dynamically generate the inner image URL """
+        if self.inner_image:
+            return 'https://techstoreplatform.tech/store_pics/' + str(self.inner_image)
+        return 'https://techstoreplatform.tech/store_pics/default_inner_image.png'
+
+    @property
+    def outer_image_url(self):
+        """ Dynamically generate the outer image URL """
+        if self.outer_image:
+            return 'https://techstoreplatform.tech/store_pics/' + str(self.outer_image)
+        return 'https://techstoreplatform.tech/store_pics/default_outer_image.png'
 
     def __repr__(self):
         """ Return a string representation of the Store object. """
-        return "Store ID: {}, Store Name: {}, Provider ID: {}".format(self.store_id, self.store_name, self.provider_id)
+        return f"Store ID: {self.store_id}, Store Name: {self.store_name}, Provider ID: {self.provider_id}"
 
     def to_dict(self):
         """Convert the Store object to a dictionary."""
-        if self.inner_image:
-            inner_image_url = 'https://techstoreplatform.tech/store_pics/' + str(self.inner_image)
-        else:
-            inner_image_url = 'https://techstoreplatform.tech/store_pics/default_inner_image.png'
-
-        if self.outer_image:
-            outer_image_url = 'https://techstoreplatform.tech/store_pics/' + str(self.outer_image)
-        else:
-            outer_image_url = 'https://techstoreplatform.tech/store_pics/default_outer_image.png'
-        
         return {
             'store_id': self.store_id,
             'provider_id': self.provider_id,
@@ -52,8 +55,8 @@ class Store(db.Model):
             'operation_times': self.operation_times,
             'social_media_accounts': self.social_media_accounts,
             'store_bio': self.store_bio,
-            'inner_image_url': inner_image_url,
-            'outer_image_url': outer_image_url,
+            'inner_image_url': self.inner_image_url,
+            'outer_image_url': self.outer_image_url,
             'created_at': self.created_at.isoformat(),
             'updated_at': self.updated_at.isoformat()
         }
