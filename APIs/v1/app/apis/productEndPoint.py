@@ -50,6 +50,12 @@ def addProduct():
     deliveryStatus = request.form.get('status')
     image_1 = request.files.get('image_1')
 
+    # Convert deliveryStatus to boolean
+    if deliveryStatus in ['true', 'True', 'on', '1']:  # Treat 'true', 'on', '1' as True
+        deliveryStatus = True
+    else:
+        deliveryStatus = False  # Treat other values (or if not set) as False
+
     # Save product image
     newFileName, newFilePath = saveProductImagesFunc([image_1])
 
