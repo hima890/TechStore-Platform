@@ -48,7 +48,6 @@ def addProduct():
     description = request.form.get('description')
     price = request.form.get('price')
     deliveryStatus = request.form.get('status')
-    print("the deliveryStatus: " + str(deliveryStatus))
     image_1 = request.files.get('image_1')
 
     # Convert deliveryStatus to boolean
@@ -137,7 +136,12 @@ def updateProduct():
     if request.form.get('price'):
         product.price = request.form.get('price')
     if request.form.get('status'):
-        product.deliveryStatus = request.form.get('status')
+        # Convert deliveryStatus to boolean
+        deliveryStatus = request.form.get('status')
+        if deliveryStatus in ['true', 'True', 'on', '1']:  # Treat 'true', 'on', '1' as True
+            product.deliveryStatus = True
+        else:
+            product.deliveryStatus = False  # Treat other values (or if not set) as False
 
     # Update product image if provided
     if request.files.get('image_1'):
