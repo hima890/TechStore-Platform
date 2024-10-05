@@ -7,10 +7,10 @@ from . import product
 from ..models import Store
 from .swaggerFile import productDoc, productUpdateDoc, productDeleteDoc, getAllProductsByCategoryDoc, searchProductDoc
 from ..models import Product, Provider
-from app.utils.saveProductImages import saveProductImages
-from app.utils.updateProductImage import updateProductImage
-from app.utils.deleteProductImage import deleteProductImage
-from app.utils.generateProductId import generateProductId
+from ..utils import saveProductImagesFunc
+from ..utils import updateProductImageFunc
+from ..utils import deleteProductImageFunc
+from ..utils import generateProductIdFunc
 from .. import db
 from .. import limiter
 
@@ -50,11 +50,17 @@ def addProduct():
     deliveryStatus = request.form.get('status')
     image_1 = request.files.get('image_1')
 
+    # Convert deliveryStatus to boolean
+    if deliveryStatus in ['true', 'True', 'on', '1']:  # Treat 'true', 'on', '1' as True
+        deliveryStatus = True
+    else:
+        deliveryStatus = False  # Treat other values (or if not set) as False
+
     # Save product image
-    newFileName, newFilePath = saveProductImages([image_1])
+    newFileName, newFilePath = saveProductImagesFunc([image_1])
 
     # Generate a unique product ID
-    newId = generateProductId()
+    newId = generateProductIdFunc()
 
     # Create a new Product instance
     newProduct = Product(
@@ -107,13 +113,16 @@ def updateProduct():
         }), 400
 
     productID = request.form.get('product_id')
-    product = Product.query.filter_by(product_id=productID).first()
+    product = Product.query.filter_by(id=productID).first()
 
     if not product:
-        return jsonify({
+        product = Product.query.filter_by(product_id=productID).first()
+        if not product:
+            return jsonify({
             "status": "error",
             "message": "Product not found"
         }), 404
+       
 
     # Update product fields
     if request.form.get('name'):
@@ -125,13 +134,25 @@ def updateProduct():
     if request.form.get('description'):
         product.description = request.form.get('description')
     if request.form.get('price'):
-        product.price = request.form.get('price')
+        price = request.form.get('price')
+        try:
+            product.price = float(price)
+        except ValueError:
+            return jsonify({
+                "status": "error",
+                "message": "Invalid price format"
+            }), 400
     if request.form.get('status'):
-        product.deliveryStatus = request.form.get('status')
+        # Convert deliveryStatus to boolean
+        deliveryStatus = request.form.get('status')
+        if deliveryStatus in ['true', 'True', 'on', '1']:  # Treat 'true', 'on', '1' as True
+            product.deliveryStatus = True
+        else:
+            product.deliveryStatus = False  # Treat other values (or if not set) as False
 
     # Update product image if provided
     if request.files.get('image_1'):
-        unique_filename_1, _ = updateProductImage(request.files.get('image_1'))
+        unique_filename_1, _ = updateProductImageFunc(request.files.get('image_1'))
         product.image_1 = unique_filename_1
 
     db.session.commit()
@@ -164,17 +185,18 @@ def deleteProduct():
         }), 404
 
     productID = request.form.get('product_id')
-    product = Product.query.filter_by(product_id=productID).first()
+    product = Product.query.filter_by(id=productID).first()
 
     if not product:
-        return jsonify({
+        product = Product.query.filter_by(product_id=productID).first()
+        if not product:
+            return jsonify({
             "status": "error",
             "message": "Product not found"
         }), 404
-
     # Delete product image
     if product.image_1:
-        deleteProductImage(product.image_1)
+        deleteProductImageFunc(product.image_1)
 
     try:
         db.session.delete(product)
@@ -187,7 +209,7 @@ def deleteProduct():
         db.session.rollback()
         return jsonify({
             "status": "error",
-            "message": f"Error deleting product from database: {e}"
+            "message": "Error deleting product from database: {}".format(e)
         }), 500
 
 
@@ -214,14 +236,7 @@ def getAllProducts():
 
         products = Product.query.filter_by(category=category_name).all()
         for product in products:
-            productData = {
-                'id': product.id,
-                'name': product.name,
-                'brand': product.brand,
-                'description': product.description,
-                'price': product.price,
-                'image_1': product.image_1
-            }
+            productData = product.to_dict()
             categoryData['products'].append(productData)
         categoryList.append(categoryData)
 
@@ -258,16 +273,8 @@ def searchProducts():
 
     productList = []
     for product in products:
-        productList.append({
-            'id': product.id,
-            'name': product.name,
-            'brand': product.brand,
-            'category': product.category,
-            'price': product.price,
-            'description': product.description,
-            'store_name': product.store.store_name,
-            'image_1': product.image_1
-        })
+        data = product.to_dict()
+        productList.append(data)
 
     return jsonify({
         'status': 'success',

@@ -15,10 +15,10 @@ from .. import limiter
 @jwt_required()
 @limiter.limit("5 per minute")
 @swag_from(resetDoc)
-# @swag_from(optCodeDoc)
 def reset():
     """Reset a user's password"""
     currentUserEmail = get_jwt_identity()
+    print(str(currentUserEmail))
     if not currentUserEmail:
         return jsonify({
             "status": "error",

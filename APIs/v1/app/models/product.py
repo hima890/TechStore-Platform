@@ -37,5 +37,5 @@ class Product(db.Model):
             'description': self.description,
             'price': self.price,
             'deliveryStatus': self.deliveryStatus,
-            'image_1': url_for('static', filename='product_images/' + self.image_1) if self.image_1 else None
+            'image_1': 'https://techstoreplatform.tech/products_images/' + str(self.image_1) if self.image_1 else None
         }

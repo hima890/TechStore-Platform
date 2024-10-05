@@ -7,7 +7,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from . import store
 from ..models import Store, Provider
 from .. import limiter, db
-from ..utils import saveProfilePicture
+from ..utils import saveProfilePictureFunc
 from .swaggerFile import (createStoreDoc, updateStoreDoc,
                           deleteStoreDoc, getAllStoresDoc,
                           getStoresDoc)
@@ -17,12 +17,18 @@ def getAccount():
     currentUserEmail = get_jwt_identity()
 
     if not currentUserEmail:
-        return None, {'status': 'error', 'message': 'Bad request, no user token'}, 400
+        return None, {
+            'status': 'error',
+            'message': 'Bad request, no user token'
+            }, 400
 
     provider = Provider.query.filter_by(email=currentUserEmail).first()
 
     if not provider:
-        return None, {'status': 'error', 'message': 'Provider not found'}, 404
+        return None, {
+            'status': 'error',
+            'message': 'Provider not found'
+            }, 404
 
     return provider, None, 200
 
@@ -39,28 +45,32 @@ def create_store():
 
     try:
 
-        data = request.get_json()
-        store_name = data.get('store_name')
-        store_location = data.get('store_location')
-        store_email = data.get('store_email')
-        store_phone_number = data.get('store_phone_number')
-        operation_times = data.get('operation_times')
-        social_media_accounts = data.get('social_media_accounts')
-        store_bio = data.get('store_bio')
+        store_name = request.form.get('store_name')
+        store_location = request.form.get('store_location')
+        store_email = request.form.get('store_email')
+        store_phone_number = request.form.get('store_phone_number')
+        operation_times = request.form.get('operation_times')
+        social_media_accounts = request.form.get('social_media_accounts')
+        store_bio = request.form.get('store_bio')
 
         if not store_name or not store_location or not store_email or not store_phone_number:
-            return jsonify({'error': 'Missing required fields'}), 400
+            return jsonify({
+                'status': 'error',
+                'message': 'Missing required fields'
+                }), 400
 
         inner_image = request.files.get('inner_image')
         outer_image = request.files.get('outer_image')
 
-        inner_image_filename = None
-        outer_image_filename = None
-
         if inner_image:
-            inner_image_filename, inner_image_path = saveProfilePicture(inner_image, 'inner')
+            inner_image_filename, inner_image_path = saveProfilePictureFunc(inner_image, (600, 600), 'static/store_pics')
+        else:
+            inner_image_filename = None
+
         if outer_image:
-            outer_image_filename, outer_image_path = saveProfilePicture(outer_image, 'outer')
+            outer_image_filename, outer_image_path = saveProfilePictureFunc(outer_image, (600, 600), 'static/store_pics')
+        else:
+            outer_image_filename = None
 
         new_store = Store(
             provider_id=provider.id,
@@ -87,7 +97,10 @@ def create_store():
     except Exception as e:
         db.session.rollback()
         print(f"Error occurred during store creation: {str(e)}")
-        return jsonify({'error': f'An error occurred while creating the store: {str(e)}'}), 500
+        return jsonify({
+            'status': 'error',
+            'message': 'An error occurred while creating the store: {}'.format(str(e))
+            }), 500
 
 
 @store.route('/update-store/<int:store_id>', methods=['PUT'])
@@ -102,32 +115,34 @@ def update_store(store_id):
 
     store = Store.query.filter_by(store_id=store_id, provider_id=provider.id).first()
     if not store:
-        return jsonify({'error': 'Store not found or you are not authorized to update this store'}), 404
+        return jsonify({
+            'status': 'error',
+            'message': 'Store not found or you are not authorized to update this store'
+            }), 404
 
-    data = request.get_json()
-    if data.get("store_name"):
-        store.store_name = data.get("store_name")
-    if data.get("store_location"):
-        store.store_location = data.get("store_location")
-    if data.get("store_email"):
-        store.store_email = data.get("store_email")
-    if data.get("store_phone_number"):
-        store.store_phone_number = data.get("store_phone_number")
-    if data.get("operation_times"):
-        store.operation_times = data.get("operation_times")
-    if data.get("social_media_accounts"):
-        store.social_media_accounts = data.get("social_media_accounts")
-    if data.get("store_bio"):
-        store.store_bio = data.get("store_bio")
+    if request.form.get("store_name"):
+        store.store_name = request.form.get("store_name")
+    if request.form.get("store_location"):
+        store.store_location = request.form.get("store_location")
+    if request.form.get("store_email"):
+        store.store_email = request.form.get("store_email")
+    if request.form.get("store_phone_number"):
+        store.store_phone_number = request.form.get("store_phone_number")
+    if request.form.get("operation_times"):
+        store.operation_times = request.form.get("operation_times")
+    if request.form.get("social_media_accounts"):
+        store.social_media_accounts = request.form.get("social_media_accounts")
+    if request.form.get("store_bio"):
+        store.store_bio = request.form.get("store_bio")
 
     inner_image = request.files.get('inner_image')
     outer_image = request.files.get('outer_image')
 
     if inner_image:
-        inner_image_filename, inner_image_path = saveProfilePicture(inner_image, 'inner')
+        inner_image_filename, inner_image_path = saveProfilePictureFunc(inner_image, (600, 600), 'static/store_pics')
         store.inner_image = inner_image_filename
     if outer_image:
-        outer_image_filename, outer_image_path = saveProfilePicture(outer_image, 'outer')
+        outer_image_filename, outer_image_path = saveProfilePictureFunc(outer_image, (600, 600), 'static/store_pics')
         store.outer_image = outer_image_filename
 
     try:
@@ -139,7 +154,10 @@ def update_store(store_id):
         }), 200
     except Exception as e:
         db.session.rollback()
-        return jsonify({'error': 'An error occurred while updating the store.'}), 500
+        return jsonify({
+            'status': 'error',
+            'message': 'An error occurred while updating the store.'
+            }), 500
 
 
 @store.route('/delete-store/<int:store_id>', methods=['DELETE'])
@@ -155,29 +173,24 @@ def delete_store(store_id):
     store = Store.query.filter_by(store_id=store_id, provider_id=provider.id).first()
 
     if not store:
-        return jsonify( 
-            {
+        return jsonify({
                 'status': 'error',
                 'message': 'Store not found or you are not authorized to delete this store'
-            }
-            ), 404
+            }), 404
 
     try:
         db.session.delete(store)
         db.session.commit()
-        return jsonify(
-            {
+        return jsonify({
                 'status': 'success',
                 'message': 'Store deleted successfully'
-            }
-            ), 200
+            }), 200
     except Exception as e:
         db.session.rollback()
-        return jsonify(
-            {
+        return jsonify({
                 'status': 'error',
-                'message': 'An error occurred while deleting the store.'}
-            ), 500
+                'message': 'An error occurred while deleting the store.'
+            }), 500
 
 
 @store.route('/stores', methods=['GET'])
@@ -186,25 +199,21 @@ def delete_store(store_id):
 def getAllStores():
     stores = Store.query.all()
     if not stores:
-        return jsonify( 
-            {
+        return jsonify({
                 'status': 'error',
                 'message': 'No stores found'
-            }
-            ), 404
+            }), 404
     storeList = []
     for store in stores:
         storeData = store.to_dict()
-        storeData['products'] = [product.to_dect() for product in store.products]
+        storeData['products'] = [product.to_dict() for product in store.products]
         storeList.append(storeData)
 
-    return jsonify(
-        {
+    return jsonify({
             'status': 'success',
             'message': 'All stores in the database',
             'stores': storeList
-        }
-        ), 200
+        }), 200
 
 
 
@@ -222,15 +231,7 @@ def getAllStores2():
     
     store_list = []
     for store in stores:
-        store_data = {
-            'id': store.id,
-            'owner': store.owner,
-            'phoneNumber': store.phoneNumber,
-            'email': store.email,
-            'storeName': store.storeName,
-            'outer_image': store.outer_image,
-            'inner_image': store.inner_image
-        }
+        store_data = store.to_dict()
         store_list.append(store_data)
 
     return jsonify({

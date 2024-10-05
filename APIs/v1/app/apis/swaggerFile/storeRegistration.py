@@ -205,6 +205,14 @@ updateStoreDoc = {
     'tags': ['Store account Management'],
     'parameters': [
         {
+            'name': 'Authorization',
+            'in': 'header',
+            'required': True,
+            'type': 'string',
+            'description': 'Bearer token' 
+        }
+        ,
+        {
             'name': 'store_id',
             'in': 'path',
             'type': 'integer',
@@ -334,6 +342,14 @@ updateStoreDoc = {
 deleteStoreDoc = {
     'tags': ['Store account Management'],
     'parameters': [
+        {
+            'name': 'Authorization',
+            'in': 'header',
+            'required': True,
+            'type': 'string',
+            'description': 'Bearer token' 
+        }
+        ,
         {
             'name': 'store_id',
             'in': 'path',

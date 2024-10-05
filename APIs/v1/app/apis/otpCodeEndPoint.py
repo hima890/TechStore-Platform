@@ -38,7 +38,7 @@ def sendNewOptCode():
     user.opt_code = optCode
     user.opt_code_time = creationTime
    
-    userFirstName = user.first_name
+    userFirstName = "User"
     plainTextContent = """\
     Dear {},
 
@@ -122,10 +122,10 @@ def sendNewOptCode():
     )
     # Check of the email was sent successfully
     if not emailFunction:
-        return jsonify(
-            {"status": "error"},
-            {"message": "OTP code email was not sent."},
-        ), 400
+        return jsonify({
+            "status": "error",
+            "message": "OTP code email was not sent."
+        }), 400
 
     # Save the OPT code to the database
     db.session.commit()

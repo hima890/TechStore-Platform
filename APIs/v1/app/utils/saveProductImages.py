@@ -5,7 +5,7 @@ from PIL import Image
 from werkzeug.utils import secure_filename
 
 
-def saveProductImages(pictureFiles, outputSize=(600, 600), uploadFolder='static/products_images'):
+def saveProductImagesFunc(pictureFiles, outputSize=(600, 600), uploadFolder='static/products_images'):
     """
     Rename using uuid4 and resizes and saves the products pictures.
 

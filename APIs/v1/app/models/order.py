@@ -25,7 +25,7 @@ class Order(db.Model):
     is_visible_to_provider = db.Column(db.Boolean, default=True)  # If visible to the store/provider
 
     user = db.relationship('User', backref='order')  # Relationship to the User model
-    store = db.relationship('Store', backref='order')  # Relationship to the Store model
+    store = db.relationship('Store', back_populates='orders')
 
     def __repr__(self):
         """ Return a string representation of the Order object. """
@@ -43,7 +43,7 @@ class Order(db.Model):
             'user_id': self.user_id,
             'requester_name': self.requester_name,
             'requester_email': self.requester_email,
-            'img': url_for('static', filename='orders_pics/' + self.img) if self.img else None,
+            'img': 'https://techstoreplatform.tech/orders_pics/' + str(self.img) if self.img else None,
             'title': self.title,
             'brand': self.brand,
             'description': self.description,

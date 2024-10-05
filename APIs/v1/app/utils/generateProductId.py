@@ -3,6 +3,6 @@
 import random
 
 
-def generateProductId():
+def generateProductIdFunc():
     """Generate a random 4-digit number for product_id."""
     return random.randint(1000, 9999)

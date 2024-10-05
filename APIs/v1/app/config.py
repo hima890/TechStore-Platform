@@ -1,7 +1,11 @@
 #!/usr/bin/python3
 """ Flask configuration classes. """
 import os
+from dotenv import load_dotenv
 
+
+# Load environment variables
+load_dotenv("./.env")
 
 # Define the path to the database file
 db_dir = os.path.join(os.getcwd(), 'databases')
@@ -24,7 +28,7 @@ class Config:
 class DevelopmentConfig(Config):
     """Development configuration."""
     # Use an environment variable or fall back to 'dev_database.db' by default
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + db_path
+    SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI')
     DEBUG = True
 
 
@@ -38,8 +42,7 @@ class ProductionConfig(Config):
 class TestingConfig(Config):
     """Testing configuration."""
     # Use an environment variable or fall back to 'test_database.db' by default
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + db_path
-    print(SQLALCHEMY_DATABASE_URI)
+    SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI')
     TESTING = True
     DEBUG = True
 
@@ -50,4 +53,3 @@ config = {
     'production': ProductionConfig,
     'testing': TestingConfig
 }
-

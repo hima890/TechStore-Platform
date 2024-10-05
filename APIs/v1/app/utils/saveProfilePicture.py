@@ -5,7 +5,7 @@ from PIL import Image
 from werkzeug.utils import secure_filename
 
 
-def saveProfilePicture(pictureFile, outputSize=(300, 300), uploadFolder='static/profile_pics'):
+def saveProfilePictureFunc(pictureFile, outputSize=(300, 300), uploadFolder='static/profile_pics'):
     """
     Rename using uuid4 and resizes and saves the profile picture.
 

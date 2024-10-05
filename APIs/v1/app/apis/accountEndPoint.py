@@ -3,7 +3,7 @@
 from flask import request, jsonify
 from flasgger import swag_from
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from werkzeug.security import check_password_hash
+from werkzeug.security import check_password_hash, generate_password_hash
 from . import account
 from .swaggerFile import accountDoc, accountUpdateDoc, accountUpdatePasswordDoc
 from ..models import User, Provider
@@ -35,17 +35,8 @@ def getAccount():
 
     return jsonify({
         "status": "success",
-        "data": {
-            "userId": user.id,
-            "first name": user.first_name,
-            "last name": user.last_name,
-            "username": user.username,
-            "email": user.email,
-            "phone number": user.phone_number,
-            "gander": user.gander,
-            "location": user.location,
-            "profile image": user.profile_image,
-        }
+        "message": "User account info",
+        "data": user.to_dict()
     }), 200
 
 
@@ -61,6 +52,7 @@ def updateAccount():
             "status": "error",
             "message": "Bad request, no user token"
         }), 400
+
     user = User.query.filter_by(email=currentUserEmail).first()
     if not user:
         user = Provider.query.filter_by(email=currentUserEmail).first()
@@ -69,12 +61,6 @@ def updateAccount():
                 "status": "error",
                 "message": "User not found"
             }), 404
-
-    if not request.form:
-        return jsonify({
-            "status": "error",
-            "message": "Bad request, no data provided"
-        }), 400
 
     if request.form.get("first_name"):
         user.first_name = request.form.get("first_name")
@@ -101,17 +87,7 @@ def updateAccount():
     return jsonify({
         "status": "success",
         "message": "User account updated successfully",
-        "data": {
-            "userId": user.id,
-            "first name": user.first_name,
-            "last name": user.last_name,
-            "username": user.username,
-            "email": user.email,
-            "phone number": user.phone_number,
-            "gander": user.gander,
-            "location": user.location,
-            "profile image": user.profile_image
-        }
+        "data": user.to_dict()
     }), 200
 
 
@@ -159,22 +135,12 @@ def updatePassword():
             "message": "Old password is incorrect"
         }), 400
 
-    user.password_hash = newPassword
+    user.password_hash = generate_password_hash(newPassword)
 
     db.session.commit()
 
     return jsonify({
         "status": "success",
         "message": "User password updated successfully",
-        "data": {
-            "userId": user.id,
-            "first name": user.first_name,
-            "last name": user.last_name,
-            "username": user.username,
-            "email": user.email,
-            "phone number": user.phone_number,
-            "gander": user.gander,
-            "location": user.location,
-            "profile image": user.profile_image
-        }
+        "data": user.to_dict()
     }), 200

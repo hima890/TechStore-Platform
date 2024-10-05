@@ -3,7 +3,7 @@
 import os
 
 
-def deleteProductImage(image):
+def deleteProductImageFunc(image):
     if image:
         # Get the image path in the server
         imagePath = os.path.join('static/products_images', image)

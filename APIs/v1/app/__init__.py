@@ -12,6 +12,8 @@ from flask_limiter.util import get_remote_address
 from redis import Redis
 from flasgger import Swagger
 from .config import config
+import redis
+
 
 # Load environment variables
 load_dotenv("./.env")
@@ -33,6 +35,7 @@ def custom_unauthorized_response(callback):
 limiter = Limiter(
     get_remote_address,
     default_limits=["200 per day", "50 per hour"],
+    storage_uri="redis://localhost:6379"  # Pointing to Redis instance on localhost
 )
 
 # Swagger setup for API documentation

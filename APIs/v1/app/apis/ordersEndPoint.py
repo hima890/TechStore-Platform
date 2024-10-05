@@ -85,7 +85,7 @@ def addOrders():
     return jsonify({
         "status": "success",
         "message": "Order created successfully!",
-        "data": newOrder.to_dict()
+        "data": {newOrder.to_dict()}
     }), 201
 
 
@@ -136,7 +136,7 @@ def getOrder():
         return jsonify({
             "status": "success",
             "message": "Orders found",
-            "data": orderList
+            "data": {orderList}
         }), 200
 
     return jsonify({
