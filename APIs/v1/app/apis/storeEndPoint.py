@@ -7,7 +7,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from . import store
 from ..models import Store, Provider
 from .. import limiter, db
-from ..utils import saveProfilePicture
+from ..utils import saveProfilePictureFunc
 from .swaggerFile import (createStoreDoc, updateStoreDoc,
                           deleteStoreDoc, getAllStoresDoc,
                           getStoresDoc)
@@ -63,12 +63,12 @@ def create_store():
         outer_image = request.files.get('outer_image')
 
         if inner_image:
-            inner_image_filename, inner_image_path = saveProfilePicture(inner_image, (600, 600), 'static/store_pics')
+            inner_image_filename, inner_image_path = saveProfilePictureFunc(inner_image, (600, 600), 'static/store_pics')
         else:
             inner_image_filename = None
 
         if outer_image:
-            outer_image_filename, outer_image_path = saveProfilePicture(outer_image, (600, 600), 'static/store_pics')
+            outer_image_filename, outer_image_path = saveProfilePictureFunc(outer_image, (600, 600), 'static/store_pics')
         else:
             outer_image_filename = None
 
@@ -139,10 +139,10 @@ def update_store(store_id):
     outer_image = request.files.get('outer_image')
 
     if inner_image:
-        inner_image_filename, inner_image_path = saveProfilePicture(inner_image, (600, 600), 'static/store_pics')
+        inner_image_filename, inner_image_path = saveProfilePictureFunc(inner_image, (600, 600), 'static/store_pics')
         store.inner_image = inner_image_filename
     if outer_image:
-        outer_image_filename, outer_image_path = saveProfilePicture(outer_image, (600, 600), 'static/store_pics')
+        outer_image_filename, outer_image_path = saveProfilePictureFunc(outer_image, (600, 600), 'static/store_pics')
         store.outer_image = outer_image_filename
 
     try:

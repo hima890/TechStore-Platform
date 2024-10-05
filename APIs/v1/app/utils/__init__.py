@@ -10,3 +10,4 @@ from .updateProductImage import updateProductImageFunc
 from .deleteProductImage import deleteProductImageFunc
 from .generateProductId import generateProductIdFunc
 from .saveOrdersImages import saveOrdersPicture
+from .saveProfilePicture import saveProfilePictureFunc
