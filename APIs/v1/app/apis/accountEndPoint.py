@@ -2,7 +2,7 @@
 """ Account management Endpoints """
 from flask import request, jsonify
 from flasgger import swag_from
-from flask_jwt_extended import jwt_required, get_jwt_identity
+from flask_jwt_extended import jwt_required, get_jwt_identity, generate_password_hash
 from werkzeug.security import check_password_hash
 from . import account
 from .swaggerFile import accountDoc, accountUpdateDoc, accountUpdatePasswordDoc
@@ -135,7 +135,7 @@ def updatePassword():
             "message": "Old password is incorrect"
         }), 400
 
-    user.password_hash = newPassword
+    user.password_hash = generate_password_hash(newPassword)
 
     db.session.commit()
 
