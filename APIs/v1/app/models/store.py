@@ -29,15 +29,15 @@ class Store(db.Model):
     def inner_image_url(self):
         """ Dynamically generate the inner image URL """
         if self.inner_image:
-            return 'https://techstoreplatform.tech/store_pics/' + str(self.inner_image)
-        return 'https://techstoreplatform.tech/store_pics/default_inner_image.png'
+            return 'https://api.techstoreplatform.tech/store_pics/' + str(self.inner_image)
+        return 'https://api.techstoreplatform.tech/store_pics/default_inner_image.png'
 
     @property
     def outer_image_url(self):
         """ Dynamically generate the outer image URL """
         if self.outer_image:
-            return 'https://techstoreplatform.tech/store_pics/' + str(self.outer_image)
-        return 'https://techstoreplatform.tech/store_pics/default_outer_image.png'
+            return 'https://api.techstoreplatform.tech/store_pics/' + str(self.outer_image)
+        return 'https://api.techstoreplatform.tech/store_pics/default_outer_image.png'
 
     def __repr__(self):
         """ Return a string representation of the Store object. """
